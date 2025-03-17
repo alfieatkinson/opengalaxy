@@ -1,0 +1,18 @@
+[tool.black]
+
+line-length = 88
+
+target-version = ['py312']
+
+exclude = '''
+/(
+    .git
+    __pycache__
+    /migrations
+    /tests
+)/
+'''
+
+skip-string-normalization = false
+
+fast = true
