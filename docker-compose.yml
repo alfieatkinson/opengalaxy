@@ -14,3 +14,18 @@ services:
       custom_network:
         aliases:
           - ${PROJECT_NAME}_db.local
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app/frontend
+      - node_modules:/app/frontend/node_modules
+    depends_on:
+      - backend
+    networks:
+      custom_network:
+        aliases:
+          - ${PROJECT_NAME}_frontend.local
