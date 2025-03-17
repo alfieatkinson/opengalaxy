@@ -1,41 +1,29 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import prettier from 'eslint-plugin-prettier'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
 
-// Resolve file paths
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-// Compatibility setup for ESLint
+const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 })
 
-// Manually import and extend configurations
-export default {
-  // Spread each individual config object
-  ...compat.extends('next/core-web-vitals')[0],
-  ...compat.extends('next/typescript')[0],
-  ...compat.extends('plugin:prettier/recommended')[0],
-  plugins: {
-    prettier,
+export default defineConfig([
+  globalIgnores(['**/node_modules', '**/.next', '**/public', '**/build']),
+  {
+    extends: compat.extends('next/typescript', 'plugin:prettier/recommended'), // Had to remove "next/core-web-vitals", as a workaround for an error with eslint-config-next
+
+    plugins: {
+      prettier,
+    },
+
+    rules: {
+      'prettier/prettier': ['error'],
+    },
   },
-  rules: {
-    'prettier/prettier': ['error'], // Enforce Prettier formatting as error
-  },
-  ignores: [
-    'node_modules',
-    '.next',
-    'public',
-    'build',
-    'out',
-    'package-lock.json',
-    'Dockerfile',
-    'next.config.js',
-    'postcss.config.js',
-    'next-env.d.ts',
-    'eslint.config.mjs',
-    'tsconfig.json',
-  ],
-}
+])
