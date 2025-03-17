@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const HomePage = () => {
+export default function HomePage() {
   const [data, setData] = useState<string | null>(null)
 
   useEffect(() => {
@@ -21,5 +21,3 @@ const HomePage = () => {
     </div>
   )
 }
-
-export default HomePage
