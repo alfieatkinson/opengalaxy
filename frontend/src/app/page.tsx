@@ -7,17 +7,17 @@ export default function HomePage() {
 
   useEffect(() => {
     // Fetch data from the backend using a GET request
-    fetch("http://localhost:8000/test/")
+    fetch('http://localhost:8000/test/')
       .then((res) => res.json())
       .then((data) => setData(data.data))
-      .catch((error) => console.error("Error fetching data:", error))
+      .catch((error) => console.error('Error fetching data:', error))
   }, []) // Empty dependency array ensures this runs only once on component mount
 
   return (
     <div>
       <h1>Dockerised Full-Stack Template</h1>
       <h3>With Django, Next.js, Postgres, and Docker</h3>
-      <p>{data ? data : "Loading data..."}</p> {/* Display data or loading message */}
+      <p>{data ? data : 'Loading data...'}</p> {/* Display data or loading message */}
     </div>
   )
 }
