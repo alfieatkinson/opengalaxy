@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - ./data/db:/var/lib/postgresql/data/
+      - ./data/db:/var/lib/postgresql/data/:z
     networks:
       custom_network:
         aliases:
@@ -24,8 +24,8 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./frontend:/app/frontend
-      - node_modules:/app/frontend/node_modules
+      - ./frontend:/app/frontend:z
+      - node_modules:/app/frontend/node_modules:z
     depends_on:
       - backend
     networks:
@@ -46,8 +46,8 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./backend:/app/backend
-      - ./static:/app/backend/static
+      - ./backend:/app/backend:z
+      - ./static:/app/backend/static:z
     depends_on:
       - db
     networks:
@@ -63,4 +63,3 @@ networks:
 volumes:
   node_modules:
     driver: local
-    
