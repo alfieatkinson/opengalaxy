@@ -1,5 +1,6 @@
 #/docker-compose.yml
 services:
+  # Service for PostgreSQL database
   db:
     image: postgres:16-alpine
     ports:
@@ -14,6 +15,8 @@ services:
       custom_network:
         aliases:
           - ${PROJECT_NAME}_db.local
+
+  # Service for Next.js frontend
   frontend:
     build:
       context: ./frontend
@@ -29,6 +32,8 @@ services:
       custom_network:
         aliases:
           - ${PROJECT_NAME}_frontend.local
+
+  # Service for Django backend
   backend:
     build:
       context: ./backend
@@ -49,3 +54,8 @@ services:
       custom_network:
         aliases:
           - ${PROJECT_NAME}_backend.local
+
+networks:
+  custom_network:
+    name: ${PROJECT_NAME}
+    driver: bridge
