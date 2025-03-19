@@ -1,9 +1,3 @@
 build:
   docker:
     web: backend/Dockerfile
-
-release:
-  image: web
-  command:
-    - python /app/backend/manage.py migrate
-    - python /app/backend/manage.py collectstatic --noinput
