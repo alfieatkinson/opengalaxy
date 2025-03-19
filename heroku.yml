@@ -5,6 +5,5 @@ build:
 release:
   image: web
   command:
-    - /app/backend/wait-for-postgres.sh postgresdb
     - python /app/backend/manage.py migrate
     - python /app/backend/manage.py collectstatic --noinput
