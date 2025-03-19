@@ -28,11 +28,13 @@ RUN chmod +x /wait-for-postgres.sh
 # Conditionally run migrations and collectstatic in development
 CMD if [ "$DJANGO_ENV" == "development" ]; then \
     echo "Running in development mode..."; \
-    /wait-for-postgres.sh postgresdb; \
+    /wait-for-postgres.sh $DATABASE_HOST; \
     python manage.py migrate; \
     python manage.py collectstatic --noinput; \
     python manage.py runserver 0.0.0.0:8000; \
     else \
     echo "Running in production mode..."; \
-    /wait-for-postgres.sh postgresdb; \
+    /wait-for-postgres.sh $DATABASE_HOST; \
+    python manage.py migrate; \
+    python manage.py collectstatic --noinput; \
     fi
