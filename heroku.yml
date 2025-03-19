@@ -5,6 +5,4 @@ build:
 release:
   image: web
   command:
-    - echo "Listing files in /app/backend"
-    - ls /app/backend
-    - python /app/backend/manage.py migrate && python /app/backend/manage.py collectstatic --noinput
+    - /app/backend/wait-for-postgres.sh postgresdb -- python /app/backend/manage.py migrate && python /app/backend/manage.py collectstatic --noinput
