@@ -26,18 +26,10 @@ COPY wait-for-postgres.sh /wait-for-postgres.sh
 RUN chmod +x /wait-for-postgres.sh
 
 # Conditionally run migrations and collectstatic in development
-RUN if [ "$DJANGO_ENV" == "development" ]; then \
-    echo "Running migrations and collecting static files (Development)..."; \
+CMD if [ "$DJANGO_ENV" == "development" ]; then \
+    echo "Running in development mode..."; \
     /wait-for-postgres.sh postgresdb; \
     poetry run python manage.py migrate; \
     poetry run python manage.py collectstatic --noinput; \
-    fi
-
-# Set the command to start Django with Gunicorn
-CMD if [ "$DJANGO_ENV" == "production" ]; then \
-    echo "Running in production mode..."; \
-    gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT; \
-    else \
-    echo "Running in development mode..."; \
     poetry run python manage.py runserver 0.0.0.0:8000; \
     fi
