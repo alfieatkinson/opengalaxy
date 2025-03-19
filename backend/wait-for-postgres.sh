@@ -2,18 +2,27 @@
 
 set -e
 
-# For production, use DATABASE_URL environment variable provided by Heroku
+# For production, ensure the environment variables are set.
 if [ "$DJANGO_ENV" = "production" ]; then
+  # Optionally, you could re-export them as you already do:
   export DATABASE_HOST="$DATABASE_HOST"
   export POSTGRES_USER="$POSTGRES_USER"
   export POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
   export POSTGRES_DB="$POSTGRES_DB"
 fi
 
-# The first argument is the host (Postgres host), the rest are the commands to run after waiting for Postgres
-host="$1"
+# If DATABASE_HOST is empty, use the first argument as fallback.
+if [ -z "$DATABASE_HOST" ]; then
+  DATABASE_HOST="$1"
+fi
+
+# Debug output
+echo "DEBUG: DATABASE_HOST is '$DATABASE_HOST'"
+echo "DEBUG: POSTGRES_USER is '$POSTGRES_USER'"
+echo "DEBUG: POSTGRES_DB is '$POSTGRES_DB'"
+
+# The first argument is consumed (if not already set via env)
 shift
-cmd="$@"
 
 # Wait for Postgres to be ready
 until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$DATABASE_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
@@ -22,4 +31,4 @@ until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$DATABASE_HOST" -U "$POSTGRES_USER"
 done
 
 >&2 echo "Postgres is up - executing command"
-exec $cmd
+exec "$@"
