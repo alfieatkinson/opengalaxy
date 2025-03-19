@@ -7,7 +7,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Fetch data from the backend using a GET request
-    fetch('http://localhost:8000/test/')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/test/`)
       .then((res) => res.json())
       .then((data) => setData(data.data))
       .catch((error) => console.error('Error fetching data:', error))
