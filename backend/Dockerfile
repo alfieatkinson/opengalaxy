@@ -25,18 +25,19 @@ COPY . .
 COPY wait-for-postgres.sh /wait-for-postgres.sh
 RUN chmod +x /wait-for-postgres.sh
 
-# Copy the entrypoint.sh script into the container and make it executable
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Conditionally run migrations and collectstatic in development
+RUN if [ "$DJANGO_ENV" == "development" ]; then \
+    echo "Running migrations and collecting static files (Development)..."; \
+    /wait-for-postgres.sh postgresdb; \
+    poetry run python manage.py migrate; \
+    poetry run python manage.py collectstatic --noinput; \
+    fi
 
-# Conditional ENTRYPOINT
-# If DJANGO_ENV is 'production', don't use entrypoint.sh for Heroku.
-# Otherwise, use entrypoint.sh for local development.
-ARG DJANGO_ENV
-RUN if [ "$DJANGO_ENV" != "production" ]; then \
-    echo "Using entrypoint.sh for development..."; \
-    ENTRYPOINT ["/entrypoint.sh"]; \
+# Set the command to start Django with Gunicorn
+CMD if [ "$DJANGO_ENV" == "production" ]; then \
+    echo "Running in production mode..."; \
+    gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT; \
     else \
-    echo "Production environment: skipping entrypoint.sh"; \
-    ENTRYPOINT ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:$PORT"]; \
+    echo "Running in development mode..."; \
+    poetry run python manage.py runserver 0.0.0.0:8000; \
     fi
