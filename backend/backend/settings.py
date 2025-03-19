@@ -59,6 +59,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://opengalaxy.alfieatkinson.dev",
 ]
 
 ROOT_URLCONF = "backend.urls"
