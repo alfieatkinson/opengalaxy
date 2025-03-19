@@ -16,16 +16,14 @@ if [ -z "$DATABASE_HOST" ]; then
   DATABASE_HOST="$1"
 fi
 
-# Debug output
-echo "DEBUG: DATABASE_HOST is '$DATABASE_HOST'"
-echo "DEBUG: POSTGRES_USER is '$POSTGRES_USER'"
-echo "DEBUG: POSTGRES_DB is '$POSTGRES_DB'"
-
 # The first argument is consumed (if not already set via env)
 shift
 
 # Wait for Postgres to be ready
 until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$DATABASE_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
+  >&2 echo "DEBUG: DATABASE_HOST is '$DATABASE_HOST'"
+  >&2 echo "DEBUG: POSTGRES_USER is '$POSTGRES_USER'"
+  >&2 echo "DEBUG: POSTGRES_DB is '$POSTGRES_DB'"
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
