@@ -1,5 +1,3 @@
-#/backend/Dockerfile
-
 # Use a lightweight Python image
 FROM python:3.12-alpine
 
@@ -31,5 +29,14 @@ RUN chmod +x /wait-for-postgres.sh
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Set the container's entrypoint to the entrypoint.sh script
-ENTRYPOINT ["/entrypoint.sh"]
+# Conditional ENTRYPOINT
+# If DJANGO_ENV is 'production', don't use entrypoint.sh for Heroku.
+# Otherwise, use entrypoint.sh for local development.
+ARG DJANGO_ENV
+RUN if [ "$DJANGO_ENV" != "production" ]; then \
+    echo "Using entrypoint.sh for development..."; \
+    ENTRYPOINT ["/entrypoint.sh"]; \
+    else \
+    echo "Production environment: skipping entrypoint.sh"; \
+    ENTRYPOINT ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:$PORT"]; \
+    fi
