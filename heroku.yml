@@ -1,6 +1,8 @@
 build:
   docker:
     web: backend/Dockerfile
+
 release:
-  command:
-    - /backend/wait-for-postgres.sh postgresdb && python backend/manage.py migrate && python backend/manage.py collectstatic --noinput
+  docker:
+    command:
+      - /app/backend/wait-for-postgres.sh postgresdb && python /app/backend/manage.py migrate && python /app/backend/manage.py collectstatic --noinput
