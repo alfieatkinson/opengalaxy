@@ -5,4 +5,6 @@ build:
 release:
   image: web
   command:
-    - python /backend/manage.py migrate && python /backend/manage.py collectstatic --noinput
+    - echo "Listing files in /app/backend"
+    - ls /app/backend
+    - python /app/backend/manage.py migrate && python /app/backend/manage.py collectstatic --noinput
