@@ -29,7 +29,10 @@ RUN chmod +x /wait-for-postgres.sh
 CMD if [ "$DJANGO_ENV" == "development" ]; then \
     echo "Running in development mode..."; \
     /wait-for-postgres.sh postgresdb; \
-    poetry run python manage.py migrate; \
-    poetry run python manage.py collectstatic --noinput; \
-    poetry run python manage.py runserver 0.0.0.0:8000; \
+    python manage.py migrate; \
+    python manage.py collectstatic --noinput; \
+    python manage.py runserver 0.0.0.0:8000; \
+    else \
+    echo "Running in production mode..."; \
+    /wait-for-postgres.sh postgresdb; \
     fi
