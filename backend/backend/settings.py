@@ -11,22 +11,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Detect environment
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development")  # Default to development
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-xc4o3ex6*gdd&hwmin!j(pglkt)9v=q(l5i@+!e7@3=d(2w*)a"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-xc4o3ex6*gdd&hwmin!j(pglkt)9v=q(l5i@+!e7@3=d(2w*)a"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ENVIRONMENT == "development"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "opengalaxy.alfieatkinson.dev"]
 
 
 # Application definition
@@ -79,19 +82,20 @@ TEMPLATES = [
 WSGI_APPLICATION = "backend.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "postgres"),
-        "USER": os.getenv("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
-        "HOST": os.getenv("DATABASE_HOST", "db"),
-        "PORT": "5432",
+# Database Configuration
+if ENVIRONMENT == "production":
+    DATABASES = {"default": dj_database_url.config(conn_max_age=600, ssl_require=True)}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "postgres"),
+            "USER": os.getenv("POSTGRES_USER", "postgres"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+            "HOST": os.getenv("DATABASE_HOST", "db"),
+            "PORT": "5432",
+        }
     }
-}
 
 
 # Password validation
