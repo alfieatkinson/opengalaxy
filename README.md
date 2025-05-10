@@ -1,12 +1,12 @@
 <div align="center">
     <h1>Open<strong>Galaxy</strong></h1>
-    <a href="https://opengalaxy.alfieatkinson.dev">Live test</a>
+    <h2><a href="https://opengalaxy.alfieatkinson.dev">Live test</a></h2>
 </div>
 
 ---
 
 <div align="center">
-    <h1>Technologies Used</h1>
+    <h3>Technologies Used</h3>
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="40" alt="typescript logo"  />
     <img width="12" />
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="react logo"  />
