@@ -6,15 +6,17 @@ import { fetchSearchResults } from '@/lib/search/api'
 import MediaCard from '@/components/common/MediaCard'
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     query?: string
-  }
+  }>
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const query = searchParams.query?.trim() ?? ''
+  const { query } = await searchParams
 
-  if (!query) {
+  const queryTrimmed = query?.trim() ?? ''
+
+  if (!queryTrimmed) {
     return (
       <div className="p-8">
         <p className="text-lg text-center text-gray-500">Please enter a search term.</p>
@@ -22,13 +24,13 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     )
   }
 
-  const results: SearchResult[] = await fetchSearchResults(query)
+  const results: SearchResult[] = await fetchSearchResults(queryTrimmed)
 
   if (results.length === 0) {
     return (
       <div className="p-8">
         <p className="text-lg text-center text-gray-500">
-          No results found for &quot;{query}&quot;.
+          No results found for &quot;{queryTrimmed}&quot;.
         </p>
       </div>
     )
@@ -37,7 +39,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   return (
     <div>
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">Search results for &quot;{query}&quot;</h1>
+        <h1 className="text-3xl font-bold mb-4">Search results for &quot;{queryTrimmed}&quot;</h1>
       </div>
       <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map((result) => (
