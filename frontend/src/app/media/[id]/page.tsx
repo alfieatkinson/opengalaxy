@@ -12,8 +12,10 @@ interface MediaPageProps {
 }
 
 export const generateMetadata = async ({
-  params
-}: MediaPageProps): Promise<Metadata> => {
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
   const media: Media = await fetchMediaById(params.id)
   return {
     title: media.title,
