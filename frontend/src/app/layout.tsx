@@ -1,16 +1,23 @@
+// src/app/layout.tsx
+
 import type { Metadata } from 'next'
 import '@/styles/globals.css'
 
+import PageWrapper from '@/components/layout/PageWrapper'
+
 export const metadata: Metadata = {
   title: 'OpenGalaxy',
-  description:
-    'OpenGalaxy is an open-license media app for browsing and saving open-license media via the Openverse API.',
+  description: 'Browse the galaxy with OpenGalaxy',
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="bg-base-300 text-white">
+        <PageWrapper>{children}</PageWrapper>
+      </body>
     </html>
   )
 }
+
+export default RootLayout
