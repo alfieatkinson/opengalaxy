@@ -1,6 +1,5 @@
 // src/components/layout/Footer.tsx
 
-
 const Footer = ({ isLandingPage }: { isLandingPage: boolean }) => {
   return (
     <footer

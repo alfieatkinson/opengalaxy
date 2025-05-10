@@ -11,19 +11,12 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   const isLandingPage = pathname === '/'
 
   return (
-    <div 
-      className={`flex flex-col ${
-        isLandingPage ? 'h-screen'
-        : 'min-h-screen items-center'
-      }`}
-    >
+    <div className={`flex flex-col ${isLandingPage ? 'h-screen' : 'min-h-screen items-center'}`}>
       <Header isLandingPage={isLandingPage} />
       <main
         className={[
           'flex flex-col flex-grow pt-20 pb-4',
-          isLandingPage
-            ? 'items-center justify-center overflow-hidden'
-            : 'max-w-300'
+          isLandingPage ? 'items-center justify-center overflow-hidden' : 'max-w-300',
         ].join(' ')}
       >
         {children}

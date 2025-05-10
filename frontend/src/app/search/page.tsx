@@ -17,11 +17,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (!query) {
     return (
       <div className="p-8">
-        <p
-          className='text-lg text-center text-gray-500'
-        >
-          Please enter a search term.
-        </p>
+        <p className="text-lg text-center text-gray-500">Please enter a search term.</p>
       </div>
     )
   }
@@ -31,9 +27,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (results.length === 0) {
     return (
       <div className="p-8">
-        <p
-          className='text-lg text-center text-gray-500'
-        >
+        <p className="text-lg text-center text-gray-500">
           No results found for &quot;{query}&quot;.
         </p>
       </div>
@@ -43,11 +37,9 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   return (
     <div>
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">
-          Search results for &quot;{query}&quot;
-        </h1>
+        <h1 className="text-3xl font-bold mb-4">Search results for &quot;{query}&quot;</h1>
       </div>
-      <div className='p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+      <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map((result) => (
           <Link key={result.id} href={`/media/${result.id}`}>
             <MediaCard

@@ -33,10 +33,7 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
           }
         }}
       />
-      <button
-        className="btn btn-primary join-item w-1/5 ml-2"
-        onClick={handleSearch}
-      >
+      <button className="btn btn-primary join-item w-1/5 ml-2" onClick={handleSearch}>
         Search
       </button>
     </div>
