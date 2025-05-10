@@ -4,8 +4,11 @@ import { type Metadata } from 'next'
 import type { Media } from '@/lib/media/types'
 import { fetchMediaById } from '@/lib/media/api'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 
-type MediaPageProps = {
+export const dynamic = 'force-dynamic'
+
+interface MediaPageProps {
   params: Promise<{
     id: string
   }>
@@ -13,7 +16,16 @@ type MediaPageProps = {
 
 export const generateMetadata = async ({ params }: MediaPageProps): Promise<Metadata> => {
   const { id } = await params
-  const media: Media = await fetchMediaById(id)
+
+  const media: Media | null = await fetchMediaById(id)
+
+  if (!media) {
+    return {
+      title: 'Media Not Found',
+      description: 'The requested media could not be found.',
+    }
+  }
+
   return {
     title: media.title,
     description: media.description,
@@ -22,7 +34,12 @@ export const generateMetadata = async ({ params }: MediaPageProps): Promise<Meta
 
 const MediaPage = async ({ params }: MediaPageProps) => {
   const { id } = await params
-  const media: Media = await fetchMediaById(id)
+
+  const media: Media | null = await fetchMediaById(id)
+
+  if (!media) {
+    notFound() // If media is not found, show the Not Found page
+  }
 
   return (
     <div className="p-8">
