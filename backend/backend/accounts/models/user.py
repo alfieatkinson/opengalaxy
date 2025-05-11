@@ -39,7 +39,7 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}".strip()
 
     class Meta:
-        db_table = "accounts_user"
+        db_table = "user"
         verbose_name = "user"
         verbose_name_plural = "users"
         ordering = ["-created_at"]
