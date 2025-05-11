@@ -24,7 +24,8 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/search/", views.SearchView.as_view(), name="search"),
+    path("/search/", views.SearchView.as_view(), name="search"),
+    path("/media/<str:openverse_id>/", views.MediaDetailView.as_view(), name="media-detail"),
 ]
 
 if settings.DEBUG:
