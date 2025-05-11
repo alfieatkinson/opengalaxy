@@ -20,12 +20,13 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from . import views
+from core.search.views import SearchView
+from core.media.views import MediaDetailView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("/search/", views.SearchView.as_view(), name="search"),
-    path("/media/<str:openverse_id>/", views.MediaDetailView.as_view(), name="media-detail"),
+    path("search/", SearchView.as_view(), name="search"),
+    path("media/<str:openverse_id>/", MediaDetailView.as_view(), name="media-detail"),
 ]
 
 if settings.DEBUG:
