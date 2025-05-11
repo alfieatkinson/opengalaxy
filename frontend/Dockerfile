@@ -24,5 +24,3 @@ EXPOSE 3000
 # Uncomment the line below to run in development mode with live reloading
 CMD ["npm", "run", "dev"]
 
-# Uncomment the line below to run in production mode
-# CMD ["npm", "start"]
