@@ -30,10 +30,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENVIRONMENT == "development"
 
-ALLOWED_HOSTS = os.getenv(
-    "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-).split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # Application definition
 
@@ -46,7 +43,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
-    
     # APP_DIRS
     "accounts",
     "media",
@@ -66,10 +62,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = os.getenv(
-    "DJANGO_CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000"
-).split(",")
+CORS_ALLOWED_ORIGINS = os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 
 CORS_ALLOW_METHODS = [
     "GET",
@@ -153,7 +146,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-django_heroku.settings(locals()) 
+django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -162,24 +155,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Openverse API settings
-OPENVERSE_API_URL = os.getenv(
-    "OPENVERSE_API_URL",
-    "https://api.openverse.org/v1/"
-)
-OPENVERSE_CLIENT_ID = os.getenv(
-    "OPENVERSE_CLIENT_ID",
-    "your_openverse_client_id"
-)
-OPENVERSE_CLIENT_SECRET = os.getenv(
-    "OPENVERSE_CLIENT_SECRET",
-    "your_openverse_client_secret"
-)
+OPENVERSE_API_URL = os.getenv("OPENVERSE_API_URL", "https://api.openverse.org/v1/")
+OPENVERSE_CLIENT_ID = os.getenv("OPENVERSE_CLIENT_ID", "your_openverse_client_id")
+OPENVERSE_CLIENT_SECRET = os.getenv("OPENVERSE_CLIENT_SECRET", "your_openverse_client_secret")
 
 # Redis settings
-REDISCLOUD_URL = os.getenv(
-    "REDISCLOUD_URL",
-    "redis://localhost:6379/1"
-)
+REDISCLOUD_URL = os.getenv("REDISCLOUD_URL", "redis://localhost:6379/1")
 redis_parsed = urllib.parse.urlparse(REDISCLOUD_URL)
 
 CACHES = {
@@ -189,6 +170,6 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "PASSWORD": redis_parsed.password,  # Only used if Redis URL includes a password (Heroku does)
-        }
+        },
     }
 }
