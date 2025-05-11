@@ -158,3 +158,18 @@ django_heroku.settings(locals())
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Openverse API settings
+OPENVERSE_API_URL = os.getenv(
+    "OPENVERSE_API_URL",
+    "https://api.openverse.org/v1/"
+)
+OPENVERSE_CLIENT_ID = os.getenv(
+    "OPENVERSE_CLIENT_ID",
+    "your_openverse_client_id"
+)
+OPENVERSE_CLIENT_SECRET = os.getenv(
+    "OPENVERSE_CLIENT_SECRET",
+    "your_openverse_client_secret"
+)
