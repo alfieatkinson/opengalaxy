@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 
 class Media(models.Model):
+    openverse_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=255)
     indexed_on = models.DateTimeField()
     url = models.URLField(null=True)
@@ -18,6 +19,7 @@ class Media(models.Model):
     file_type = models.CharField(max_length=80, null=True)
     mature = models.BooleanField()
     thumbnail_url = models.URLField()
+    media_type = models.CharField(max_length=10, choices=[])
     
     class Meta:
         db_table = "media"
