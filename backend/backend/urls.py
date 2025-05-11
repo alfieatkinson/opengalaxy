@@ -24,7 +24,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("test/", views.send_test_data),
+    path("api/search/", views.SearchView.as_view(), name="search"),
 ]
 
 if settings.DEBUG:
