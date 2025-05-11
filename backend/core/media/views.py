@@ -5,9 +5,8 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 
-from media.models.media import Media
-from openverse_client import OpenverseClient
-
+from core.media.models.media import Media
+from core.openverse_client import OpenverseClient
 
 class MediaDetailView(View):
     client = OpenverseClient()
