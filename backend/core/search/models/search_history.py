@@ -1,4 +1,4 @@
-# backend/backend/search/models/search_history.py
+# backend/core/search/models/search_history.py
 
 from django.db import models
 from django.conf import settings

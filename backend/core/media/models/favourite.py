@@ -1,4 +1,4 @@
-# backend/backend/media/models/favourite.py
+# backend/core/media/models/favourite.py
 
 from django.db import models
 from django.conf import settings

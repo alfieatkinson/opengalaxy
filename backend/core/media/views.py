@@ -1,4 +1,4 @@
-# backend/backend/media/views.py
+# backend/core/media/views.py
 
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse

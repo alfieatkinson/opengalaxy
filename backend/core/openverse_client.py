@@ -1,4 +1,4 @@
-# backend/backend/openverse_client.py
+# backend/core/openverse_client.py
 
 import requests
 from django.conf import settings

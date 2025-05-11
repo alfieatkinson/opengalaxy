@@ -1,4 +1,4 @@
-# backend/backend/accounts/models/preferences.py
+# backend/core/accounts/models/preferences.py
 
 from django.db import models
 from django.conf import settings

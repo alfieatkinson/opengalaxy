@@ -1,4 +1,4 @@
-# backend/backend/search/views.py
+# backend/core/search/views.py
 
 from django.http import JsonResponse
 from django.utils import timezone
