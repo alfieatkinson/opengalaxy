@@ -4,6 +4,7 @@
 /wait-for-postgres.sh postgresdb
 
 # Perform database migration
+python manage.py makemigrations --noinput
 python manage.py migrate
 
 # Collect static files
