@@ -1,5 +1,5 @@
 # backend/backend/media/models/__init__.py
 
-from .media import *
-from .tag import *
-from .favourite import *
+from .media import Media
+from .tag import Tag, MediaTag
+from .favourite import Favourite
