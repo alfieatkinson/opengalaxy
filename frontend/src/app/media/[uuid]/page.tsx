@@ -4,6 +4,7 @@ import { type Metadata } from 'next'
 import { fetchMediaById } from '@/lib/media/api'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import FullSizeImage from '@/components/FullSizeImage'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,17 +45,7 @@ const MediaPage = async ({ params }: MediaPageProps) => {
   return (
     <div className="p-8">
       <div className="card bg-base-100 shadow-lg">
-        {media.url && (
-          <figure>
-            <Image
-              src={media.url} // full-size
-              alt={media.title}
-              width={800}
-              height={450}
-              className="object-cover w-full h-60"
-            />
-          </figure>
-        )}
+        <FullSizeImage media={media} />
         <div className="card-body text-white">
           <h1 className="text-4xl font-bold mb-2">{media.title}</h1>
           <p className="mb-4">{media.attribution}</p> {/* your “description” */}
