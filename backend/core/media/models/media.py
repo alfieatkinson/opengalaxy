@@ -20,7 +20,7 @@ class Media(models.Model):
     file_size = models.IntegerField(null=True)
     file_type = models.CharField(max_length=80, null=True)
     mature = models.BooleanField()
-    thumbnail_url = models.URLField()
+    thumbnail_url = models.URLField(null=True)
     height = models.IntegerField(null=True)
     width = models.IntegerField(null=True)
     duration = models.IntegerField(null=True)
