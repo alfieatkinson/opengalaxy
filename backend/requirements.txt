@@ -1,6 +1,8 @@
 asgiref==3.8.1
 black==25.1.0
+certifi==2025.4.26
 cfgv==3.4.0
+charset-normalizer==3.4.2
 click==8.1.8
 distlib==0.3.9
 dj-database-url==2.3.0
@@ -13,6 +15,7 @@ filelock==3.18.0
 flake8==7.1.2
 gunicorn==23.0.0
 identify==2.6.9
+idna==3.10
 mccabe==0.7.0
 mypy-extensions==1.0.0
 nodeenv==1.9.1
@@ -25,7 +28,9 @@ pycodestyle==2.12.1
 pyflakes==3.2.0
 PyYAML==6.0.2
 redis==6.0.0
+requests==2.32.3
 sqlparse==0.5.3
 typing_extensions==4.12.2
+urllib3==2.4.0
 virtualenv==20.29.3
 whitenoise==6.9.0
