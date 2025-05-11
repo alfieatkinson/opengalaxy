@@ -1,19 +1,16 @@
 // src/lib/search/types.ts
 
-import type { SearchResult } from '@/lib/search/types'
+import type { SearchAPIResponse } from '@/lib/search/types'
 
-import { mockData } from '@/lib/search/mockData'
-
-export const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
-  return mockData
-
+export const fetchSearchResults = async (
+  query: string,
+  page: number = 1,
+  pageSize: number = 12,
+): Promise<SearchAPIResponse> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/search?query=${encodeURIComponent(query)}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`,
     { cache: 'no-store' },
   )
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch search results')
-  }
-  return res.json()
+  if (!res.ok) throw new Error(`Search failed: ${res.statusText}`)
+  return res.json() as Promise<SearchAPIResponse>
 }
