@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 import django_heroku
+import urllib.parse
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -175,7 +176,19 @@ OPENVERSE_CLIENT_SECRET = os.getenv(
 )
 
 # Redis settings
-REDIS_URL = os.getenv(
-    "REDIS_URL",
+REDISCLOUD_URL = os.getenv(
+    "REDISCLOUD_URL",
     "redis://localhost:6379/1"
 )
+redis_parsed = urllib.parse.urlparse(REDISCLOUD_URL)
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDISCLOUD_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": redis_parsed.password,  # Only used if Redis URL includes a password (Heroku does)
+        }
+    }
+}
