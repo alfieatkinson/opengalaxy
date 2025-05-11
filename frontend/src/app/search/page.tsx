@@ -9,18 +9,18 @@ import MediaCard from '@/components/common/MediaCard'
 import PageNavigator from '@/components/PageNavigator'
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     query?: string
     page?: string
     page_size?: string
-  }
+  }>
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const params = await searchParams
   const query = params.query?.trim() ?? ''
   const page = Math.max(parseInt(params.page ?? '1', 10), 1)
-  const perPage = Math.max(parseInt(params.page_size ?? '20', 10), 1)
+  const perPage = Math.max(parseInt(params.page_size ?? '12', 10), 1)
 
   if (!query) {
     return (
@@ -66,3 +66,5 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     </div>
   )
 }
+
+export default SearchPage
