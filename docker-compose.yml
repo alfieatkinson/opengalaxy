@@ -14,6 +14,17 @@ services:
         aliases:
           - ${PROJECT_NAME}_db.local
 
+  # Service for Redis cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
+    networks:
+      custom_network:
+        aliases:
+          - ${PROJECT_NAME}_redis.local
+
   # Service for Next.js frontend
   frontend:
     build:
@@ -47,6 +58,7 @@ services:
       - ./static:/app/backend/static:z
     depends_on:
       - db
+      - redis
     networks:
       custom_network:
         aliases:
