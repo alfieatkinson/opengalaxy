@@ -1,4 +1,4 @@
-# backend/backend/analytics/models/api_request.py
+# backend/core/analytics/models/api_request.py
 
 from django.conf import settings
 from django.db import models

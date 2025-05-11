@@ -1,4 +1,4 @@
-# backend/backend/accounts/models/__init__.py
+# backend/core/accounts/models/__init__.py
 
 from .user import User
 from .preferences import UserPreferences

@@ -18,17 +18,10 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Detect environment
-ENVIRONMENT = os.getenv("DJANGO_ENV", "development")  # Default to development
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
     "SECRET_KEY", "django-insecure-xc4o3ex6*gdd&hwmin!j(pglkt)9v=q(l5i@+!e7@3=d(2w*)a"
 )
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ENVIRONMENT == "development"
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
@@ -44,10 +37,10 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     # APP_DIRS
-    "accounts",
-    "media",
-    "search",
-    "analytics",
+    "core.accounts",
+    "core.media",
+    "core.search",
+    "core.analytics",
 ]
 
 MIDDLEWARE = [
@@ -75,7 +68,7 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -93,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database Configuration

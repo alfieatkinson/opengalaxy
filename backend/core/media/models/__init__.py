@@ -1,4 +1,4 @@
-# backend/backend/media/models/__init__.py
+# backend/core/media/models/__init__.py
 
 from .media import Media
 from .tag import Tag, MediaTag

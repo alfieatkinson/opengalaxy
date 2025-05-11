@@ -1,4 +1,4 @@
-# backend/backend/accounts/models/user.py
+# backend/core/accounts/models/user.py
 
 import uuid
 from django.contrib.auth.models import AbstractUser
