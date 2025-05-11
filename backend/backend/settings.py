@@ -29,12 +29,10 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENVIRONMENT == "development"
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "opengalaxy.alfieatkinson.dev",
-    "opengalaxy-backend.herokuapp.com"
-]
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 # Application definition
 
@@ -67,11 +65,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://opengalaxy.alfieatkinson.dev",
-    "https://api.opengalaxy.alfieatkinson.dev",
-]
+CORS_ALLOWED_ORIGINS = os.getenv(
+    "DJANGO_CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000"
+).split(",")
 
 CORS_ALLOW_METHODS = [
     "GET",
@@ -136,6 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "accounts.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
