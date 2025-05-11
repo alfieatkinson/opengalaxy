@@ -24,7 +24,10 @@ class Media(models.Model):
     height = models.IntegerField(null=True)
     width = models.IntegerField(null=True)
     duration = models.IntegerField(null=True)
-    media_type = models.CharField(max_length=10, choices=["image", "audio"])
+    media_type = models.CharField(max_length=10, choices=[
+        ("image", "Image"),
+        ("audio", "Audio"),
+    ])
     accessed_at = models.DateTimeField(auto_now=True)
 
     class Meta:
