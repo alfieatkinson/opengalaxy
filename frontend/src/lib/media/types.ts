@@ -21,5 +21,5 @@ export interface Media {
   width: number | null
   duration: number | null
   media_type: 'image' | 'audio'
-  accessed_at?: string; // Only present in MediaDetailView
+  accessed_at?: string // Only present in MediaDetailView
 }
