@@ -3,6 +3,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Media(models.Model):
     openverse_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=255)
@@ -25,7 +26,7 @@ class Media(models.Model):
     duration = models.IntegerField(null=True)
     media_type = models.CharField(max_length=10, choices=["image", "audio"])
     accessed_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         db_table = "media"
         verbose_name = "media"

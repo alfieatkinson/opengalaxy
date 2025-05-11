@@ -3,6 +3,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Favourite(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     media = models.ForeignKey("media.Media", on_delete=models.CASCADE)
@@ -13,6 +14,4 @@ class Favourite(models.Model):
         verbose_name = "favourite"
         verbose_name_plural = "favourites"
         ordering = ["-added_at"]
-        constraints = [
-            models.UniqueConstraint(fields=["user", "media"], name="unique_favourite")
-        ]
+        constraints = [models.UniqueConstraint(fields=["user", "media"], name="unique_favourite")]
