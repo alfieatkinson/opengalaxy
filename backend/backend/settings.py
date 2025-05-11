@@ -47,6 +47,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    
+    # APP_DIRS
+    "accounts",
+    "media",
+    "search",
+    "analytics",
 ]
 
 MIDDLEWARE = [
