@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 import django_heroku
-import dj_database_url
 import urllib.parse
+from urllib.parse import urlparse
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,9 +90,32 @@ TEMPLATES = [
 WSGI_APPLICATION = "core.wsgi.application"
 
 # Database Configuration
-DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL', 'postgres://localhost:5432/postgres'))
-}
+# Check if we are on Heroku
+if os.getenv("DATABASE_URL"):
+    # Parse the DATABASE_URL from Heroku
+    database_url = urlparse(os.getenv("DATABASE_URL"))
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": database_url.path[1:],  # Skip the leading '/'
+            "USER": database_url.username,
+            "PASSWORD": database_url.password,
+            "HOST": database_url.hostname,
+            "PORT": database_url.port,
+        }
+    }
+else:
+    # Local Development Defaults
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "postgres"),
+            "USER": os.getenv("POSTGRES_USER", "postgres"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+            "HOST": os.getenv("DATABASE_HOST", "db"),
+            "PORT": os.getenv("DATABASE_PORT", "5432"),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
