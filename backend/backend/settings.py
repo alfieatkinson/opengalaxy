@@ -173,3 +173,9 @@ OPENVERSE_CLIENT_SECRET = os.getenv(
     "OPENVERSE_CLIENT_SECRET",
     "your_openverse_client_secret"
 )
+
+# Redis settings
+REDIS_URL = os.getenv(
+    "REDIS_URL",
+    "redis://localhost:6379/1"
+)
