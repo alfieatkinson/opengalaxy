@@ -1,11 +1,12 @@
 # backend/core/search/views.py
 
+from math import ceil
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 
-from openverse_client import OpenverseClient
-from media.models.media import Media
+from core.openverse_client import OpenverseClient
+from core.media.models.media import Media
 
 
 class SearchView(View):
@@ -67,7 +68,7 @@ class SearchView(View):
                 "category": item.get("category"),
                 "file_size": item.get("file_size"),
                 "file_type": item.get("file_type"),
-                "mature": item.get("is_mature"),
+                "mature": item.get("is_mature", False),
                 "thumbnail_url": item.get("thumbnail"),
                 "height": item.get("height"),
                 "width": item.get("width"),
