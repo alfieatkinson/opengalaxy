@@ -2,7 +2,6 @@
 
 import { type Metadata } from 'next'
 import { fetchMediaById } from '@/lib/media/api'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/FullSizeImage'
 
