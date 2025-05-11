@@ -1,14 +1,16 @@
+# /backend/Dockerfile
+
 # Use a lightweight Python image
 FROM python:3.12-alpine
 
-# Set environment variables to ensure Python outputs are directed to the console
+# Set environment variables to ensure Python outputs are directed to the console and no bytecode files are generated
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # Set the working directory for the container
 WORKDIR /app/backend
 
-# Copy the Python dependencies file into the container
+# Copy the Python dependency file into the container
 COPY requirements.txt .
 
 # Install system dependencies required for GeoDjango, including compilation dependencies and geospatial libraries
@@ -25,16 +27,9 @@ COPY . .
 COPY wait-for-postgres.sh /wait-for-postgres.sh
 RUN chmod +x /wait-for-postgres.sh
 
-# Conditionally run migrations and collectstatic in development
-CMD if [ "$DJANGO_ENV" == "development" ]; then \
-    echo "Running in development mode..."; \
-    /wait-for-postgres.sh $DATABASE_HOST; \
-    python manage.py migrate; \
-    python manage.py collectstatic --noinput; \
-    python manage.py runserver 0.0.0.0:8000; \
-    else \
-    echo "Running in production mode..."; \
-    /wait-for-postgres.sh $DATABASE_HOST; \
-    python manage.py migrate; \
-    python manage.py collectstatic --noinput; \
-    fi
+# Copy the entrypoint.sh script into the container and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the container's entrypoint to the entrypoint.sh script
+ENTRYPOINT ["/entrypoint.sh"]
