@@ -8,13 +8,13 @@ import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
 interface MediaPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export const generateMetadata = async ({ params }: MediaPageProps): Promise<Metadata> => {
-  const { id } = params
+  const { id } = await params
   const media = await fetchMediaById(id)
 
   if (!media) {
@@ -34,7 +34,7 @@ export const generateMetadata = async ({ params }: MediaPageProps): Promise<Meta
 }
 
 const MediaPage = async ({ params }: MediaPageProps) => {
-  const { id } = params
+  const { id } = await params
   const media = await fetchMediaById(id)
 
   if (!media) {
