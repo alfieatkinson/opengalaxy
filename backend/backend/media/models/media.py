@@ -7,7 +7,8 @@ class Media(models.Model):
     openverse_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=255)
     indexed_on = models.DateTimeField()
-    url = models.URLField(null=True)
+    foreign_landing_url = models.URLField()
+    url = models.URLField()
     creator = models.CharField(max_length=255, null=True)
     creator_url = models.URLField(null=True)
     license = models.CharField(max_length=50)
@@ -19,7 +20,11 @@ class Media(models.Model):
     file_type = models.CharField(max_length=80, null=True)
     mature = models.BooleanField()
     thumbnail_url = models.URLField()
-    media_type = models.CharField(max_length=10, choices=[])
+    height = models.IntegerField(null=True)
+    width = models.IntegerField(null=True)
+    duration = models.IntegerField(null=True)
+    media_type = models.CharField(max_length=10, choices=["image", "audio"])
+    accessed_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = "media"
