@@ -1,9 +1,9 @@
 // src/app/page.tsx
 
-import Hero from "@/components/layout/Hero";
+import Hero from '@/components/layout/Hero'
 
 const HomePage = () => {
-  return <Hero />;
-};
+  return <Hero />
+}
 
-export default HomePage;
+export default HomePage
