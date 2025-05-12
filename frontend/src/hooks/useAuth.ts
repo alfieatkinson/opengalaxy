@@ -79,7 +79,7 @@ export const useAuth = () => {
 
   // Sign in: Exchange credentials for tokens and fetch user
   const signIn = async (username: string, password: string) => {
-    const res = await fetch('/api/auth/token/', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/token/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -95,7 +95,7 @@ export const useAuth = () => {
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
 
     // Fetch the user
-    const meRes = await authFetch('/api/auth/users/me/')
+    const meRes = await authFetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/users/me/`)
     const me = await meRes.json()
     setUser(me)
   }
@@ -108,7 +108,7 @@ export const useAuth = () => {
     last_name: string,
     password: string,
   ) => {
-    const res = await fetch('/api/accounts/register/', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/register/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, email, first_name, last_name, password }),
@@ -124,7 +124,7 @@ export const useAuth = () => {
 
   // Sign out: Clear tokens and user
   const signOut = async () => {
-    await fetch('/api/auth/logout/', { method: 'POST' })
+    await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/logout/`, { method: 'POST' })
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     setUser(null)
