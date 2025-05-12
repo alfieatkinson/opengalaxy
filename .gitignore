@@ -13,3 +13,6 @@ data/
 # Static files
 **/static/
 **/staticfiles/
+
+# Node modules
+node_modules/
