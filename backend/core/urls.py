@@ -16,17 +16,16 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from core.search.views import SearchView
-from core.media.views import MediaDetailView
-
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("search/", SearchView.as_view(), name="search"),
-    path("media/<str:openverse_id>/", MediaDetailView.as_view(), name="media-detail"),
+    path("api/accounts/", include("core.accounts.urls")),
+    path("api/media/", include("core.media.urls")),
+    path("api/search/", include("core.search.urls")),
+    path("api/analytics/", include("core.analytics.urls")),
 ]
 
 if settings.DEBUG:
