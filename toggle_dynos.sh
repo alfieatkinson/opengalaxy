@@ -6,14 +6,26 @@ if ! heroku auth:whoami &>/dev/null; then
     heroku login
 fi
 
+# Prompt user for action
+echo "Choose action:"
+echo "1. Stop dynos"
+echo "2. Start dynos"
+read -p "Enter number: " choice
+
 # Set the app name
 APP_NAME="opengalaxy-backend"
 
-# Check if web dynos are currently running
-if heroku ps --app $APP_NAME | grep -q "web.*up"; then
-    echo "Dynos are running. Stopping them..."
-    heroku ps:stop web --app $APP_NAME
-else
-    echo "Dynos are stopped. Starting them..."
-    heroku ps:scale web=1 --app $APP_NAME
-fi
+case $choice in
+    1)
+        echo "Stopping dynos..."
+        heroku ps:stop web --app $APP_NAME
+        ;;
+    2)
+        echo "Starting dynos..."
+        heroku ps:scale web=1 --app $APP_NAME
+        ;;
+    *)
+        echo "Invalid option. Exiting."
+        exit 1
+        ;;
+esac
