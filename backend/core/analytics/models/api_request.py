@@ -2,9 +2,6 @@
 
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
-from django.contrib.postgres.fields import JSONField
-
 
 class APIRequest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
