@@ -177,7 +177,7 @@ CACHES = {
         "LOCATION": REDISCLOUD_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": redis_parsed.password,  # Only used if Redis URL includes a password (Heroku does)
+            "PASSWORD": redis_parsed.password,  # Only used if Redis URL includes a password
         },
     }
 }

@@ -11,7 +11,10 @@ repos:
     rev: 25.1.0
     hooks:
       - id: black
-        args: ['--line-length=100']  # Optional: Adjust black settings if needed
+        args: [
+          '--line-length=100',
+          '--exclude', '.git/*, __pycache__/*, migrations/*, tests/*',
+        ]
         files: ^backend/  # Only run black on the backend directory
   - repo: https://github.com/PyCQA/flake8
     rev: 7.2.0
@@ -23,6 +26,7 @@ repos:
           '--per-file-ignores=__init__.py:F401'
         ]
         files: ^backend/  # Only run flake8 on the backend directory
+        exclude: ^backend/(migrations|__pycache__|tests|.git)/.'
 
   # For Next.js (Frontend)
   - repo: https://github.com/pre-commit/mirrors-eslint
