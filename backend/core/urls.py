@@ -26,6 +26,7 @@ urlpatterns = [
     path("api/media/", include("core.media.urls")),
     path("api/search/", include("core.search.urls")),
     path("api/analytics/", include("core.analytics.urls")),
+    path("api/auth/", include("rest_framework.urls")),
 ]
 
 if settings.DEBUG:
