@@ -99,4 +99,14 @@ export const useAuth = () => {
     const me = await meRes.json()
     setUser(me)
   }
+
+  // Sign out: Clear tokens and user
+  const signOut = async () => {
+    await fetch('/api/auth/logout/', { method: 'POST' })
+    localStorage.removeItem(ACCESS_TOKEN_KEY)
+    localStorage.removeItem(REFRESH_TOKEN_KEY)
+    setUser(null)
+  }
+
+  return { user, isLoggedIn, signIn, signOut, authFetch }
 }
