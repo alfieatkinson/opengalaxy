@@ -1,7 +1,6 @@
 # backend/core/media/models/media.py
 
 from django.db import models
-from django.conf import settings
 
 
 class Media(models.Model):

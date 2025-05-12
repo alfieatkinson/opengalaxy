@@ -1,7 +1,6 @@
 # backend/core/media/models/tag.py
 
 from django.db import models
-from django.conf import settings
 
 
 class Tag(models.Model):

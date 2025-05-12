@@ -7,7 +7,8 @@ from django.core.cache import cache
 
 class OpenverseClient:
     """
-    A client for interfacing with the Openverse API using OAuth2 client credentials and Redis-backed token caching.
+    A client for interfacing with the Openverse API using OAuth2 client credentials
+    and Redis-backed token caching.
     """
 
     TOKEN_CACHE_KEY = "openverse_access_token"
