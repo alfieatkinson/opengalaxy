@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.db import models
 
+
 class APIRequest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     request_method = models.CharField(max_length=10)

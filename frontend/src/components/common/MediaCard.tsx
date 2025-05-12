@@ -1,11 +1,11 @@
 // src/components/common/MediaCard.tsx
 
-import Image from 'next/image'
+import Image from "next/image";
 
 interface MediaCardProps {
-  title: string
-  description?: string
-  imageUrl?: string
+  title: string;
+  description?: string;
+  imageUrl?: string;
 }
 
 const MediaCard = ({ title, description, imageUrl }: MediaCardProps) => {
@@ -27,7 +27,7 @@ const MediaCard = ({ title, description, imageUrl }: MediaCardProps) => {
         {description && <p className="text-sm line-clamp-3">{description}</p>}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MediaCard
+export default MediaCard;

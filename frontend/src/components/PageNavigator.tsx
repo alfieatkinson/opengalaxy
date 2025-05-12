@@ -1,27 +1,32 @@
 // src/components/PageNavigator.tsx
 
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import { useRouter } from "next/navigation";
+import React from "react";
 
 interface PageNavigatorProps {
-  query: string
-  page: number
-  totalPages: number
-  pageSize: number
+  query: string;
+  page: number;
+  totalPages: number;
+  pageSize: number;
 }
 
-const PageNavigator = ({ query, page, totalPages, pageSize }: PageNavigatorProps) => {
-  const router = useRouter()
+const PageNavigator = ({
+  query,
+  page,
+  totalPages,
+  pageSize,
+}: PageNavigatorProps) => {
+  const router = useRouter();
 
   const changePage = (to: number) => {
-    const params = new URLSearchParams()
-    params.set('query', query)
-    params.set('page', String(to))
-    params.set('page_size', String(pageSize))
-    router.push(`/search?${params.toString()}`)
-  }
+    const params = new URLSearchParams();
+    params.set("query", query);
+    params.set("page", String(to));
+    params.set("page_size", String(pageSize));
+    router.push(`/search?${params.toString()}`);
+  };
 
   return (
     <div className="flex justify-center items-center space-x-4 my-8">
@@ -43,7 +48,7 @@ const PageNavigator = ({ query, page, totalPages, pageSize }: PageNavigatorProps
         Next
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default PageNavigator
+export default PageNavigator;

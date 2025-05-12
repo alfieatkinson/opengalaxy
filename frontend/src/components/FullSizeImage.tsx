@@ -1,23 +1,23 @@
 // src/components/FullSizeImage.tsx
 
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import type { Media } from '@/lib/media/types'
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import type { Media } from "@/lib/media/types";
 
 interface FullSizeImageProps {
-  media: Media
+  media: Media;
 }
 
 const FullSizeImage = ({ media }: FullSizeImageProps) => {
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const img = new window.Image()
-    img.src = media.url
-    img.onload = () => setLoaded(true)
-  }, [media.url])
+    const img = new window.Image();
+    img.src = media.url;
+    img.onload = () => setLoaded(true);
+  }, [media.url]);
 
   return (
     <figure className="relative w-full overflow-hidden">
@@ -28,7 +28,7 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
           alt={media.title}
           fill
           className={`object-contain transition-opacity duration-300 ${
-            loaded ? 'opacity-0' : 'opacity-100'
+            loaded ? "opacity-0" : "opacity-100"
           }`}
         />
 
@@ -42,7 +42,7 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
         )}
       </div>
     </figure>
-  )
-}
+  );
+};
 
-export default FullSizeImage
+export default FullSizeImage;

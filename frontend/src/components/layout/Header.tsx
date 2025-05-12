@@ -1,26 +1,26 @@
 // src/components/layout/Header.tsx
 
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { useAuth } from '@/hooks/useAuth'
-import SearchBar from '@/components/common/SearchBar'
-import HighlightedText from '../common/HighlightedText'
+import Image from "next/image";
+import { useAuth } from "@/hooks/useAuth";
+import SearchBar from "@/components/common/SearchBar";
+import HighlightedText from "../common/HighlightedText";
 
 const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
-  const { user, isLoggedIn, signIn, signOut } = useAuth()
+  const { user, isLoggedIn, signIn, signOut } = useAuth();
 
   return (
     <header
       className={`fixed flex items-center justify-between max-h-32 w-screen z-50 ${
-        isLandingPage ? 'p-4 bg-transparent' : 'p-4 bg-base-200'
+        isLandingPage ? "p-4 bg-transparent" : "p-4 bg-base-200"
       } text-white`}
     >
       {/* Left slot: logo on inner pages, empty on landing */}
       <div
         className="w-1/4"
         onClick={() => {
-          window.location.href = '/'
+          window.location.href = "/";
         }}
       >
         {!isLandingPage && (
@@ -59,7 +59,7 @@ const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
         )}
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
