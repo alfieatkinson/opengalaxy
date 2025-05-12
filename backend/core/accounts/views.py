@@ -3,7 +3,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
@@ -25,12 +24,6 @@ class RegisterView(generics.CreateAPIView):
         if password:
             user.set_password(password)
             user.save()
-
-# /api/auth/token/ and /api/auth/token/refresh/
-class CustomTokenObtainPairView(TokenObtainPairView):
-    # Can be used to add custom claims to the token
-    pass
-
 
 # /api/auth/users/me/
 class UserDetailView(generics.RetrieveAPIView):

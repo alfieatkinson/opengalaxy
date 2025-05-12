@@ -138,6 +138,9 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "accounts.User"
 
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
