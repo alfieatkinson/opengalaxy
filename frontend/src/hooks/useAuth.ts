@@ -100,6 +100,28 @@ export const useAuth = () => {
     setUser(me)
   }
 
+  // Sign up: Register a new user and log them in
+  const signUp = async (
+    username: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    password: string,
+  ) => {
+    const res = await fetch('/api/accounts/register/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, first_name, last_name, password }),
+    })
+
+    if (!res.ok) {
+      const errorText = await res.text()
+      throw new Error(errorText || 'Registration failed')
+    }
+
+    return true
+  }
+
   // Sign out: Clear tokens and user
   const signOut = async () => {
     await fetch('/api/auth/logout/', { method: 'POST' })
@@ -108,5 +130,5 @@ export const useAuth = () => {
     setUser(null)
   }
 
-  return { user, isLoggedIn, signIn, signOut, authFetch }
+  return { user, isLoggedIn, signIn, signUp, signOut, authFetch }
 }

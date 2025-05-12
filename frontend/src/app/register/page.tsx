@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { RegisterSchema, type RegisterForm } from '@/lib/auth/validation'
+import { useAuth } from '@/hooks/useAuth'
 
 const fields: Array<keyof RegisterForm> = [
   'username',
@@ -18,6 +19,7 @@ const fields: Array<keyof RegisterForm> = [
 
 const RegisterPage = () => {
   const router = useRouter()
+  const { signUp } = useAuth()
 
   const {
     register,
@@ -37,23 +39,16 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      // Call registration endpoint
-      const res = await fetch('/api/accounts/register/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: data.username,
-          email: data.email_address,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          password: data.password,
-        }),
-      })
-
-      if (!res.ok) throw new Error('Registration failed')
+      await signUp(
+        data.username,
+        data.email_address,
+        data.first_name,
+        data.last_name,
+        data.password,
+      )
 
       alert('Registration successful! Please log in.')
-      router.push('/login') // Redirect to login page
+      router.push('/login')
     } catch (error) {
       alert(`Registration failed: ${error}`)
     }
