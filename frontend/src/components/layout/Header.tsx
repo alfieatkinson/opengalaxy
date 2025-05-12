@@ -16,7 +16,7 @@ const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
   const handleLogout = async () => {
     try {
       await signOut()
-      router.push('/')       // send them back home
+      router.push('/') // send them back home
     } catch (err) {
       console.error('Logout failed', err)
     }
@@ -29,9 +29,7 @@ const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
       } text-white`}
     >
       {/* Left slot */}
-      <div
-        className="w-1/4 cursor-pointer"
-        onClick={() => router.push('/')}>
+      <div className="w-1/4 cursor-pointer" onClick={() => router.push('/')}>
         {!isLandingPage && (
           <span className="text-2xl font-bold">
             Open<HighlightedText>Galaxy</HighlightedText>
