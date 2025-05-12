@@ -8,11 +8,12 @@ import Footer from '@/components/layout/Footer'
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
+  const isLandingPage = pathname === '/'
   const isScrollable = pathname === '/' || pathname === '/login' || pathname === '/register'
 
   return (
     <div className={`flex flex-col ${isScrollable ? 'h-screen' : 'min-h-screen items-center'}`}>
-      <Header isScrollable={isScrollable} />
+      <Header isScrollable={isScrollable} isLandingPage={isLandingPage} />
       <main
         className={[
           'flex flex-col flex-grow pt-20 pb-4',

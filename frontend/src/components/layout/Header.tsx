@@ -9,7 +9,13 @@ import { useAuth } from '@/hooks/useAuth'
 import SearchBar from '@/components/common/SearchBar'
 import HighlightedText from '../common/HighlightedText'
 
-const Header = ({ isScrollable }: { isScrollable: boolean }) => {
+const Header = ({
+  isScrollable,
+  isLandingPage,
+}: {
+  isScrollable: boolean
+  isLandingPage: boolean
+}) => {
   const router = useRouter()
   const { user, isLoggedIn, signOut } = useAuth()
 
@@ -30,7 +36,7 @@ const Header = ({ isScrollable }: { isScrollable: boolean }) => {
     >
       {/* Left slot */}
       <div className="w-1/4 cursor-pointer" onClick={() => router.push('/')}>
-        {!isScrollable && (
+        {!isLandingPage && (
           <span className="text-2xl font-bold">
             Open<HighlightedText>Galaxy</HighlightedText>
           </span>
@@ -39,7 +45,7 @@ const Header = ({ isScrollable }: { isScrollable: boolean }) => {
 
       {/* Centre slot */}
       <div className="flex-grow flex justify-center">
-        {!isScrollable && <SearchBar placeholder="Search for media..." />}
+        {!isLandingPage && <SearchBar placeholder="Search for media..." />}
       </div>
 
       {/* Right slot */}
