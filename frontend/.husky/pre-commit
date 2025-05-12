@@ -1,2 +1,5 @@
-npm run lint:fox
-npm run format
+#!/bin/sh
+
+. "$(dirname "$0")/_/husky.sh"
+
+npm run lint:fix && npm run format
