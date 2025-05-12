@@ -6,6 +6,22 @@
     dark --prefersdark;
 }
 
+@plugin 'daisyui/theme' {
+  name: 'light';
+  default: true;
+  prefersdark: false;
+  --color-secondary: white;
+  --color-secondary-content: black;
+}
+
+@plugin 'daisyui/theme' {
+  name: 'dark';
+  default: false;
+  prefersdark: true;
+  --color-secondary: white;
+  --color-secondary-content: black;
+}
+
 @layer base {
   /* Global resets or typography */
   body {

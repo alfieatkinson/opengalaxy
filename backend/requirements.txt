@@ -11,6 +11,7 @@ django-cors-headers==4.7.0
 django-heroku==0.3.1
 django-redis==5.4.0
 djangorestframework==3.15.2
+djangorestframework_simplejwt==5.5.0
 filelock==3.18.0
 flake8==7.1.2
 gunicorn==23.0.0
@@ -26,6 +27,7 @@ pre_commit==4.1.0
 psycopg2==2.9.10
 pycodestyle==2.12.1
 pyflakes==3.2.0
+PyJWT==2.9.0
 PyYAML==6.0.2
 redis==6.0.0
 requests==2.32.3
