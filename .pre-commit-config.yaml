@@ -16,6 +16,8 @@ repos:
           '--exclude', '.git/*, __pycache__/*, migrations/*, tests/*',
         ]
         files: ^backend/  # Only run black on the backend directory
+        stages: [commit]
+
   - repo: https://github.com/PyCQA/flake8
     rev: 7.2.0
     hooks:
