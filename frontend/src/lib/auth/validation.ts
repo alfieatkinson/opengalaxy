@@ -11,10 +11,10 @@ export const RegisterSchema = LoginSchema.extend({
   email: z.string().email('Invalid email address'),
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
-  passwordConfirm: z.string().min(1, 'Please confirm password'),
-}).refine((data) => data.password === data.passwordConfirm, {
+  confirm_password: z.string().min(1, 'Please confirm password'),
+}).refine((data) => data.password === data.confirm_password, {
   message: 'Passwords must match',
-  path: ['passwordConfirm'],
+  path: ['password_confirm'],
 })
 
 export type LoginForm = z.infer<typeof LoginSchema>
