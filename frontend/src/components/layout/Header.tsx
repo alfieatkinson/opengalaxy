@@ -45,7 +45,7 @@ const Header = ({
 
       {/* Centre slot */}
       <div className="flex-grow flex justify-center">
-        {!isLandingPage && <SearchBar placeholder="Search for media..." />}
+        {!isScrollable && <SearchBar placeholder="Search for media..." />}
       </div>
 
       {/* Right slot */}
