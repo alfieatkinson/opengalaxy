@@ -9,7 +9,7 @@ import { RegisterSchema, type RegisterForm } from '@/lib/auth/validation'
 
 const fields: Array<keyof RegisterForm> = [
   'username',
-  'email',
+  'email_address',
   'first_name',
   'last_name',
   'password',
@@ -27,7 +27,7 @@ const RegisterPage = () => {
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       username: '',
-      email: '',
+      email_address: '',
       first_name: '',
       last_name: '',
       password: '',
@@ -43,7 +43,7 @@ const RegisterPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: data.username,
-          email: data.email,
+          email: data.email_address,
           first_name: data.first_name,
           last_name: data.last_name,
           password: data.password,
@@ -60,22 +60,26 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h1 className="text-2xl mb-4">Sign Up</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="card card-compact bg-base-100 shadow w-md mx-auto p-10">
+      <h1 className="text-3xl text-center font-bold mb-4">Register</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
         {fields.map((field) => (
-          <div key={field}>
-            <label className="block">{field.replace('_', ' ').toUpperCase()}</label>
+          <div key={field} className="relative">
+            <div className="grid grid-cols-2">
+              <label className="block">{field.replace('_', ' ').toUpperCase()}</label>
+              {errors[field] && (
+                <p className="text-right text-xs text-red-500">{errors[field]?.message}</p>
+              )}
+            </div>
             <input
               type={field.includes('password') ? 'password' : 'text'}
               {...register(field)}
-              className="input input-bordered w-full"
+              className="input input-bordered w-full h-8"
             />
-            {errors[field] && <p className="text-sm text-red-500">{errors[field]?.message}</p>}
           </div>
         ))}
         <button type="submit" disabled={isSubmitting} className="btn btn-secondary w-full">
-          {isSubmitting ? 'Signing up…' : 'Sign Up'}
+          {isSubmitting ? 'Registering user...' : 'Register'}
         </button>
       </form>
     </div>
