@@ -3,7 +3,7 @@
 import type { Media } from '@/lib/media/types'
 
 export async function fetchMediaById(id: string): Promise<Media | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/media/${encodeURIComponent(id)}`, {
+  const res = await fetch(`${process.env.BACKEND_API_URL}/api/media/${encodeURIComponent(id)}`, {
     cache: 'no-store',
   })
   if (!res.ok) {

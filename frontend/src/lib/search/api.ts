@@ -8,7 +8,7 @@ export const fetchSearchResults = async (
   pageSize: number = 12,
 ): Promise<SearchAPIResponse> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`,
+    `${process.env.BACKEND_API_URL}/api/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`,
     { cache: 'no-store' },
   )
   if (!res.ok) throw new Error(`Search failed: ${res.statusText}`)
