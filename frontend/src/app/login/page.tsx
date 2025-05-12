@@ -35,7 +35,7 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="card card-compact bg-base-100 shadow w-lg w-md mx-auto p-10">
+    <div className="card card-compact bg-base-100 shadow w-md mx-auto p-10">
       <h1 className="text-3xl text-center font-bold mb-4">Login</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
         <div>
