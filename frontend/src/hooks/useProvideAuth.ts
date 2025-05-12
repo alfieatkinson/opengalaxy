@@ -19,7 +19,7 @@ export interface User {
 const ACCESS_TOKEN_KEY = 'accessToken'
 const REFRESH_TOKEN_KEY = 'refreshToken'
 
-export const useAuth = () => {
+export const useProvideAuth = () => {
   const [user, setUser] = useState<User | null>(null)
   const isLoggedIn = Boolean(user)
 
@@ -79,23 +79,34 @@ export const useAuth = () => {
 
   // Sign in: Exchange credentials for tokens and fetch user
   const signIn = async (username: string, password: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/token/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     })
 
-    if (!res.ok) {
-      const err = await res.json()
-      throw new Error(err.detail || 'Login failed')
+    let payload
+    const contentType = res.headers.get('content-type') ?? ''
+    if (contentType.includes('application/json')) {
+      payload = await res.json()
+    } else {
+      const text = await res.text()
+      console.warn('Non-JSON login error:', text)
+      throw new Error(text || 'Login failed')
     }
 
-    const { access, refresh } = await res.json()
+    if (!res.ok) {
+      // e.g. 401 → { detail: 'No active account found' }
+      throw new Error(payload.detail || 'Login failed')
+    }
+
+    const { access, refresh } = payload
     localStorage.setItem(ACCESS_TOKEN_KEY, access)
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
 
-    // Fetch the user
-    const meRes = await authFetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/users/me/`)
+    const meRes = await authFetch(
+      `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/users/me/`,
+    )
     const me = await meRes.json()
     setUser(me)
   }
@@ -124,7 +135,9 @@ export const useAuth = () => {
 
   // Sign out: Clear tokens and user
   const signOut = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/auth/logout/`, { method: 'POST' })
+    await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/logout/`, {
+      method: 'POST',
+    })
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     setUser(null)
