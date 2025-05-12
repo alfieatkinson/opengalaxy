@@ -1,0 +1,17 @@
+# backend/core/accounts/urls.py
+
+from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
+
+from .views import (
+    CustomTokenObtainPairView,
+    UserDetailView,
+    LogoutView,
+)
+
+urlpatterns = [
+    path("token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("users/me/", UserDetailView.as_view(), name="user_detail"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+]
