@@ -6,26 +6,33 @@ if ! heroku auth:whoami &>/dev/null; then
     heroku login
 fi
 
-# Prompt user for action
-echo "Choose action:"
-echo "1. Stop dynos"
-echo "2. Start dynos"
-read -p "Enter number: " choice
-
 # Set the app name
 APP_NAME="opengalaxy-backend"
 
-case $choice in
-    1)
-        echo "Stopping dynos..."
-        heroku ps:stop web --app $APP_NAME
-        ;;
-    2)
+# Default action is to stop dynos
+ACTION="stop"
+
+# Parse command line arguments
+while getopts "s|S|t|T" flag; do
+    case "${flag}" in
+        s|S) ACTION="start" ;;
+        t|T) ACTION="stop" ;;
+        *) echo "Invalid option. Use -s to start and -t to stop."; exit 1 ;;
+    esac
+done
+
+# Perform the selected action
+case $ACTION in
+    start)
         echo "Starting dynos..."
         heroku ps:scale web=1 --app $APP_NAME
         ;;
+    stop)
+        echo "Stopping dynos..."
+        heroku ps:scale web=0 --app $APP_NAME
+        ;;
     *)
-        echo "Invalid option. Exiting."
+        echo "Invalid action. Exiting."
         exit 1
         ;;
 esac
