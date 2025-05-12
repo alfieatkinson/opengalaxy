@@ -62,8 +62,8 @@ const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
             <Link href="/login">
               <button className="btn btn-primary">Login</button>
             </Link>
-            <Link href="/signup">
-              <button className="btn btn-secondary">Sign Up</button>
+            <Link href="/register">
+              <button className="btn btn-secondary">Register</button>
             </Link>
           </>
         )}
