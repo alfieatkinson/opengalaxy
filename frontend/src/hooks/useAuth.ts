@@ -2,36 +2,16 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-interface User {
+export interface User {
+  id: string
   username: string
-  profilePicture: string
-}
-
-export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const isLoggedIn = Boolean(user)
-
-  useEffect(() => {
-    // load from localStorage if present
-    const raw = localStorage.getItem('mockUser')
-    if (raw) setUser(JSON.parse(raw))
-  }, [])
-
-  const signIn = () => {
-    const mock = {
-      username: 'Admin',
-      profilePicture: '/globe.svg',
-    }
-    localStorage.setItem('mockUser', JSON.stringify(mock))
-    setUser(mock)
-  }
-
-  const signOut = () => {
-    localStorage.removeItem('mockUser')
-    setUser(null)
-  }
-
-  return { user, isLoggedIn, signIn, signOut }
+  email: string
+  first_name: string
+  last_name: string
+  created_at: string
+  updated_at: string
+  is_active: boolean
+  is_staff: boolean
 }
