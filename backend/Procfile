@@ -1,2 +1,2 @@
 release: python3 manage.py migrate
-web: gunicorn backend.core.wsgi
+web: gunicorn core.wsgi
