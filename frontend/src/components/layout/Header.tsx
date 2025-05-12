@@ -31,8 +31,7 @@ const Header = ({ isLandingPage }: { isLandingPage: boolean }) => {
       {/* Left slot */}
       <div
         className="w-1/4 cursor-pointer"
-        onClick={() => router.push('/')}
-      >
+        onClick={() => router.push('/')}>
         {!isLandingPage && (
           <span className="text-2xl font-bold">
             Open<HighlightedText>Galaxy</HighlightedText>
