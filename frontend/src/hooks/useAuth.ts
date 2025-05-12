@@ -76,4 +76,27 @@ export const useAuth = () => {
     }
     load()
   }, [authFetch])
+
+  // Sign in: Exchange credentials for tokens and fetch user
+  const signIn = async (username: string, password: string) => {
+    const res = await fetch('/api/auth/token/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    })
+
+    if (!res.ok) {
+      const err = await res.json()
+      throw new Error(err.detail || 'Login failed')
+    }
+
+    const { access, refresh } = await res.json()
+    localStorage.setItem(ACCESS_TOKEN_KEY, access)
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+
+    // Fetch the user
+    const meRes = await authFetch('/api/auth/users/me/')
+    const me = await meRes.json()
+    setUser(me)
+  }
 }
