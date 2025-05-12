@@ -55,5 +55,25 @@ export const useAuth = () => {
     return res
   }, [])
 
+  // Load user on mount if token exists
+  useEffect(() => {
+    const load = async () => {
+      const token = localStorage.getItem(ACCESS_TOKEN_KEY)
+      if (!token) return
 
+      try {
+        const res = await authFetch('/api/auth/users/me/')
+        if (!res.ok) throw new Error('Not authorised')
+
+        const me = await res.json()
+        setUser(me)
+      } catch (error) {
+        console.error('Failed to load user:', error)
+        localStorage.removeItem(ACCESS_TOKEN_KEY)
+        localStorage.removeItem(REFRESH_TOKEN_KEY)
+        setUser(null)
+      }
+    }
+    load()
+  }, [authFetch])
 }
