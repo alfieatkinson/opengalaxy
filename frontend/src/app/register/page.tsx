@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { RegisterSchema, type RegisterForm } from '@/lib/auth/validation'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/context/AuthContext'
 
 const fields: Array<keyof RegisterForm> = [
   'username',

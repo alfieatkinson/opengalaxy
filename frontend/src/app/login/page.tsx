@@ -5,7 +5,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/context/AuthContext'
 import { LoginSchema, type LoginForm } from '@/lib/auth/validation'
 
 const LoginPage = () => {
