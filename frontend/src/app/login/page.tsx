@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { LoginSchema, type LoginForm } from '@/lib/auth/validation'
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const { signIn } = useAuth()
   const router = useRouter()
 
