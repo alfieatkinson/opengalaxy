@@ -1,6 +1,6 @@
 // src/lib/search/types.ts
 
-import type { SearchAPIResponse } from "@/lib/search/types";
+import type { SearchAPIResponse } from '@/lib/search/types'
 
 export const fetchSearchResults = async (
   query: string,
@@ -9,8 +9,8 @@ export const fetchSearchResults = async (
 ): Promise<SearchAPIResponse> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`,
-    { cache: "no-store" },
-  );
-  if (!res.ok) throw new Error(`Search failed: ${res.statusText}`);
-  return res.json() as Promise<SearchAPIResponse>;
-};
+    { cache: 'no-store' },
+  )
+  if (!res.ok) throw new Error(`Search failed: ${res.statusText}`)
+  return res.json() as Promise<SearchAPIResponse>
+}

@@ -1,23 +1,23 @@
 // src/components/common/SearchBar.tsx
 
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface SearchBarProps {
-  placeholder: string;
+  placeholder: string
 }
 
 const SearchBar = ({ placeholder }: SearchBarProps) => {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
+  const [query, setQuery] = useState('')
+  const router = useRouter()
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
-    console.log(`Search clicked with query: ${query}`);
-    router.push(`/search?query=${encodeURIComponent(query)}`);
-  };
+    if (!query.trim()) return
+    console.log(`Search clicked with query: ${query}`)
+    router.push(`/search?query=${encodeURIComponent(query)}`)
+  }
 
   return (
     <div className="join w-full max-w-xl justify-center">
@@ -28,19 +28,16 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            handleSearch();
+          if (e.key === 'Enter') {
+            handleSearch()
           }
         }}
       />
-      <button
-        className="btn btn-primary join-item w-1/5 ml-2"
-        onClick={handleSearch}
-      >
+      <button className="btn btn-primary join-item w-1/5 ml-2" onClick={handleSearch}>
         Search
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

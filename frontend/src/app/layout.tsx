@@ -1,14 +1,14 @@
 // src/app/layout.tsx
 
-import type { Metadata } from "next";
-import "@/styles/globals.css";
+import type { Metadata } from 'next'
+import '@/styles/globals.css'
 
-import PageWrapper from "@/components/layout/PageWrapper";
+import PageWrapper from '@/components/layout/PageWrapper'
 
 export const metadata: Metadata = {
-  title: "OpenGalaxy",
-  description: "Browse the galaxy with OpenGalaxy",
-};
+  title: 'OpenGalaxy',
+  description: 'Browse the galaxy with OpenGalaxy',
+}
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <PageWrapper>{children}</PageWrapper>
       </body>
     </html>
-  );
-};
+  )
+}
 
-export default RootLayout;
+export default RootLayout
