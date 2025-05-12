@@ -8,7 +8,7 @@ export const LoginSchema = z.object({
 })
 
 export const RegisterSchema = LoginSchema.extend({
-  email: z.string().email('Invalid email address'),
+  email_address: z.string().email('Invalid email address'),
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
   confirm_password: z.string().min(1, 'Please confirm password'),
