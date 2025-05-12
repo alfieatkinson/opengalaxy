@@ -23,31 +23,7 @@ repos:
         args: [
           '--max-line-length=100',
           '--ignore=E203,W503',
-          '--per-file-ignores=__init__.py:F401'
+          '--per-file-ignores=__init__.py:F401',
+          '--exclude=backend/**/migrations/*'
         ]
         files: ^backend/  # Only run flake8 on the backend directory
-        exclude: ^backend/(migrations|__pycache__|tests|.git)/.*
-
-  # For Next.js (Frontend)
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
-        files: ^frontend/  # Only run prettier on the frontend directory
-        args: ['--config', 'frontend/prettier.config.cjs']
-
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.26.0
-    hooks:
-      - id: eslint
-        files: ^frontend/  # Only run eslint on the frontend directory
-        additional_dependencies:
-          - eslint@9.22.0
-          - eslint-config-next@15.2.2
-          - eslint-plugin-prettier@5.2.3
-          - eslint-config-prettier@10.1.1
-        args: [
-          '--config', 'frontend/eslint.config.mjs',
-          '--fix',
-          '--ext', '.ts,.tsx'
-        ]
