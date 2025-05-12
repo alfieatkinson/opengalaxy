@@ -35,22 +35,30 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h1 className="text-2xl mb-4">Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="card card-compact bg-base-100 shadow w-lg w-md mx-auto p-10">
+      <h1 className="text-3xl text-center font-bold mb-4">Login</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
         <div>
-          <label className="block">Username</label>
-          <input {...register('username')} className="input input-bordered w-full" />
-          {errors.username && <p className="text-sm text-red-500">{errors.username.message}</p>}
+          <div className="grid grid-cols-2">
+            <label className="block">USERNAME</label>
+            {errors.username && (
+              <p className="text-right text-xs text-red-500">{errors.username.message}</p>
+            )}
+          </div>
+          <input {...register('username')} className="input input-bordered w-full h-8" />
         </div>
         <div>
-          <label className="block">Password</label>
+          <div className="grid grid-cols-2">
+            <label className="block">PASSWORD</label>
+            {errors.password && (
+              <p className="text-right text-xs text-red-500">{errors.password.message}</p>
+            )}
+          </div>
           <input
             type="password"
             {...register('password')}
-            className="input input-bordered w-full"
+            className="input input-bordered w-full h-8"
           />
-          {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
         </div>
         <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full">
           {isSubmitting ? 'Logging in…' : 'Login'}
