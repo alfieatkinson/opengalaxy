@@ -1,7 +1,7 @@
 // src/components/Hero.tsx
 
-import HighlightedText from '@/components/common/HighlightedText'
-import SearchBar from '@/components/common/SearchBar'
+import HighlightedText from "@/components/common/HighlightedText";
+import SearchBar from "@/components/common/SearchBar";
 
 const Hero = () => {
   return (
@@ -9,10 +9,12 @@ const Hero = () => {
       <h1 className="text-5xl font-bold mb-4">
         Open<HighlightedText>Galaxy</HighlightedText>
       </h1>
-      <p className="text-lg mb-8">Explore a universe of open-license media, free for all.</p>
+      <p className="text-lg mb-8">
+        Explore a universe of open-license media, free for all.
+      </p>
       <SearchBar placeholder="Search for open-license media..." />
     </div>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

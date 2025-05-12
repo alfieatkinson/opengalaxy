@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'daisyui' {
   themes:
@@ -9,7 +9,7 @@
 @layer base {
   /* Global resets or typography */
   body {
-    font-family: var(--font-sans, theme('fontFamily.sans'));
+    font-family: var(--font-sans, theme("fontFamily.sans"));
   }
 }
 

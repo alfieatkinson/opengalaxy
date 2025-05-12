@@ -11,6 +11,7 @@ from core.media.models.media import Media
 
 logger = logging.getLogger(__name__)
 
+
 class SearchView(View):
     """
     GET /api/search/?q=foo
@@ -27,7 +28,7 @@ class SearchView(View):
         if not query:
             logger.warning("Search query is empty, returning 400 response.")
             return JsonResponse({"results": []}, status=400)
-        
+
         logger.info(f"Received search query: {query}, page: {page}, page_size: {page_size}")
 
         # Fetch results from both endpoints
@@ -38,7 +39,7 @@ class SearchView(View):
         except Exception as e:
             logger.error(f"Error while querying Openverse: {e}")
             return JsonResponse({"error": "Error fetching data from Openverse."}, status=500)
-        
+
         # Log response data for debugging
         logger.debug(f"Image response: {img_resp}")
         logger.debug(f"Audio response: {aud_resp}")
@@ -48,7 +49,7 @@ class SearchView(View):
         aud_total = aud_resp.get("result_count", len(aud_resp.get("results", [])))
         total_count = img_total + aud_total
         total_pages = ceil(total_count / (page_size * 2))
-        
+
         # Log total count and pages
         logger.info(f"Total results: {total_count}, Total pages: {total_pages}")
 
@@ -65,7 +66,7 @@ class SearchView(View):
         start = (page - 1) * page_size
         end = start + page_size
         page_items = merged[start:end]
-        
+
         # Log the number of items being returned for this page
         logger.info(f"Returning {len(page_items)} items for page {page}.")
 
@@ -96,7 +97,7 @@ class SearchView(View):
             }
             # Log upsert action
             logger.debug(f"Upserting media item: {data['openverse_id']}")
-            
+
             # Upsert so you can revisit later
             Media.objects.update_or_create(openverse_id=data["openverse_id"], defaults=data)
             results.append(data)

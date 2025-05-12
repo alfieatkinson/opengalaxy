@@ -8,6 +8,7 @@ from django.views import View
 from core.media.models.media import Media
 from core.openverse_client import OpenverseClient
 
+
 class MediaDetailView(View):
     client = OpenverseClient()
 
