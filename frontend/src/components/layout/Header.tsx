@@ -5,9 +5,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { User as UserIcon } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/context/AuthContext'
 import SearchBar from '@/components/common/SearchBar'
-import HighlightedText from '../common/HighlightedText'
+import HighlightedText from '@/components/common/HighlightedText'
 
 const Header = ({
   isScrollable,
@@ -56,11 +56,14 @@ const Header = ({
               onClick={() => router.push('/profile')}
               className="flex items-center space-x-2 hover:opacity-80"
             >
-              <UserIcon size={24} />
-              <span className="hidden sm:inline">{user!.username}</span>
+              <span className="text-sm font-bold">{user?.username}</span>
+              <UserIcon size={32} />
             </button>
-            <button onClick={handleLogout} className="btn btn-ghost">
-              Logout
+            <button
+              onClick={handleLogout}
+              className="btn btn-error font-bold text-xl aspect-square"
+            >
+              X
             </button>
           </>
         ) : (
