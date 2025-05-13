@@ -37,7 +37,7 @@ export const useProvideAuth = () => {
       if (!refresh) throw new Error('No refresh token available')
 
       const tokenRes = await fetch(
-        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/refresh`,
+        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/refresh/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
