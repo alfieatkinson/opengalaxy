@@ -24,23 +24,26 @@ export const useProvideAuth = () => {
   const isLoggedIn = Boolean(user)
 
   // Helper function to call API with auth header, refresh if needed
-  const authFetch = useCallback(async (input: RequestInfo, init: RequestInit = {}) => {
+  const authFetch = useCallback(async (input: RequestInfo, init: RequestInit = {}, retried = 0) => {
     let token = localStorage.getItem(ACCESS_TOKEN_KEY)
     const headers = new Headers(init.headers)
     if (token) headers.set('Authorization', `Bearer ${token}`)
 
     let res = await fetch(input, { ...init, headers })
 
-    if (res.status === 401) {
+    if (res.status === 401 && retried < 5) {
       // Try refreshing the token
       const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
       if (!refresh) throw new Error('No refresh token available')
 
-      const tokenRes = await fetch('/api/auth/token/refresh', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh }),
-      })
+      const tokenRes = await fetch(
+        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/refresh`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh }),
+        },
+      )
       if (!tokenRes.ok) throw new Error('Failed to refresh token')
 
       const data = await tokenRes.json()
@@ -50,7 +53,7 @@ export const useProvideAuth = () => {
       localStorage.setItem(ACCESS_TOKEN_KEY, token)
       headers.set('Authorization', `Bearer ${token}`)
 
-      res = await fetch(input, { ...init, headers })
+      res = await authFetch(input, { ...init, headers }, retried + 1)
     }
     return res
   }, [])
@@ -62,7 +65,9 @@ export const useProvideAuth = () => {
       if (!token) return
 
       try {
-        const res = await authFetch('/api/auth/users/me/')
+        const res = await authFetch(
+          `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/users/me/`,
+        )
         if (!res.ok) throw new Error('Not authorised')
 
         const me = await res.json()
@@ -135,7 +140,7 @@ export const useProvideAuth = () => {
 
   // Sign out: Clear tokens and user
   const signOut = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/logout/`, {
+    await authFetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/logout/`, {
       method: 'POST',
     })
     localStorage.removeItem(ACCESS_TOKEN_KEY)
