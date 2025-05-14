@@ -29,7 +29,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true)
   const [isPrivate, setIsPrivate] = useState(false)
   const [profile, setProfile] = useState<User | null>(null)
-  const [favs, setFavs] = useState<Media[] | null>(null)
+  const [mediaList, setMediaList] = useState<Media[]>([])
 
   useEffect(() => {
     if (!username) return
@@ -41,14 +41,13 @@ const ProfilePage = () => {
         if (!prof && !privateFlag) return notFound()
 
         // If it’s public, load the first few favourites
-        let favList: Media[] = []
         if (!privateFlag) {
-          favList = await getUserFavs(fetcher, username, 6)
+          const firstPage = await getUserFavs(fetcher, username, 1, 6)
+          setMediaList(firstPage.results.map((item) => item.media)) // Extract just the Media[]
         }
 
         setIsPrivate(privateFlag)
         setProfile(prof)
-        setFavs(favList)
         setLoading(false)
       } catch {
         notFound()
@@ -86,7 +85,7 @@ const ProfilePage = () => {
         {!isPrivate && <QuickSettings username={username} />}
       </div>
 
-      <FavouritesPreview username={username} favs={favs} isPrivate={isPrivate} />
+      <FavouritesPreview username={username} media={mediaList} isPrivate={isPrivate} />
     </div>
   )
 }

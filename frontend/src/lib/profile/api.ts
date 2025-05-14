@@ -1,8 +1,6 @@
 // src/lib/profile/api.ts
 
-import { User } from '@/lib/profile/types'
-import { UserPreferences } from '@/lib/profile/types'
-import { Media } from '@/lib/media/types'
+import { User, UserPreferences, PaginatedFavourites } from '@/lib/profile/types'
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/users`
 
@@ -26,11 +24,14 @@ export const getUserProfile = async (
 export const getUserFavs = async (
   fetcher: typeof fetch = fetch,
   username: string,
-  limit = 12,
-): Promise<Media[]> => {
-  const res = await fetcher(`${BASE_URL}/${username}/favourites/?limit=${limit}/`)
-  if (!res.ok) return [] as Media[]
-  return (await res.json()) as Media[]
+  page = 1,
+  pageSize = 24,
+): Promise<PaginatedFavourites> => {
+  const res = await fetcher(
+    `${BASE_URL}/${username}/favourites/?page=${page}&page_size=${pageSize}`,
+  )
+  if (!res.ok) throw new Error('Failed to load favourites')
+  return res.json() as Promise<PaginatedFavourites>
 }
 
 // GET /api/accounts/users/:username/preferences/

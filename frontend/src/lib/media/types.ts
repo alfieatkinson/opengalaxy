@@ -22,4 +22,5 @@ export interface Media {
   duration: number | null
   media_type: 'image' | 'audio'
   accessed_at?: string // Only present in MediaDetailView
+  favourites_count?: number // Only present in FavouritesPreview
 }

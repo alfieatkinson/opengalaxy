@@ -3,16 +3,16 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Media } from '@/lib/media/types'
 import MediaCard from '@/components/common/MediaCard'
+import { Media } from '@/lib/media/types'
 
 interface FavouritesPreviewProps {
   username: string
-  favs: Media[] | null
+  media: Media[]
   isPrivate: boolean
 }
 
-const FavouritesPreview = ({ username, favs, isPrivate }: FavouritesPreviewProps) => {
+const FavouritesPreview = ({ username, media, isPrivate }: FavouritesPreviewProps) => {
   const router = useRouter()
 
   return (
@@ -20,9 +20,9 @@ const FavouritesPreview = ({ username, favs, isPrivate }: FavouritesPreviewProps
       <h2 className="text-2xl font-bold mb-4">Favourites</h2>
       {isPrivate ? (
         <p>This profile is private. You cannot see the favourites.</p>
-      ) : favs && favs.length > 0 ? (
+      ) : media && media.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {favs.map((media, index) => (
+          {media.map((media, index) => (
             <MediaCard key={index} media={media} />
           ))}
         </div>
