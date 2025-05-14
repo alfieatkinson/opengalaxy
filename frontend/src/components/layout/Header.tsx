@@ -26,7 +26,7 @@ const Header = ({
   }
 
   const dropdownItems = [
-    { label: 'Profile', onClick: () => router.push(`/profile/${user!.id}`) },
+    { label: 'Profile', onClick: () => router.push(`/profile/${user!.username}`) },
     { label: 'Settings', onClick: () => router.push('/settings') },
     { label: 'Logout', onClick: handleLogout },
   ]
@@ -60,7 +60,7 @@ const Header = ({
               items={dropdownItems}
             />
             <button
-              onClick={() => router.push('/favourites')}
+              onClick={() => router.push(`/profile/${user?.username}/favourites`)}
               className="flex items-center space-x-2 hover:opacity-80"
             >
               <BookmarkIcon size={32} />
