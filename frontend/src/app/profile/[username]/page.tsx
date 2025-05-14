@@ -20,12 +20,6 @@ const ProfilePage = () => {
 
   const username = params.username as string
 
-  // wrap authFetch so it matches the standard fetch signature
-  const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
-    rawAuthFetch(input.toString(), init)
-
-  const fetcher = me ? authFetch : fetch
-
   const [loading, setLoading] = useState(true)
   const [isPrivate, setIsPrivate] = useState(false)
   const [profile, setProfile] = useState<User | null>(null)
@@ -34,6 +28,10 @@ const ProfilePage = () => {
   useEffect(() => {
     if (!username) return
     ;(async () => {
+      const fetcher = me
+        ? (i: RequestInfo | URL, init?: RequestInit) => rawAuthFetch(i.toString(), init)
+        : fetch
+
       try {
         // Load the profile
         const { private: privateFlag, profile: prof } = await getUserProfile(fetcher, username)
@@ -53,7 +51,7 @@ const ProfilePage = () => {
         notFound()
       }
     })()
-  }, [username, fetcher])
+  }, [username])
 
   if (loading) {
     return <div className="p-6">Loading…</div>
@@ -88,7 +86,9 @@ const ProfilePage = () => {
         {me?.username === username && <QuickSettings username={username} />}
       </div>
       <div className="flex-grow" />
-      <FavouritesPreview username={username} media={mediaList} isPrivate={isPrivate} />
+      <div className="flex w-full items-center justify-center">
+        <FavouritesPreview username={username} media={mediaList} isPrivate={isPrivate} />
+      </div>
     </div>
   )
 }
