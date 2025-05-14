@@ -3,18 +3,19 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { notFound, useRouter, useParams } from 'next/navigation'
+import { notFound, useParams } from 'next/navigation'
 import { User as UserIcon } from 'lucide-react'
 
 import { useAuth } from '@/context/AuthContext'
-import MediaCard from '@/components/common/MediaCard'
 import { User } from '@/lib/profile/types'
 import { Media } from '@/lib/media/types'
 import { getUserProfile, getUserFavs } from '@/lib/profile/api'
+import UserInfo from '@/components/UserInfo'
+import FavouritesPreview from '@/components/FavouritesPreview'
+import QuickSettings from '@/components/QuickSettings'
 
 const ProfilePage = () => {
   const params = useParams()
-  const router = useRouter()
   const { authFetch: rawAuthFetch, user: me } = useAuth()
 
   const username = params.username as string
@@ -79,53 +80,13 @@ const ProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 w-full border-1">
-      {/* Basic info */}
-      <div className="flex items-center space-x-4">
-        <UserIcon size={48} />
-        <div>
-          <h1 className="text-3xl font-bold">{userProfile.username}</h1>
-          <p>
-            {userProfile.first_name} {userProfile.last_name}
-          </p>
-          <p className="text-sm text-gray-400">{userProfile.email}</p>
-        </div>
+      <div className="flex flex-row">
+        <UserInfo user={userProfile} />
+        <div className="flex-grow" />
+        <QuickSettings publicProfile={!isPrivate} showSensitive={false} blurSensitive={false} />
       </div>
 
-      {/* Favourites preview */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Favourites</h2>
-        {favs && favs.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {favs.map((media, index) => (
-              <MediaCard key={index} media={media} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">
-            {isPrivate ? 'Favourites are hidden for private profiles.' : 'No favourites yet.'}
-          </p>
-        )}
-        {!isPrivate && (
-          <button className="btn btn-link mt-4" onClick={() => router.push('/favourites')}>
-            View all favourites →
-          </button>
-        )}
-      </section>
-
-      {/* Quick settings shortcut */}
-      {me?.username === username && (
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Quick Settings</h2>
-          <ul className="space-y-2">
-            <li>Public profile: {/* TODO: show real value */}</li>
-            <li>Show sensitive: {/* TODO */}</li>
-            <li>Blur sensitive: {/* TODO */}</li>
-          </ul>
-          <button className="btn btn-outline mt-2" onClick={() => router.push('/settings')}>
-            Advanced settings →
-          </button>
-        </section>
-      )}
+      <FavouritesPreview favs={favs} isPrivate={isPrivate} />
     </div>
   )
 }
