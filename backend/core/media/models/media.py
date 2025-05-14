@@ -31,6 +31,7 @@ class Media(models.Model):
         ],
     )
     accessed_at = models.DateTimeField(auto_now=True)
+    favourites_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = "media"
