@@ -78,13 +78,13 @@ const ProfilePage = () => {
   const userProfile = profile!
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8 w-full">
+    <div className="flex flex-col flex-grow mx-auto p-6 space-y-8 w-full">
       <div className="flex flex-row">
         <UserInfo user={userProfile} />
         <div className="flex-grow" />
-        {!isPrivate && <QuickSettings username={username} />}
+        {me?.username === username && <QuickSettings username={username} />}
       </div>
-
+      <div className="flex-grow" />
       <FavouritesPreview username={username} media={mediaList} isPrivate={isPrivate} />
     </div>
   )

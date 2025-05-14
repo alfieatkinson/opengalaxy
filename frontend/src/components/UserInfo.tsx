@@ -11,7 +11,7 @@ interface UserInfoProps {
 
 const UserInfo = ({ user }: UserInfoProps) => {
   return (
-    <div className="flex absolute items-center space-x-4 mt-4">
+    <div className="flex items-center space-x-4 mt-4">
       <UserIcon size={64} />
       <div>
         <h1 className="text-4xl font-bold">{user.username}</h1>
