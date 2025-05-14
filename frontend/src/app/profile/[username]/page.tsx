@@ -79,7 +79,7 @@ const ProfilePage = () => {
   const userProfile = profile!
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8 w-full border-1">
+    <div className="max-w-4xl mx-auto p-6 space-y-8 w-full">
       <div className="flex flex-row">
         <UserInfo user={userProfile} />
         <div className="flex-grow" />
