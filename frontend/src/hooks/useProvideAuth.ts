@@ -37,7 +37,7 @@ export const useProvideAuth = () => {
       if (!refresh) throw new Error('No refresh token available')
 
       const tokenRes = await fetch(
-        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/refresh`,
+        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/token/refresh/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -49,6 +49,10 @@ export const useProvideAuth = () => {
       const data = await tokenRes.json()
       token = data.access
       if (!token) throw new Error('No access token received after refresh')
+
+      if (data.refresh) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh)
+      }
 
       localStorage.setItem(ACCESS_TOKEN_KEY, token)
       headers.set('Authorization', `Bearer ${token}`)
@@ -140,9 +144,18 @@ export const useProvideAuth = () => {
 
   // Sign out: Clear tokens and user
   const signOut = async () => {
-    await authFetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/logout/`, {
-      method: 'POST',
-    })
+    const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
+    try {
+      if (refresh) {
+        await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/logout/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh }),
+        })
+      }
+    } catch (err) {
+      console.warn('Logout endpoint failed, clearing local tokens anyway', err)
+    }
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     setUser(null)

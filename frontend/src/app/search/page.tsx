@@ -57,7 +57,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
       <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map((r: Media) => (
           <Link key={r.openverse_id} href={`/media/${r.openverse_id}`}>
-            <MediaCard title={r.title} description={r.attribution} imageUrl={r.thumbnail_url} />
+            <MediaCard media={r} />
           </Link>
         ))}
       </div>

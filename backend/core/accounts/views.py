@@ -4,14 +4,23 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 
-from .serializer import UserSerializer
+from .models import UserPreferences
+from .serializer import UserSerializer, UserPreferencesSerializer
+from .permissions import PublicOrOwnerPermission, IsOwnerOrAdmin
+
+from core.media.models import Favourite
+from core.media.serializers import FavouriteSerializer
 
 User = get_user_model()
 
-# /api/auth/register/
+# /api/accounts/register/
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -24,8 +33,10 @@ class RegisterView(generics.CreateAPIView):
         if password:
             user.set_password(password)
             user.save()
+            
+        UserPreferences.objects.get_or_create(user=user)
 
-# /api/auth/users/me/
+# /api/accounts/users/me/
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,7 +44,7 @@ class UserDetailView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-# /api/auth/logout/
+# /api/accounts/logout/
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -46,3 +57,65 @@ class LogoutView(APIView):
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_205_RESET_CONTENT)
+
+# /api/accounts/users/<username>/
+class UserDetailByUsernameView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "username"
+    lookup_url_kwarg = "username"
+    authentication_classes = [
+        JWTAuthentication,
+        SessionAuthentication,
+        BasicAuthentication,
+    ]
+    permission_classes = [PublicOrOwnerPermission]
+    
+class UserPreferencesView(generics.RetrieveUpdateAPIView):
+    """
+    GET  /users/<username>/preferences/  → retrieve prefs
+    PATCH /users/<username>/preferences/  → update prefs
+    """
+    serializer_class = UserPreferencesSerializer
+    authentication_classes = [JWTAuthentication, SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsOwnerOrAdmin]
+
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
+
+    def get_queryset(self):
+        # we join from User to prefs
+        return UserPreferences.objects.select_related('user').all()
+
+    def get_object(self):
+        # first get the UserPreferences instance for the user with this username
+        username = self.kwargs[self.lookup_url_kwarg]
+        try:
+            return self.get_queryset().get(user__username=username)
+        except UserPreferences.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class FavouritesPagination(PageNumberPagination):
+    page_size = 24
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    
+class UserFavouritesView(generics.ListAPIView):
+    """
+    GET /api/accounts/users/<username>/favourites/
+    """
+    serializer_class = FavouriteSerializer
+    permission_classes = [PublicOrOwnerPermission]
+    pagination_class = FavouritesPagination
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        # Only return favourites for that user, newest first
+        return (
+            Favourite.objects
+            .filter(user__username=username)
+            .select_related('media')
+            # annotate each media with its total favourites count
+            .annotate(media__favourites_count=Count('media__favourite'))
+            .order_by('-added_at')
+        )
