@@ -34,7 +34,7 @@ const Header = ({
   return (
     <header
       className={`fixed flex w-full p-4 z-50 text-white ${
-        isScrollable ? 'bg-transparent' : 'bg-base-200'
+        !isScrollable ? 'bg-transparent' : 'bg-base-200'
       }`}
     >
       <div className="w-1/4 cursor-pointer" onClick={() => router.push('/')}>
