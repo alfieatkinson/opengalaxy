@@ -11,3 +11,9 @@ export interface User {
   is_active: boolean
   is_staff: boolean
 }
+
+export interface UserPreferences {
+  public_profile: boolean
+  show_sensitive: boolean
+  blur_sensitive: boolean
+}
