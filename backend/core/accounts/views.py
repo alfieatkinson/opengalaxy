@@ -4,14 +4,18 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.contrib.auth import get_user_model
 
+from .models import UserPreferences
 from .serializer import UserSerializer
+from .permissions import PublicOrOwnerPermission
 
 User = get_user_model()
 
-# /api/auth/register/
+# /api/accounts/register/
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -24,8 +28,10 @@ class RegisterView(generics.CreateAPIView):
         if password:
             user.set_password(password)
             user.save()
+            
+        UserPreferences.objects.get_or_create(user=user)
 
-# /api/auth/users/me/
+# /api/accounts/users/me/
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,7 +39,7 @@ class UserDetailView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-# /api/auth/logout/
+# /api/accounts/logout/
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -46,3 +52,12 @@ class LogoutView(APIView):
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_205_RESET_CONTENT)
+
+# /api/accounts/users/<username>/
+class UserDetailByUsernameView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "username"
+    lookup_url_kwarg = "username"
+    authentication_classes = []
+    permission_classes = [PublicOrOwnerPermission]
