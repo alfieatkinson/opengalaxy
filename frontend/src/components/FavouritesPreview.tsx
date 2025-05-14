@@ -7,11 +7,12 @@ import { Media } from '@/lib/media/types'
 import MediaCard from '@/components/common/MediaCard'
 
 interface FavouritesPreviewProps {
+  username: string
   favs: Media[] | null
   isPrivate: boolean
 }
 
-const FavouritesPreview = ({ favs, isPrivate }: FavouritesPreviewProps) => {
+const FavouritesPreview = ({ username, favs, isPrivate }: FavouritesPreviewProps) => {
   const router = useRouter()
 
   return (
@@ -29,7 +30,10 @@ const FavouritesPreview = ({ favs, isPrivate }: FavouritesPreviewProps) => {
         <p className="text-gray-500">No favourites yet.</p>
       )}
       {!isPrivate && (
-        <button className="btn btn-outline mt-4" onClick={() => router.push('/favourites')}>
+        <button
+          className="btn btn-outline mt-4"
+          onClick={() => router.push(`${username}/favourites`)}
+        >
           View all favourites →
         </button>
       )}

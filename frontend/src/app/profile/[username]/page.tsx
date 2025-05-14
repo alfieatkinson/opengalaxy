@@ -40,7 +40,7 @@ const ProfilePage = () => {
 
         if (!prof && !privateFlag) return notFound()
 
-        // 2) If it’s public, load the first few favourites
+        // If it’s public, load the first few favourites
         let favList: Media[] = []
         if (!privateFlag) {
           favList = await getUserFavs(fetcher, username, 6)
@@ -83,10 +83,10 @@ const ProfilePage = () => {
       <div className="flex flex-row">
         <UserInfo user={userProfile} />
         <div className="flex-grow" />
-        <QuickSettings publicProfile={!isPrivate} showSensitive={false} blurSensitive={false} />
+        {!isPrivate && <QuickSettings username={username} />}
       </div>
 
-      <FavouritesPreview favs={favs} isPrivate={isPrivate} />
+      <FavouritesPreview username={username} favs={favs} isPrivate={isPrivate} />
     </div>
   )
 }
