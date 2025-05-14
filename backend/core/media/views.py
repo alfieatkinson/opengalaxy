@@ -1,11 +1,14 @@
 # backend/core/media/views.py
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 
-from core.media.models.media import Media
+from core.media.models import Media, Favourite
 from core.openverse_client import OpenverseClient
 
 
@@ -76,3 +79,45 @@ class MediaDetailView(View):
                 "accessed_at": media.accessed_at.isoformat(),
             }
         )
+
+class MediaFavouriteView(APIView):
+    """
+    :GET /api/media/<openverse_id>/favourite/ → { is_favourite: bool }
+    :POST /api/media/<openverse_id>/favourite/ → add, returns { is_favourite: True }
+    :DELETE /api/media/<openverse_id>/favourite/ → remove, returns { is_favourite: False }
+    """
+    
+    def get(self, request, openverse_id):
+        # Anonymous > always false
+        if not request.user or not request.user.is_authenticated:
+            return Response({"is_favourite": False}, status=status.HTTP_200_OK)
+        
+        media = get_object_or_404(Media, openverse_id=openverse_id)
+        exists = Favourite.objects.filter(user=request.user, media=media).exists()
+        return Response({"is_favourite": exists}, status=status.HTTP_200_OK)
+    
+    def post(self, request, openverse_id):
+        if not request.user or not request.user.is_authenticated:
+            return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        media = get_object_or_404(Media, openverse_id=openverse_id)
+        Favourite.objects.get_or_create(user=request.user, media=media)
+        
+        # Update favourite count
+        media.favourites_count = Favourite.objects.filter(media=media).count()
+        media.save(update_fields=['favourites_count'])
+        
+        return Response({"is_favourite": True}, status=status.HTTP_201_CREATED)
+        
+    def delete(self, request, openverse_id):
+        if not request.user or not request.user.is_authenticated:
+            return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        media = get_object_or_404(Media, openverse_id=openverse_id)
+        Favourite.objects.filter(user=request.user, media=media).delete()
+        
+        # Update favourite count
+        media.favourites_count = Favourite.objects.filter(media=media).count()
+        media.save(update_fields=['favourites_count'])
+        
+        return Response({"is_favourite": False}, status=status.HTTP_200_OK)
