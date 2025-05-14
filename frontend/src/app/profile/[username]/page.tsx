@@ -80,7 +80,10 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col flex-grow mx-auto p-6 space-y-8 w-full">
       <div className="flex flex-row">
-        <UserInfo user={userProfile} />
+        <div>
+          <UserInfo user={userProfile} />
+          <div className="flex-grow" />
+        </div>
         <div className="flex-grow" />
         {me?.username === username && <QuickSettings username={username} />}
       </div>
