@@ -10,8 +10,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from django.contrib.auth import get_user_model
 
 from .models import UserPreferences
-from .serializer import UserSerializer
-from .permissions import PublicOrOwnerPermission
+from .serializer import UserSerializer, UserPreferencesSerializer
+from .permissions import PublicOrOwnerPermission, IsOwnerOrAdmin
 
 User = get_user_model()
 
@@ -59,5 +59,33 @@ class UserDetailByUsernameView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     lookup_field = "username"
     lookup_url_kwarg = "username"
-    authentication_classes = []
+    authentication_classes = [
+        JWTAuthentication,
+        SessionAuthentication,
+        BasicAuthentication,
+    ]
     permission_classes = [PublicOrOwnerPermission]
+    
+class UserPreferencesView(generics.RetrieveUpdateAPIView):
+    """
+    GET  /users/<username>/preferences/  → retrieve prefs
+    PATCH /users/<username>/preferences/  → update prefs
+    """
+    serializer_class = UserPreferencesSerializer
+    authentication_classes = [JWTAuthentication, SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsOwnerOrAdmin]
+
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
+
+    def get_queryset(self):
+        # we join from User to prefs
+        return UserPreferences.objects.select_related('user').all()
+
+    def get_object(self):
+        # first get the UserPreferences instance for the user with this username
+        username = self.kwargs[self.lookup_url_kwarg]
+        try:
+            return self.get_queryset().get(user__username=username)
+        except UserPreferences.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
