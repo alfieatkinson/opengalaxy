@@ -59,7 +59,13 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         ))}
       </div>
 
-      <PageNavigator query={query} page={page} totalPages={total_pages} pageSize={perPage} />
+      <PageNavigator
+        basePath="/search"
+        queryParams={{ query }}
+        page={page}
+        totalPages={total_pages}
+        pageSize={perPage}
+      />
     </div>
   )
 }

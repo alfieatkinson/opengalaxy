@@ -6,21 +6,27 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 
 interface PageNavigatorProps {
-  query: string
+  basePath: string
+  queryParams?: Record<string, string>
   page: number
   totalPages: number
   pageSize: number
 }
 
-const PageNavigator = ({ query, page, totalPages, pageSize }: PageNavigatorProps) => {
+const PageNavigator = ({
+  basePath,
+  queryParams = {},
+  page,
+  totalPages,
+  pageSize,
+}: PageNavigatorProps) => {
   const router = useRouter()
 
   const changePage = (to: number) => {
-    const params = new URLSearchParams()
-    params.set('query', query)
+    const params = new URLSearchParams(queryParams)
     params.set('page', String(to))
     params.set('page_size', String(pageSize))
-    router.push(`/search?${params.toString()}`)
+    router.push(`${basePath}?${params.toString()}`)
   }
 
   return (
