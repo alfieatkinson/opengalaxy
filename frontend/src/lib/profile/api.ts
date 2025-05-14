@@ -2,7 +2,7 @@
 
 import { User, UserPreferences, PaginatedFavourites } from '@/lib/profile/types'
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/accounts/users`
+const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users`
 
 // GET /api/accounts/users/:username/
 export const getUserProfile = async (
