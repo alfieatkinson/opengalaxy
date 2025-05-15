@@ -69,7 +69,9 @@ const FavouriteButton = ({ mediaId, className = '', size = 24 }: FavouriteButton
       <BookmarkIcon
         size={size}
         fill={isFav ? 'currentColor' : 'none'}
-        className={isFav ? 'text-primary' : 'text-inherit'}
+        className={
+          isFav ? 'text-primary hover:text-secondary' : 'text-secondary hover:text-primary'
+        }
       />
     </button>
   )
