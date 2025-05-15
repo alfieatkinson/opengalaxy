@@ -100,7 +100,7 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
           {!mini && (
             <button onClick={toggleFav} style={{ pointerEvents: 'auto' }}>
               <BookmarkIcon
-                size={20}
+                size={24}
                 fill={isFav ? 'currentColor' : 'none'}
                 className={isFav ? 'text-primary' : 'text-white'}
               />
