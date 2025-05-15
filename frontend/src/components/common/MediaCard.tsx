@@ -5,7 +5,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Media } from '@/lib/media/types'
-import FavouriteButton from './FavouriteButton'
+import FavouriteControl from '@/components/common/FavouriteControl'
 
 interface MediaCardProps {
   media: Media
@@ -18,16 +18,21 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
       className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow
         ${mini ? 'w-full h-40' : 'w-full h-56'}`}
     >
-      {/* Image */}
       <Link href={`/media/${media.openverse_id}`}>
         <div className="block w-full h-full">
-          <Image
-            src={media.thumbnail_url}
-            alt={media.title}
-            width={mini ? 240 : 400}
-            height={mini ? 192 : 225}
-            className="object-cover w-full h-full"
-          />
+          {media.thumbnail_url ? (
+            <Image
+              src={media.thumbnail_url}
+              alt={media.title}
+              width={mini ? 240 : 400}
+              height={mini ? 192 : 225}
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <div className="w-full h-full bg-base-300 flex items-center justify-center">
+              <p className="text-base-content text-opacity-50">No thumbnail available</p>
+            </div>
+          )}
         </div>
       </Link>
 
@@ -55,7 +60,14 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
             </h3>
           </Link>
           <div className="flex flex-grow" />
-          {!mini && <FavouriteButton mediaId={media.openverse_id} size={24} />}
+          {!mini && (
+            <FavouriteControl
+              mediaId={media.openverse_id}
+              initialCount={media.favourites_count ?? 0}
+              size={24}
+              requireHover={true}
+            />
+          )}
         </div>
       </div>
     </div>
