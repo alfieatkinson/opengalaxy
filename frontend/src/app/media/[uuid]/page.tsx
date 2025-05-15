@@ -4,8 +4,17 @@ import { type Metadata } from 'next'
 import { fetchMediaById } from '@/lib/media/api'
 import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/FullSizeImage'
-import FavouriteButton from '@/components/common/FavouriteButton'
-import { SquareArrowOutUpRight as LinkIcon } from 'lucide-react'
+import FavouriteControl from '@/components/common/FavouriteControl'
+import AttributeCard from '@/components/common/AttributeCard'
+import LinkButton from '@/components/common/LinkButton'
+import {
+  User as UserIcon,
+  Maximize2 as MaxIcon,
+  CalendarSearch as CalendarIcon,
+  Music as MusicIcon,
+  Scale as ScaleIcon,
+  Tag as TagIcon,
+} from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,22 +52,75 @@ const MediaPage = async ({ params }: MediaPageProps) => {
     notFound()
   }
 
+  const formatDuration = (duration: number): string => {
+    // Convert duration in milliseconds to minutes and seconds
+    const minutes = Math.floor(duration / 60000)
+    const seconds = Math.floor((duration % 60000) / 1000)
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
   return (
-    <div className="p-8">
-      <div className="card bg-base-100 shadow-lg">
-        <FullSizeImage media={media} />
-        <div className="card-body text-white">
-          <div className="flex flex-row justify-between">
-            <h1 className="text-4xl font-bold mb-2">{media.title}</h1>
-            <FavouriteButton mediaId={media.openverse_id} size={32} />
-          </div>
-          <div className="flex flex-row justify-between"></div>
+    <div className="">
+      <div className="card h-full bg-base-100 shadow-lg">
+        <div className="card-header w-full">
+          <FullSizeImage media={media} />
         </div>
-        <div className="card-footer flex flex-row justify-between p-6">
+        <div className="card-body text-secondary">
+          <div className="flex flex-row justify-between">
+            <h1 className="text-2xl font-bold mb-2">{media.title}</h1>
+            <div className="flex flex-row items-center ml-4 mb-4">
+              <FavouriteControl
+                mediaId={media.openverse_id}
+                initialCount={media.favourites_count ?? 0}
+                size={32}
+              />
+              <LinkButton href={media.foreign_landing_url} />
+            </div>
+          </div>
+          <div className="flex gap-4 items-center justify-center flex-wrap">
+            {media.creator && (
+              <AttributeCard title="Creator" icon={<UserIcon size={24} />} text={media.creator} />
+            )}
+
+            {media.license && (
+              <AttributeCard
+                title="License"
+                icon={<ScaleIcon size={24} />}
+                text={`${media.license} ${media.license_version ?? ''}`}
+              />
+            )}
+
+            {media.indexed_on && (
+              <AttributeCard
+                title="Indexed On"
+                icon={<CalendarIcon size={24} />}
+                text={new Date(media.indexed_on).toLocaleDateString()}
+              />
+            )}
+
+            {media.category && (
+              <AttributeCard title="Category" icon={<TagIcon size={24} />} text={media.category} />
+            )}
+
+            {media.media_type === 'image' && media.width && media.height && (
+              <AttributeCard
+                title="Dimensions"
+                icon={<MaxIcon size={24} />}
+                text={`${media.width}x${media.height}px`}
+              />
+            )}
+
+            {media.media_type === 'audio' && media.duration && (
+              <AttributeCard
+                title="Duration"
+                icon={<MusicIcon size={24} />}
+                text={formatDuration(media.duration)}
+              />
+            )}
+          </div>
+        </div>
+        <div className="card-footer flex flex-row justify-between px-6">
           <p className="mb-4 text-xs">{media.attribution}</p>
-          <button className="btn btn-secondary ml-2">
-            View source <LinkIcon size={20} strokeWidth={2.5} className="ml-1" />
-          </button>
         </div>
       </div>
     </div>
