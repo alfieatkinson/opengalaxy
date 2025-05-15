@@ -2,14 +2,10 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Bookmark as BookmarkIcon } from 'lucide-react'
-import { useAuth } from '@/context/AuthContext'
 import { Media } from '@/lib/media/types'
-import { isMediaFavourite, addMediaFavourite, removeMediaFavourite } from '@/lib/media/api'
+import FavouriteButton from './FavouriteButton'
 
 interface MediaCardProps {
   media: Media
@@ -17,44 +13,6 @@ interface MediaCardProps {
 }
 
 const MediaCard = ({ media, mini = false }: MediaCardProps) => {
-  const router = useRouter()
-  const { authFetch: rawAuthFetch, user: me } = useAuth()
-  const [isFav, setIsFav] = useState(false)
-
-  const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
-    rawAuthFetch(input.toString(), init)
-
-  const fetcher = me ? authFetch : fetch
-
-  // Check if media is favourited on mount
-  useEffect(() => {
-    let mounted = true
-    ;(async () => {
-      const fav = await isMediaFavourite(fetcher, media.openverse_id)
-      if (mounted) setIsFav(fav)
-    })()
-    return () => {
-      mounted = false
-    }
-  }, [media.openverse_id, me])
-
-  const toggleFav = async () => {
-    // If not authenticated, redirect to login
-    if (!me) return router.push('/login')
-
-    try {
-      if (isFav) {
-        await removeMediaFavourite(fetcher, media.openverse_id)
-        setIsFav(false)
-      } else {
-        await addMediaFavourite(fetcher, media.openverse_id)
-        setIsFav(true)
-      }
-    } catch (error) {
-      console.error('Error toggling favourite:', error)
-    }
-  }
-
   return (
     <div
       className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow
@@ -98,13 +56,11 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
           </Link>
           <div className="flex flex-grow" />
           {!mini && (
-            <button onClick={toggleFav} style={{ pointerEvents: 'auto' }}>
-              <BookmarkIcon
-                size={24}
-                fill={isFav ? 'currentColor' : 'none'}
-                className={isFav ? 'text-primary' : 'text-white'}
-              />
-            </button>
+            <FavouriteButton
+              mediaId={media.openverse_id}
+              className="text-white hover:text-primary"
+              size={24}
+            />
           )}
         </div>
       </div>
