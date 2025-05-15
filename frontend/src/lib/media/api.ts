@@ -41,7 +41,7 @@ export const addMediaFavourite = async (
     headers: { 'Content-Type': 'application/json' },
   })
   if (res.status === 401) {
-    throw new Error('Unauthenticated')
+    throw new Error('Unauthorised')
   }
   if (!res.ok) throw new Error('Failed to add favourite')
 }
@@ -55,7 +55,7 @@ export const removeMediaFavourite = async (
     method: 'DELETE',
   })
   if (res.status === 401) {
-    throw new Error('Unauthenticated')
+    throw new Error('Unauthorised')
   }
   if (!res.ok) throw new Error('Failed to remove favourite')
 }
