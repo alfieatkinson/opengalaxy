@@ -10,7 +10,7 @@ export const getUserProfile = async (
   username: string,
 ): Promise<{ private: boolean; profile: User | null }> => {
   const res = await fetcher(`${BASE_URL}/${username}/`)
-  if (res.status === 403) {
+  if (res.status === 401 || res.status === 403) {
     return { private: true, profile: null } as const
   }
   if (res.status === 404) throw new Error(`User not found: ${res.status} - ${res.statusText}`)
@@ -30,6 +30,9 @@ export const getUserFavs = async (
   const res = await fetcher(
     `${BASE_URL}/${username}/favourites/?page=${page}&page_size=${pageSize}`,
   )
+  if (res.status === 401 || res.status === 403) {
+    throw new Error('Private account – cannot fetch favourites')
+  }
   if (!res.ok) throw new Error('Failed to load favourites')
   return res.json() as Promise<PaginatedFavourites>
 }
