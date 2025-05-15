@@ -5,6 +5,7 @@ import { fetchMediaById } from '@/lib/media/api'
 import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/FullSizeImage'
 import FavouriteButton from '@/components/common/FavouriteButton'
+import { SquareArrowOutUpRight as LinkIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,9 +52,13 @@ const MediaPage = async ({ params }: MediaPageProps) => {
             <h1 className="text-4xl font-bold mb-2">{media.title}</h1>
             <FavouriteButton mediaId={media.openverse_id} size={32} />
           </div>
+          <div className="flex flex-row justify-between"></div>
         </div>
-        <div className="card-footer px-6">
+        <div className="card-footer flex flex-row justify-between p-6">
           <p className="mb-4 text-xs">{media.attribution}</p>
+          <button className="btn btn-secondary ml-2">
+            View source <LinkIcon size={20} strokeWidth={2.5} className="ml-1" />
+          </button>
         </div>
       </div>
     </div>
