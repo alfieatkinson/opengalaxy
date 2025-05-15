@@ -5,7 +5,7 @@ from core.media.models import Media, Favourite
 
 class MediaSerializer(serializers.ModelSerializer):
     # Annotated field for the number of favourites
-    favourites_count = serializers.IntegerField(source='favourites_count', read_only=True)
+    favourites_count = serializers.IntegerField(read_only=True)
     
     class Meta:
         model = Media

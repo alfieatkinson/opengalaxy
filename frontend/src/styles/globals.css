@@ -10,8 +10,8 @@
   name: 'light';
   default: true;
   prefersdark: false;
-  --color-secondary: white;
-  --color-secondary-content: black;
+  --color-secondary: black;
+  --color-secondary-content: white;
 }
 
 @plugin 'daisyui/theme' {

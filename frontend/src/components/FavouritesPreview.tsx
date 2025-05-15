@@ -16,14 +16,14 @@ const FavouritesPreview = ({ username, media, isPrivate }: FavouritesPreviewProp
   const router = useRouter()
 
   return (
-    <div>
+    <div className="max-w-180">
       <h2 className="text-2xl font-bold mb-4">Favourites</h2>
       {isPrivate ? (
         <p>This profile is private. You cannot see the favourites.</p>
       ) : media && media.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {media.map((media, index) => (
-            <MediaCard key={index} media={media} />
+            <MediaCard key={index} media={media} mini={true} />
           ))}
         </div>
       ) : (

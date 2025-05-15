@@ -4,6 +4,20 @@ import { type Metadata } from 'next'
 import { fetchMediaById } from '@/lib/media/api'
 import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/FullSizeImage'
+import FavouriteControl from '@/components/common/FavouriteControl'
+import AttributeCard from '@/components/common/AttributeCard'
+import LinkButton from '@/components/common/LinkButton'
+import {
+  User as UserIcon,
+  Maximize2 as MaxIcon,
+  CalendarSearch as CalendarIcon,
+  Music as MusicIcon,
+  Scale as ScaleIcon,
+  Tag as TagIcon,
+  Paperclip as PaperclipIcon,
+  Flame as FlameIcon,
+  Database as DatabaseIcon,
+} from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,28 +55,105 @@ const MediaPage = async ({ params }: MediaPageProps) => {
     notFound()
   }
 
+  const formatDuration = (duration: number): string => {
+    // Convert duration in milliseconds to minutes and seconds
+    const minutes = Math.floor(duration / 60000)
+    const seconds = Math.floor((duration % 60000) / 1000)
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
   return (
-    <div className="p-8">
-      <div className="card bg-base-100 shadow-lg">
-        <FullSizeImage media={media} />
-        <div className="card-body text-white">
-          <h1 className="text-4xl font-bold mb-2">{media.title}</h1>
-          <p className="mb-4">{media.attribution}</p> {/* your “description” */}
-          <dl className="text-sm">
-            <dt>Creator</dt>
-            <dd>{media.creator ?? 'Unknown'}</dd>
-            <dt>License</dt>
-            <dd>
-              <a href={media.license_url} target="_blank" rel="noopener">
-                {media.license} {media.license_version || ''}
-              </a>
-            </dd>
-            <dt>Dimensions</dt>
-            <dd>
-              {media.width}x{media.height}
-              {media.media_type === 'audio' && `, ${media.duration}s`}
-            </dd>
-          </dl>
+    <div className="">
+      <div className="card h-full bg-base-100 shadow-lg">
+        <div className="card-header w-full">
+          <FullSizeImage media={media} />
+        </div>
+        <div className="card-body text-secondary">
+          <div className="flex flex-row justify-between">
+            <h1 className="text-2xl font-bold mb-2">{media.title}</h1>
+            <div className="flex flex-row items-center ml-4 mb-4">
+              <FavouriteControl
+                mediaId={media.openverse_id}
+                initialCount={media.favourites_count ?? 0}
+                size={32}
+              />
+              <LinkButton href={media.foreign_landing_url} />
+            </div>
+          </div>
+          <div className="flex gap-4 items-center justify-center flex-wrap">
+            {media.creator && (
+              <AttributeCard
+                title="Creator"
+                icon={<UserIcon size={24} />}
+                text={media.creator}
+                href={media.creator_url}
+              />
+            )}
+
+            {media.license && (
+              <AttributeCard
+                title="License"
+                icon={<ScaleIcon size={24} />}
+                text={`${media.license} ${media.license_version ?? ''}`}
+                href={media.license_url}
+              />
+            )}
+
+            {media.indexed_on && (
+              <AttributeCard
+                title="Indexed On"
+                icon={<CalendarIcon size={24} />}
+                text={new Date(media.indexed_on).toLocaleDateString()}
+              />
+            )}
+
+            {media.category && (
+              <AttributeCard title="Category" icon={<TagIcon size={24} />} text={media.category} />
+            )}
+
+            {media.mature && (
+              <AttributeCard
+                title="Mature Content"
+                icon={<FlameIcon size={24} />}
+                text="This media may contain mature content."
+              />
+            )}
+
+            {media.file_type && (
+              <AttributeCard
+                title="File Type"
+                icon={<PaperclipIcon size={24} />}
+                text={media.file_type}
+              />
+            )}
+
+            {media.file_size && (
+              <AttributeCard
+                title="File Size"
+                icon={<DatabaseIcon size={24} />}
+                text={`${(media.file_size / 1024).toFixed(2)} KB`}
+              />
+            )}
+
+            {media.media_type === 'image' && media.width && media.height && (
+              <AttributeCard
+                title="Dimensions"
+                icon={<MaxIcon size={24} />}
+                text={`${media.width}x${media.height}px`}
+              />
+            )}
+
+            {media.media_type === 'audio' && media.duration && (
+              <AttributeCard
+                title="Duration"
+                icon={<MusicIcon size={24} />}
+                text={formatDuration(media.duration)}
+              />
+            )}
+          </div>
+        </div>
+        <div className="card-footer flex flex-row justify-between px-6">
+          <p className="mb-4 text-xs">{media.attribution}</p>
         </div>
       </div>
     </div>
