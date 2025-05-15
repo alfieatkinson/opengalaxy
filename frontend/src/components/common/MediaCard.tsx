@@ -55,13 +55,7 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
             </h3>
           </Link>
           <div className="flex flex-grow" />
-          {!mini && (
-            <FavouriteButton
-              mediaId={media.openverse_id}
-              className="text-white hover:text-primary"
-              size={24}
-            />
-          )}
+          {!mini && <FavouriteButton mediaId={media.openverse_id} size={24} />}
         </div>
       </div>
     </div>
