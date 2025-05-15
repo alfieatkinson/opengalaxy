@@ -22,17 +22,16 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
   return (
     <figure className="relative w-full overflow-hidden">
       <div className="relative w-full aspect-[16/9]">
-        {/* Thumbnail */}
-        <Image
-          src={media.thumbnail_url}
-          alt={media.title}
-          fill
-          className={`object-contain transition-opacity duration-300 ${
-            loaded ? 'opacity-0' : 'opacity-100'
-          }`}
-        />
-
-        {/* Full image */}
+        {media.thumbnail_url && (
+          <Image
+            src={media.thumbnail_url}
+            alt={media.title}
+            fill
+            className={`object-contain transition-opacity duration-300 ${
+              loaded ? 'opacity-0' : 'opacity-100'
+            }`}
+          />
+        )}
         {loaded && (
           <img
             src={media.url}
