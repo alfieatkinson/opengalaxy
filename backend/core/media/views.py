@@ -77,6 +77,7 @@ class MediaDetailView(View):
                 "duration": media.duration,
                 "media_type": media.media_type,
                 "accessed_at": media.accessed_at.isoformat(),
+                "favourites_count": media.favourites_count,
             }
         )
 
