@@ -10,11 +10,11 @@ import { isMediaFavourite, addMediaFavourite, removeMediaFavourite } from '@/lib
 
 interface FavouriteButtonProps {
   mediaId: string
-  className?: string
   size?: number
+  onToggle?: (nowFavourite: boolean) => void
 }
 
-const FavouriteButton = ({ mediaId, className = '', size = 24 }: FavouriteButtonProps) => {
+const FavouriteButton = ({ mediaId, size = 24, onToggle }: FavouriteButtonProps) => {
   const router = useRouter()
   const { authFetch: rawAuthFetch, user: me } = useAuth()
   const [isFav, setIsFav] = useState(false)
@@ -47,25 +47,21 @@ const FavouriteButton = ({ mediaId, className = '', size = 24 }: FavouriteButton
     }
 
     try {
-      if (isFav) {
-        await removeMediaFavourite(fetcher, mediaId)
-        setIsFav(false)
-      } else {
+      const next = !isFav
+      if (next) {
         await addMediaFavourite(fetcher, mediaId)
-        setIsFav(true)
+      } else {
+        await removeMediaFavourite(fetcher, mediaId)
       }
+      setIsFav(next)
+      onToggle?.(next)
     } catch (error) {
       console.error('Error toggling favourite:', error)
     }
   }
 
   return (
-    <button
-      onClick={toggleFav}
-      aria-pressed={isFav}
-      className={className}
-      style={{ pointerEvents: 'auto' }}
-    >
+    <button onClick={toggleFav} aria-pressed={isFav} style={{ pointerEvents: 'auto' }}>
       <BookmarkIcon
         size={size}
         fill={isFav ? 'currentColor' : 'none'}
