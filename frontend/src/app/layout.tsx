@@ -3,6 +3,9 @@
 import type { Metadata } from 'next'
 import '@/styles/globals.css'
 
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
 import PageWrapper from '@/components/layout/PageWrapper'
 import { AuthProvider } from '@/context/AuthContext'
 
@@ -18,6 +21,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <AuthProvider>
           <PageWrapper>{children}</PageWrapper>
         </AuthProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
