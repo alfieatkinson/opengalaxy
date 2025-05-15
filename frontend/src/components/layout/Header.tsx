@@ -45,7 +45,7 @@ const Header = ({
         )}
       </div>
       <div className="flex-grow flex justify-center">
-        {!isScrollable && <SearchBar placeholder="Search for media..." />}
+        {isScrollable && <SearchBar placeholder="Search for media..." />}
       </div>
       <div className="w-1/4 flex justify-end items-center space-x-4">
         {isLoggedIn ? (

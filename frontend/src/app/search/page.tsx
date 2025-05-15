@@ -1,6 +1,5 @@
 // src/app/search/page.tsx
 
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Media } from '@/lib/media/types'
 import type { SearchAPIResponse } from '@/lib/search/types'
@@ -55,14 +54,18 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
       </div>
 
       <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((r: Media) => (
-          <Link key={r.openverse_id} href={`/media/${r.openverse_id}`}>
-            <MediaCard media={r} />
-          </Link>
+        {results.map((media: Media) => (
+          <MediaCard key={media.openverse_id} media={media} />
         ))}
       </div>
 
-      <PageNavigator query={query} page={page} totalPages={total_pages} pageSize={perPage} />
+      <PageNavigator
+        basePath="/search"
+        queryParams={{ query }}
+        page={page}
+        totalPages={total_pages}
+        pageSize={perPage}
+      />
     </div>
   )
 }
