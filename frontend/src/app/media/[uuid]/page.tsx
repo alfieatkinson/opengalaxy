@@ -14,6 +14,9 @@ import {
   Music as MusicIcon,
   Scale as ScaleIcon,
   Tag as TagIcon,
+  Paperclip as PaperclipIcon,
+  Flame as FlameIcon,
+  Database as DatabaseIcon,
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -79,7 +82,12 @@ const MediaPage = async ({ params }: MediaPageProps) => {
           </div>
           <div className="flex gap-4 items-center justify-center flex-wrap">
             {media.creator && (
-              <AttributeCard title="Creator" icon={<UserIcon size={24} />} text={media.creator} />
+              <AttributeCard
+                title="Creator"
+                icon={<UserIcon size={24} />}
+                text={media.creator}
+                href={media.creator_url}
+              />
             )}
 
             {media.license && (
@@ -87,6 +95,7 @@ const MediaPage = async ({ params }: MediaPageProps) => {
                 title="License"
                 icon={<ScaleIcon size={24} />}
                 text={`${media.license} ${media.license_version ?? ''}`}
+                href={media.license_url}
               />
             )}
 
@@ -100,6 +109,30 @@ const MediaPage = async ({ params }: MediaPageProps) => {
 
             {media.category && (
               <AttributeCard title="Category" icon={<TagIcon size={24} />} text={media.category} />
+            )}
+
+            {media.mature && (
+              <AttributeCard
+                title="Mature Content"
+                icon={<FlameIcon size={24} />}
+                text="This media may contain mature content."
+              />
+            )}
+
+            {media.file_type && (
+              <AttributeCard
+                title="File Type"
+                icon={<PaperclipIcon size={24} />}
+                text={media.file_type}
+              />
+            )}
+
+            {media.file_size && (
+              <AttributeCard
+                title="File Size"
+                icon={<DatabaseIcon size={24} />}
+                text={`${(media.file_size / 1024).toFixed(2)} KB`}
+              />
             )}
 
             {media.media_type === 'image' && media.width && media.height && (
