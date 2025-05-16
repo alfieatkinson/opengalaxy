@@ -59,12 +59,19 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         ))}
       </div>
 
+      {results.length < perPage && (
+        <div className="p-8 text-center text-sm text-gray-500">
+          There are currently no further results due to Openverse API limitations.
+        </div>
+      )}
+
       <PageNavigator
         basePath="/search"
         queryParams={{ query }}
         page={page}
         totalPages={total_pages}
         pageSize={perPage}
+        hasMorePages={results.length === perPage}
       />
     </div>
   )
