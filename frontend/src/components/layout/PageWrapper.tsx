@@ -27,7 +27,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
       <Header isScrollable={isScrollable} isLandingPage={isLandingPage} />
       <main
         className={[
-          'flex flex-col items-center justify-center flex-grow mt-18 p-4 h-full border-1',
+          'flex flex-col items-center justify-center flex-grow mt-18 p-4 h-full',
           isScrollable ? 'overflow-hidden' : '',
           isLandingPage ? '' : 'w-2/3 min-w-200',
         ].join(' ')}
