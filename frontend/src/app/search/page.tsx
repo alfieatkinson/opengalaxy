@@ -19,7 +19,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const params = await searchParams
   const query = params.query?.trim() ?? ''
   const page = Math.max(parseInt(params.page ?? '1', 10), 1)
-  const perPage = Math.max(parseInt(params.page_size ?? '12', 10), 1)
+  const perPage = Math.max(parseInt(params.page_size ?? '36', 10), 1)
 
   if (!query) {
     return (
@@ -48,7 +48,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">Search results for “{query}”</h1>
       </div>
