@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Bookmark as BookmarkIcon } from 'lucide-react'
+import { Star as StarIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { isMediaFavourite, addMediaFavourite, removeMediaFavourite } from '@/lib/media/api'
 
@@ -62,7 +62,7 @@ const FavouriteButton = ({ mediaId, size = 24, onToggle }: FavouriteButtonProps)
 
   return (
     <button onClick={toggleFav} aria-pressed={isFav} style={{ pointerEvents: 'auto' }}>
-      <BookmarkIcon
+      <StarIcon
         size={size}
         fill={isFav ? 'currentColor' : 'none'}
         className={
