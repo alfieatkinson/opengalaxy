@@ -11,9 +11,16 @@ interface AudioWaveformProps {
   width?: number
   height?: number
   onReady?: () => void
+  hideControls?: boolean
 }
 
-export const AudioWaveform = ({ src, width, height = 240, onReady }: AudioWaveformProps) => {
+export const AudioWaveform = ({
+  src,
+  width,
+  height = 240,
+  onReady,
+  hideControls = false,
+}: AudioWaveformProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const waveSurferRef = useRef<WaveSurfer | null>(null)
 
@@ -80,18 +87,26 @@ export const AudioWaveform = ({ src, width, height = 240, onReady }: AudioWavefo
   return (
     <div className={`${width ? `w-${width}` : 'w-full'} h-fit`}>
       {loading && <p className="text-sm text-gray-500">Loading waveform…</p>}
-      <div ref={containerRef} />
-      <div className="flex flex-row items-center justify-between m-6 gap-4">
-        <button
-          onClick={() => togglePlayback()}
-          className="btn btn-primary aspect-square h-fit w-fit rounded-lg p-2"
-        >
-          {isPlaying ? <PauseIcon size={32} /> : <PlayIcon size={32} />}
-        </button>
-        <p className="text-sm text-gray-600">
-          {formatDuration(currentTime)} / {formatDuration(duration)}
-        </p>
-      </div>
+      <div
+        ref={containerRef}
+        className={`
+          ${hideControls ? 'pointer-events-none' : ''}
+          relative z-0  
+        `}
+      />
+      {!hideControls && (
+        <div className="flex flex-row items-center justify-between m-6 gap-4">
+          <button
+            onClick={() => togglePlayback()}
+            className="btn btn-primary aspect-square h-fit w-fit rounded-lg p-2"
+          >
+            {isPlaying ? <PauseIcon size={32} /> : <PlayIcon size={32} />}
+          </button>
+          <p className="text-sm text-gray-600">
+            {formatDuration(currentTime)} / {formatDuration(duration)}
+          </p>
+        </div>
+      )}
     </div>
   )
 }
