@@ -39,7 +39,7 @@ class MediaDetailView(View):
                 "category": fresh.get("category", media.category),
                 "file_size": fresh.get("file_size", media.file_size),
                 "file_type": fresh.get("file_type", media.file_type),
-                "mature": fresh.get("is_mature", media.mature),
+                "mature": fresh.get("mature", media.mature),
                 "thumbnail_url": fresh.get("thumbnail", media.thumbnail_url),
                 "height": fresh.get("height", media.height),
                 "width": fresh.get("width", media.width),

@@ -23,7 +23,10 @@ class SearchView(View):
     def get(self, request):
         query = request.GET.get("q", "").strip()
         page = max(int(request.GET.get("page", 1)), 1)
-        page_size = max(int(request.GET.get("page_size", 20)), 1)
+        page_size = max(int(request.GET.get("page_size", 36)), 1)
+        mature = request.GET.get("mature", "false").lower() == "true"
+        sort_by = request.GET.get("sort_by", "indexed_on").lower()
+        reverse = request.GET.get("reverse", "false").lower() == "true"
 
         if not query:
             logger.warning("Search query is empty, returning 400 response.")
@@ -32,10 +35,10 @@ class SearchView(View):
         logger.info(f"Received search query: {query}, page: {page}, page_size: {page_size}")
 
         # Fetch results from both endpoints
-        params = {"q": query, "per_page": page_size * 2}
+        params = {"q": query, "page": page, "per_page": page_size // 2, "mature": mature}
         try:
-            img_resp = self.client.query("images", params={**params, "page": page})
-            aud_resp = self.client.query("audio", params={**params, "page": page})
+            img_resp = self.client.query("images", params={**params})
+            aud_resp = self.client.query("audio", params={**params})
         except Exception as e:
             logger.error(f"Error while querying Openverse: {e}")
             return JsonResponse({"error": "Error fetching data from Openverse."}, status=500)
@@ -43,12 +46,14 @@ class SearchView(View):
         # Log response data for debugging
         logger.debug(f"Image response: {img_resp}")
         logger.debug(f"Audio response: {aud_resp}")
+        logger.debug("Raw img item keys: %s", img_resp["results"][0].keys())
+        logger.debug("Raw aud item keys: %s", aud_resp["results"][0].keys())
 
         # Sum the totals
         img_total = img_resp.get("result_count", len(img_resp.get("results", [])))
         aud_total = aud_resp.get("result_count", len(aud_resp.get("results", [])))
         total_count = img_total + aud_total
-        total_pages = ceil(total_count / (page_size * 2))
+        total_pages = ceil(total_count / page_size)
 
         # Log total count and pages
         logger.info(f"Total results: {total_count}, Total pages: {total_pages}")
@@ -57,10 +62,22 @@ class SearchView(View):
         merged = []
         for item in img_resp.get("results", []):
             item["media_type"] = "image"
+            # treat either mature flag or any sensitivity tag as sensitive
+            is_sensitive = bool(item.get("mature")) or bool(item.get("unstable__sensitivity"))
+            item["mature"] = is_sensitive
             merged.append(item)
+
         for item in aud_resp.get("results", []):
             item["media_type"] = "audio"
+            is_sensitive = bool(item.get("mature")) or bool(item.get("unstable__sensitivity"))
+            item["mature"] = is_sensitive
             merged.append(item)
+            
+        # Sort by indexed_on descending
+        merged.sort(
+            key=lambda i: i.get(sort_by, ""),
+            reverse=reverse,
+        )
 
         # Slice for this page
         start = (page - 1) * page_size
@@ -76,7 +93,7 @@ class SearchView(View):
             data = {
                 "openverse_id": item["id"],
                 "title": item.get("title"),
-                "indexed_on": item.get("date_created") or timezone.now().isoformat(),
+                "indexed_on": item.get("indexed_on") or timezone.now().isoformat(),
                 "foreign_landing_url": item.get("foreign_landing_url"),
                 "url": item.get("url"),
                 "creator": item.get("creator"),
@@ -86,9 +103,9 @@ class SearchView(View):
                 "license_url": item.get("license_url"),
                 "attribution": item.get("attribution"),
                 "category": item.get("category"),
-                "file_size": item.get("file_size"),
-                "file_type": item.get("file_type"),
-                "mature": item.get("is_mature", False),
+                "file_size": item.get("filesize"),
+                "file_type": item.get("filetype"),
+                "mature": item["mature"],
                 "thumbnail_url": item.get("thumbnail"),
                 "height": item.get("height"),
                 "width": item.get("width"),
