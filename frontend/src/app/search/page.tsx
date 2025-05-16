@@ -1,25 +1,38 @@
 // src/app/search/page.tsx
 
-import { notFound } from 'next/navigation'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { notFound, useSearchParams } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 import type { Media } from '@/lib/media/types'
 import type { SearchAPIResponse } from '@/lib/search/types'
 import { fetchSearchResults } from '@/lib/search/api'
 import MediaCard from '@/components/common/MediaCard'
 import PageNavigator from '@/components/PageNavigator'
 
-interface SearchPageProps {
-  searchParams: Promise<{
-    query?: string
-    page?: string
-    page_size?: string
-  }>
-}
+const SearchPage = () => {
+  const params = useSearchParams()
+  const { prefs } = useAuth()
 
-const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const params = await searchParams
-  const query = params.query?.trim() ?? ''
-  const page = Math.max(parseInt(params.page ?? '1', 10), 1)
-  const perPage = Math.max(parseInt(params.page_size ?? '18', 10), 1)
+  const query = params.get('query')?.trim() ?? ''
+  const page = Math.max(Number(params.get('page') ?? '1'), 1)
+  const perPage = Math.max(Number(params.get('page_size') ?? '18'), 1)
+  const showSensitive = prefs.show_sensitive
+
+  const [data, setData] = useState<SearchAPIResponse | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    if (!query) return
+    setLoading(true)
+    console.log(showSensitive)
+    fetchSearchResults(query, page, perPage, showSensitive)
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false))
+  }, [query, page, perPage, showSensitive])
 
   if (!query) {
     return (
@@ -29,13 +42,8 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     )
   }
 
-  let data: SearchAPIResponse
-  try {
-    data = await fetchSearchResults(query, page, perPage)
-  } catch (err) {
-    console.error(err)
-    return notFound()
-  }
+  if (error) return notFound()
+  if (loading || !data) return <div className="loading-spinner text-primary w-full h-full" />
 
   const { results, total_pages } = data
 
