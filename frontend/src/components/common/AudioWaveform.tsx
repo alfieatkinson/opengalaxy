@@ -86,7 +86,11 @@ export const AudioWaveform = ({
 
   return (
     <div className={`${width ? `w-${width}` : 'w-full'} h-fit`}>
-      {loading && <p className="text-sm text-gray-500">Loading waveform…</p>}
+      {loading && (
+        <div className="flex items-center justify-center w-full translate-y-24">
+          <div className="loading loading-spinner loading-lg text-primary" />
+        </div>
+      )}
       <div
         ref={containerRef}
         className={`
