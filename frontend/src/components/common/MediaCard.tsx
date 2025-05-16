@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Media } from '@/lib/media/types'
 import FavouriteControl from '@/components/common/FavouriteControl'
+import AudioWaveform from '@/components/common/AudioWaveform'
 
 interface MediaCardProps {
   media: Media
@@ -20,7 +21,9 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
     >
       <Link href={`/media/${media.openverse_id}`}>
         <div className="block w-full h-full">
-          {media.thumbnail_url ? (
+          {media.media_type === 'audio' ? (
+            <AudioWaveform src={media.url} height={mini ? 192 : 225} hideControls={true} />
+          ) : media.thumbnail_url ? (
             <Image
               src={media.thumbnail_url}
               alt={media.title}
