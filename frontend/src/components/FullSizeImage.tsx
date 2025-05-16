@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useAuth } from '@/context/AuthContext'
 import type { Media } from '@/lib/media/types'
 import BlurOverlay from '@/components/common/BlurOverlay'
 
@@ -13,6 +14,9 @@ interface FullSizeImageProps {
 
 const FullSizeImage = ({ media }: FullSizeImageProps) => {
   const [loaded, setLoaded] = useState(false)
+  const { prefs } = useAuth()
+
+  const blurSensitive = prefs.blur_sensitive // TODO: add this to a useEffect to update when the user changes prefs
 
   useEffect(() => {
     const img = new window.Image()
@@ -22,7 +26,7 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
 
   return (
     <figure className="relative w-full overflow-hidden aspect-[16/9] rounded-t-lg">
-      <BlurOverlay active={media.mature}>
+      <BlurOverlay active={media.mature && blurSensitive}>
         <div className="relative w-full h-full">
           {media.thumbnail_url && (
             <Image
