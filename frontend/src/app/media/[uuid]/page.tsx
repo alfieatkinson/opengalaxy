@@ -7,6 +7,7 @@ import FullSizeImage from '@/components/FullSizeImage'
 import FavouriteControl from '@/components/common/FavouriteControl'
 import AttributeCard from '@/components/common/AttributeCard'
 import LinkButton from '@/components/common/LinkButton'
+import AudioWaveform from '@/components/common/AudioWaveform'
 import {
   User as UserIcon,
   Maximize2 as MaxIcon,
@@ -55,18 +56,24 @@ const MediaPage = async ({ params }: MediaPageProps) => {
     notFound()
   }
 
-  const formatDuration = (duration: number): string => {
-    // Convert duration in milliseconds to minutes and seconds
-    const minutes = Math.floor(duration / 60000)
-    const seconds = Math.floor((duration % 60000) / 1000)
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  const formatDuration = (milliseconds: number): string => {
+    const m = Math.floor(milliseconds / 60000)
+    const s = Math.floor((milliseconds % 60000) / 1000)
+    const ms = Math.floor((milliseconds % 1000) / 10)
+    return `${m}:${s.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`
   }
 
   return (
     <div className="">
       <div className="card h-full bg-base-100 shadow-lg">
-        <div className="card-header w-full">
-          <FullSizeImage media={media} />
+        <div className="card-header w-full h-full">
+          {media.media_type === 'audio' ? (
+            <div className="flex flex-col items-center justify-center w-full h-fit my-6 py-8">
+              <AudioWaveform src={media.url} />
+            </div>
+          ) : (
+            <FullSizeImage media={media} />
+          )}
         </div>
         <div className="card-body text-secondary">
           <div className="flex flex-row justify-between">
