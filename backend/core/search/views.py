@@ -26,7 +26,7 @@ class SearchView(View):
         page_size = max(int(request.GET.get("page_size", 36)), 1)
         mature = request.GET.get("mature", "false").lower() == "true"
         sort_by = request.GET.get("sort_by", "indexed_on").lower()
-        reverse = request.GET.get("reverse", "false").lower() == "true"
+        sort_dir = request.GET.get("sort_dir", "desc").lower()
 
         if not query:
             logger.warning("Search query is empty, returning 400 response.")
@@ -35,7 +35,15 @@ class SearchView(View):
         logger.info(f"Received search query: {query}, page: {page}, page_size: {page_size}")
 
         # Fetch results from both endpoints
-        params = {"q": query, "page": page, "per_page": page_size // 2, "mature": mature}
+        params = {
+            "q": query,
+            "page": page,
+            "per_page": page_size // 2,
+            "mature": mature,
+            "unstable__include_sensitive_results": mature,
+            "unstable__sort_by": sort_by,
+            "unstable__sort_dir": sort_dir,
+        }
         try:
             img_resp = self.client.query("images", params={**params})
             aud_resp = self.client.query("audio", params={**params})

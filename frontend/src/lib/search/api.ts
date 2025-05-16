@@ -7,9 +7,11 @@ export const fetchSearchResults = async (
   page: number = 1,
   pageSize: number = 36,
   mature: boolean = true,
+  sortBy: string = 'relevance',
+  sortOrder: 'desc' | 'asc' = 'desc',
 ): Promise<SearchAPIResponse> => {
   const res = await fetch(
-    `${process.env.BACKEND_API_URL}/api/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}&mature=${mature.toString()}`,
+    `${process.env.BACKEND_API_URL}/api/search/?q=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}&mature=${mature.toString()}&sort_by=${sortBy}&sort_order=${sortOrder}`,
     { cache: 'no-store' },
   )
   if (!res.ok) throw new Error(`Search failed: ${res.statusText}`)
