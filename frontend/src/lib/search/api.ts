@@ -5,9 +5,9 @@ import type { SearchAPIResponse } from '@/lib/search/types'
 export const fetchSearchResults = async (
   query: string,
   page: number = 1,
-  pageSize: number = 36,
+  pageSize: number = 18,
   mature: boolean = true,
-  sortBy: string = 'relevance',
+  sortBy: 'relevance' | 'indexed_on' = 'relevance',
   sortOrder: 'desc' | 'asc' = 'desc',
 ): Promise<SearchAPIResponse> => {
   const res = await fetch(

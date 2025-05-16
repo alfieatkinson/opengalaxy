@@ -23,7 +23,7 @@ class SearchView(View):
     def get(self, request):
         query = request.GET.get("q", "").strip()
         page = max(int(request.GET.get("page", 1)), 1)
-        page_size = max(int(request.GET.get("page_size", 36)), 1)
+        page_size = max(int(request.GET.get("page_size", 18)), 1)
         mature = request.GET.get("mature", "false").lower() == "true"
         sort_by = request.GET.get("sort_by", "indexed_on").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
@@ -39,7 +39,6 @@ class SearchView(View):
             "q": query,
             "page": page,
             "per_page": page_size // 2,
-            "mature": mature,
             "unstable__include_sensitive_results": mature,
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
@@ -80,12 +79,6 @@ class SearchView(View):
             is_sensitive = bool(item.get("mature")) or bool(item.get("unstable__sensitivity"))
             item["mature"] = is_sensitive
             merged.append(item)
-            
-        # Sort by indexed_on descending
-        merged.sort(
-            key=lambda i: i.get(sort_by, ""),
-            reverse=reverse,
-        )
 
         # Slice for this page
         start = (page - 1) * page_size
