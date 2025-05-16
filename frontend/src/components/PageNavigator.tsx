@@ -11,6 +11,7 @@ interface PageNavigatorProps {
   page: number
   totalPages: number
   pageSize: number
+  hasMorePages?: boolean
 }
 
 const PageNavigator = ({
@@ -19,6 +20,7 @@ const PageNavigator = ({
   page,
   totalPages,
   pageSize,
+  hasMorePages = true,
 }: PageNavigatorProps) => {
   const router = useRouter()
 
@@ -43,7 +45,7 @@ const PageNavigator = ({
       </span>
       <button
         onClick={() => changePage(page + 1)}
-        disabled={page >= totalPages}
+        disabled={!hasMorePages || page >= totalPages}
         className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50"
       >
         Next

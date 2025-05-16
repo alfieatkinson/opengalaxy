@@ -19,7 +19,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const params = await searchParams
   const query = params.query?.trim() ?? ''
   const page = Math.max(parseInt(params.page ?? '1', 10), 1)
-  const perPage = Math.max(parseInt(params.page_size ?? '12', 10), 1)
+  const perPage = Math.max(parseInt(params.page_size ?? '18', 10), 1)
 
   if (!query) {
     return (
@@ -48,7 +48,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">Search results for “{query}”</h1>
       </div>
@@ -59,12 +59,19 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         ))}
       </div>
 
+      {results.length < perPage && (
+        <div className="p-8 text-center text-sm text-gray-500">
+          There are currently no further results due to Openverse API limitations.
+        </div>
+      )}
+
       <PageNavigator
         basePath="/search"
         queryParams={{ query }}
         page={page}
         totalPages={total_pages}
         pageSize={perPage}
+        hasMorePages={results.length === perPage}
       />
     </div>
   )
