@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Media } from '@/lib/media/types'
 import FavouriteControl from '@/components/common/FavouriteControl'
 import AudioWaveform from '@/components/common/AudioWaveform'
-import BlurOverlay from './BlurOverlay'
+import BlurOverlay from '@/components/common/BlurOverlay'
 
 interface MediaCardProps {
   media: Media
