@@ -120,9 +120,9 @@ const MediaPage = async ({ params }: MediaPageProps) => {
 
             {media.mature && (
               <AttributeCard
-                title="Mature Content"
+                title="Mature"
                 icon={<FlameIcon size={24} />}
-                text="This media may contain mature content."
+                text="Sensitive content"
               />
             )}
 
