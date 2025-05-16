@@ -4,7 +4,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { User as UserIcon, Bookmark as BookmarkIcon } from 'lucide-react'
+import { User as UserIcon, Star as StarIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import SearchBar from '@/components/common/SearchBar'
 import HighlightedText from '@/components/common/HighlightedText'
@@ -63,7 +63,7 @@ const Header = ({
               onClick={() => router.push(`/profile/${user?.username}/favourites`)}
               className="flex items-center space-x-2 hover:opacity-80"
             >
-              <BookmarkIcon size={32} />
+              <StarIcon size={32} />
             </button>
           </>
         ) : (
