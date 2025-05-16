@@ -63,6 +63,13 @@ const MediaPage = async ({ params }: MediaPageProps) => {
     return `${m}:${s.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`
   }
 
+  const formatFileSize = (bytes: number): string => {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+    if (bytes === 0) return '0 Bytes'
+    const i = Math.floor(Math.log(bytes) / Math.log(1024))
+    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`
+  }
+
   return (
     <div className="">
       <div className="card h-full bg-base-100 shadow-lg">
@@ -138,7 +145,7 @@ const MediaPage = async ({ params }: MediaPageProps) => {
               <AttributeCard
                 title="File Size"
                 icon={<DatabaseIcon size={24} />}
-                text={`${(media.file_size / 1024).toFixed(2)} KB`}
+                text={formatFileSize(media.file_size)}
               />
             )}
 
