@@ -1,4 +1,4 @@
-// src/components/FavouritesPreview.tsx
+// src/components/profile/FavouritesPreview.tsx
 
 'use client'
 

@@ -10,9 +10,9 @@ import { useAuth } from '@/context/AuthContext'
 import { User } from '@/lib/profile/types'
 import { Media } from '@/lib/media/types'
 import { getUserProfile, getUserFavs } from '@/lib/profile/api'
-import UserInfo from '@/components/UserInfo'
-import FavouritesPreview from '@/components/FavouritesPreview'
-import QuickSettings from '@/components/QuickSettings'
+import UserInfo from '@/components/profile/UserInfo'
+import FavouritesPreview from '@/components/profile/FavouritesPreview'
+import QuickSettings from '@/components/profile/QuickSettings'
 
 const ProfilePage = () => {
   const params = useParams()
