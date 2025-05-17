@@ -51,10 +51,13 @@ class SearchView(View):
             return JsonResponse({"error": "Error fetching data from Openverse."}, status=500)
 
         # Log response data for debugging
-        logger.debug(f"Image response: {img_resp}")
-        logger.debug(f"Audio response: {aud_resp}")
-        logger.debug("Raw img item keys: %s", img_resp["results"][0].keys())
-        logger.debug("Raw aud item keys: %s", aud_resp["results"][0].keys())
+        #logger.debug(f"Image response: {img_resp}")
+        #logger.debug(f"Audio response: {aud_resp}")
+        for kind, resp in (("img", img_resp), ("aud", aud_resp)):
+            results = resp.get("results", [])
+            logger.debug(f"{kind}_resp returned {len(results)} results")
+            if results:
+                logger.debug("%s_resp keys: %s", kind, list(results[0].keys()))
 
         # Sum the totals
         img_total = img_resp.get("result_count", len(img_resp.get("results", [])))
