@@ -1,9 +1,9 @@
-// src/components/common/FavouriteControl.tsx
+// src/components/media/FavouriteControl.tsx
 
 'use client'
 
 import { useState } from 'react'
-import FavouriteButton from '@/components/common/FavouriteButton'
+import FavouriteButton from '@/components/media/FavouriteButton'
 
 interface FavouriteControlProps {
   mediaId: string

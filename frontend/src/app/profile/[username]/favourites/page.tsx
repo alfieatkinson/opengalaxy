@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext'
 import type { User } from '@/lib/profile/types'
 import type { Media } from '@/lib/media/types'
 import { getUserProfile, getUserFavs } from '@/lib/profile/api'
-import MediaCard from '@/components/common/MediaCard'
+import MediaCard from '@/components/media/MediaCard'
 import PageNavigator from '@/components/PageNavigator'
 
 const FavouritesPage = () => {

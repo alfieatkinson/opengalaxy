@@ -3,7 +3,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import MediaCard from '@/components/common/MediaCard'
+import MediaCard from '@/components/media/MediaCard'
 import { Media } from '@/lib/media/types'
 
 interface FavouritesPreviewProps {

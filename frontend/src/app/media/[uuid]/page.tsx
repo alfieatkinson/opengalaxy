@@ -3,11 +3,11 @@
 import { type Metadata } from 'next'
 import { fetchMediaById } from '@/lib/media/api'
 import { notFound } from 'next/navigation'
-import FullSizeImage from '@/components/FullSizeImage'
-import FavouriteControl from '@/components/common/FavouriteControl'
-import AttributeCard from '@/components/common/AttributeCard'
+import FullSizeImage from '@/components/media/FullSizeImage'
+import FavouriteControl from '@/components/media/FavouriteControl'
+import AttributeCard from '@/components/media/AttributeCard'
 import LinkButton from '@/components/common/LinkButton'
-import AudioWaveform from '@/components/common/AudioWaveform'
+import AudioWaveform from '@/components/media/AudioWaveform'
 import {
   User as UserIcon,
   Maximize2 as MaxIcon,

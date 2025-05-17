@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext'
 import type { Media } from '@/lib/media/types'
 import type { SearchAPIResponse } from '@/lib/search/types'
 import { fetchSearchResults } from '@/lib/search/api'
-import MediaCard from '@/components/common/MediaCard'
+import MediaCard from '@/components/media/MediaCard'
 import PageNavigator from '@/components/PageNavigator'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 

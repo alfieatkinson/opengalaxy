@@ -1,4 +1,4 @@
-// src/components/common/MediaCard.tsx
+// src/components/media/MediaCard.tsx
 
 'use client'
 
@@ -6,9 +6,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import { Media } from '@/lib/media/types'
-import FavouriteControl from '@/components/common/FavouriteControl'
-import AudioWaveform from '@/components/common/AudioWaveform'
-import BlurOverlay from '@/components/common/BlurOverlay'
+import FavouriteControl from '@/components/media/FavouriteControl'
+import AudioWaveform from '@/components/media/AudioWaveform'
+import BlurOverlay from '@/components/media/BlurOverlay'
 
 interface MediaCardProps {
   media: Media
