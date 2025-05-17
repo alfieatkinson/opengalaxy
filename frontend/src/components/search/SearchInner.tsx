@@ -9,7 +9,7 @@ import type { Media } from '@/lib/media/types'
 import type { SearchAPIResponse } from '@/lib/search/types'
 import { fetchSearchResults } from '@/lib/search/api'
 import MediaCard from '@/components/media/MediaCard'
-import PageNavigator from '@/components/PageNavigator'
+import PageNavigator from '@/components/common/PageNavigator'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 const SearchInner = () => {
