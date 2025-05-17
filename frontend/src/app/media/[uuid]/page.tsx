@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/media/FullSizeImage'
 import FavouriteControl from '@/components/media/FavouriteControl'
 import AttributeCard from '@/components/media/AttributeCard'
-import LinkButton from '@/components/common/LinkButton'
+import LinkButton from '@/components/shared/LinkButton'
 import AudioWaveform from '@/components/media/AudioWaveform'
 import {
   User as UserIcon,

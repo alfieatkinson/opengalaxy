@@ -1,4 +1,4 @@
-// src/components/common/PageNavigator.tsx
+// src/components/shared/PageNavigator.tsx
 
 'use client'
 

@@ -4,7 +4,7 @@
 
 import { Suspense } from 'react'
 import SearchInner from '@/components/search/SearchInner'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
+import LoadingSpinner from '@/components/shared/LoadingSpinner'
 
 const SearchClient = () => {
   return (

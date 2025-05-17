@@ -1,6 +1,6 @@
 // src/components/Hero.tsx
 
-import HighlightedText from '@/components/common/HighlightedText'
+import HighlightedText from '@/components/shared/HighlightedText'
 import SearchBar from '@/components/search/SearchBar'
 
 const Hero = () => {

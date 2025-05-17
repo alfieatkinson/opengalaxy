@@ -1,4 +1,4 @@
-// src/components/common/LoadingSpinner.tsx
+// src/components/shared/LoadingSpinner.tsx
 
 const LoadingSpinner = () => {
   return (

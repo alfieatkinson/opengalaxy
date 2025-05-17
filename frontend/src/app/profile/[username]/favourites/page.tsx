@@ -11,7 +11,7 @@ import type { User } from '@/lib/profile/types'
 import type { Media } from '@/lib/media/types'
 import { getUserProfile, getUserFavs } from '@/lib/profile/api'
 import MediaCard from '@/components/media/MediaCard'
-import PageNavigator from '@/components/common/PageNavigator'
+import PageNavigator from '@/components/shared/PageNavigator'
 
 const FavouritesPage = () => {
   const { username } = useParams() as { username: string }
