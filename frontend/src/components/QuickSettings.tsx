@@ -14,7 +14,7 @@ interface QuickSettingsProps {
 
 const QuickSettings = ({ username }: QuickSettingsProps) => {
   const router = useRouter()
-  const { authFetch: rawAuthFetch, user: me } = useAuth()
+  const { authFetch: rawAuthFetch, user: me, updateLocalPrefs } = useAuth()
 
   // Wrap authFetch so it matches the standard fetch signature
   const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
@@ -52,6 +52,7 @@ const QuickSettings = ({ username }: QuickSettingsProps) => {
       try {
         // PATCH the change
         await updateUserPreferences(authFetch, username, { [field]: newValue })
+        updateLocalPrefs({ [field]: newValue })
       } catch (error) {
         console.error('Failed to update preferences:', error)
         // Roll back on error

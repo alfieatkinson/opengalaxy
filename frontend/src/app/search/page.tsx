@@ -1,80 +1,15 @@
 // src/app/search/page.tsx
 
-import { notFound } from 'next/navigation'
-import type { Media } from '@/lib/media/types'
-import type { SearchAPIResponse } from '@/lib/search/types'
-import { fetchSearchResults } from '@/lib/search/api'
-import MediaCard from '@/components/common/MediaCard'
-import PageNavigator from '@/components/PageNavigator'
+import SearchClient from '@/components/search/SearchClient'
+import type { Metadata } from 'next'
 
-interface SearchPageProps {
-  searchParams: Promise<{
-    query?: string
-    page?: string
-    page_size?: string
-  }>
+export const metadata: Metadata = {
+  title: 'Search | OpenGalaxy',
+  description: 'Search for open-licensed media on OpenGalaxy',
 }
 
-const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const params = await searchParams
-  const query = params.query?.trim() ?? ''
-  const page = Math.max(parseInt(params.page ?? '1', 10), 1)
-  const perPage = Math.max(parseInt(params.page_size ?? '18', 10), 1)
-
-  if (!query) {
-    return (
-      <div className="p-8">
-        <p className="text-lg text-center text-gray-500">Please enter a search term.</p>
-      </div>
-    )
-  }
-
-  let data: SearchAPIResponse
-  try {
-    data = await fetchSearchResults(query, page, perPage)
-  } catch (err) {
-    console.error(err)
-    return notFound()
-  }
-
-  const { results, total_pages } = data
-
-  if (results.length === 0) {
-    return (
-      <div className="p-8">
-        <p className="text-lg text-center text-gray-500">No results found for “{query}”.</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="w-full">
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">Search results for “{query}”</h1>
-      </div>
-
-      <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((media: Media) => (
-          <MediaCard key={media.openverse_id} media={media} />
-        ))}
-      </div>
-
-      {results.length < perPage && (
-        <div className="p-8 text-center text-sm text-gray-500">
-          There are currently no further results due to Openverse API limitations.
-        </div>
-      )}
-
-      <PageNavigator
-        basePath="/search"
-        queryParams={{ query }}
-        page={page}
-        totalPages={total_pages}
-        pageSize={perPage}
-        hasMorePages={results.length === perPage}
-      />
-    </div>
-  )
+const SearchPage = () => {
+  return <SearchClient />
 }
 
 export default SearchPage

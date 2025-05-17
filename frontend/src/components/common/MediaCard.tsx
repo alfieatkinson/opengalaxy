@@ -4,9 +4,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useAuth } from '@/context/AuthContext'
 import { Media } from '@/lib/media/types'
 import FavouriteControl from '@/components/common/FavouriteControl'
 import AudioWaveform from '@/components/common/AudioWaveform'
+import BlurOverlay from '@/components/common/BlurOverlay'
 
 interface MediaCardProps {
   media: Media
@@ -14,6 +16,10 @@ interface MediaCardProps {
 }
 
 const MediaCard = ({ media, mini = false }: MediaCardProps) => {
+  const { prefs } = useAuth()
+
+  const blurSensitive = prefs.blur_sensitive // TODO: add this to a useEffect to update when the user changes prefs
+
   return (
     <div
       className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow
@@ -24,13 +30,15 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
           {media.media_type === 'audio' ? (
             <AudioWaveform src={media.url} height={mini ? 192 : 225} hideControls={true} />
           ) : media.thumbnail_url ? (
-            <Image
-              src={media.thumbnail_url}
-              alt={media.title}
-              width={mini ? 240 : 400}
-              height={mini ? 192 : 225}
-              className="object-cover w-full h-full"
-            />
+            <BlurOverlay active={media.mature && blurSensitive} mini={true}>
+              <Image
+                src={media.thumbnail_url}
+                alt={media.title}
+                width={mini ? 240 : 400}
+                height={mini ? 192 : 225}
+                className="object-cover w-full h-full"
+              />
+            </BlurOverlay>
           ) : (
             <div className="w-full h-full bg-base-300 flex items-center justify-center">
               <p className="text-base-content text-opacity-50">No thumbnail available</p>
