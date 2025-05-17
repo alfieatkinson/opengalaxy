@@ -16,7 +16,7 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
   const [loaded, setLoaded] = useState(false)
   const { prefs } = useAuth()
 
-  const blurSensitive = prefs.blur_sensitive // TODO: add this to a useEffect to update when the user changes prefs
+  const blurSensitive = prefs.blur_sensitive
 
   useEffect(() => {
     const img = new window.Image()

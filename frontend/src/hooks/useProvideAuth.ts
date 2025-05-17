@@ -16,21 +16,28 @@ export interface User {
   is_staff: boolean
 }
 
+export interface Prefs {
+  public_profile: boolean
+  show_sensitive: boolean
+  blur_sensitive: boolean
+}
+
 const ACCESS_TOKEN_KEY = 'accessToken'
 const REFRESH_TOKEN_KEY = 'refreshToken'
 
 export const useProvideAuth = () => {
   const [user, setUser] = useState<User | null>(null)
   const isLoggedIn = Boolean(user)
-  const [prefs, setPrefs] = useState<{
-    public_profile: boolean
-    show_sensitive: boolean
-    blur_sensitive: boolean
-  }>({
+  const [prefs, setPrefs] = useState<Prefs>({
     public_profile: true,
     show_sensitive: false,
     blur_sensitive: true,
   })
+
+  // Helper function to update user preferences
+  const updateLocalPrefs = (updates: Partial<Prefs>) => {
+    setPrefs((prev) => ({ ...prev, ...updates }))
+  }
 
   // Helper function to call API with auth header, refresh if needed
   const authFetch = useCallback(async (input: RequestInfo, init: RequestInit = {}, retried = 0) => {
@@ -177,5 +184,5 @@ export const useProvideAuth = () => {
     setUser(null)
   }
 
-  return { user, prefs, isLoggedIn, signIn, signUp, signOut, authFetch }
+  return { user, prefs, isLoggedIn, signIn, signUp, signOut, authFetch, updateLocalPrefs }
 }
