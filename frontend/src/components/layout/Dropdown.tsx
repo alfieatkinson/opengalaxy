@@ -1,4 +1,4 @@
-// src/components/common/Dropdown.tsx
+// src/components/layout/Dropdown.tsx
 
 'use client'
 

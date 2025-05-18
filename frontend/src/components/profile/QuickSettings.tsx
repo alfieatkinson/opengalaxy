@@ -1,4 +1,4 @@
-// src/components/QuickSettings.tsx
+// src/components/profile/QuickSettings.tsx
 
 'use client'
 

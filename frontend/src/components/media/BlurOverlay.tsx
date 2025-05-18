@@ -1,4 +1,4 @@
-// src/components/common/BlurOverlay.tsx
+// src/components/media/BlurOverlay.tsx
 
 'use client'
 

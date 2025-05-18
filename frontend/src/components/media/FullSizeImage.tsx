@@ -1,4 +1,4 @@
-// src/components/FullSizeImage.tsx
+// src/components/media/FullSizeImage.tsx
 
 'use client'
 
@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import type { Media } from '@/lib/media/types'
-import BlurOverlay from '@/components/common/BlurOverlay'
+import BlurOverlay from '@/components/media/BlurOverlay'
 
 interface FullSizeImageProps {
   media: Media

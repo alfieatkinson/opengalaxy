@@ -1,95 +1,29 @@
 // src/app/profile/[username]/page.tsx
 
-'use client'
+import { Metadata } from 'next'
+import ClientOnly from '@/components/shared/ClientOnly'
+import ProfileInner from '@/components/profile/ProfileInner'
 
-import React, { useEffect, useState } from 'react'
-import { notFound, useParams } from 'next/navigation'
-import { User as UserIcon } from 'lucide-react'
+interface ProfilePageProps {
+  params: Promise<{ username: string }>
+}
 
-import { useAuth } from '@/context/AuthContext'
-import { User } from '@/lib/profile/types'
-import { Media } from '@/lib/media/types'
-import { getUserProfile, getUserFavs } from '@/lib/profile/api'
-import UserInfo from '@/components/UserInfo'
-import FavouritesPreview from '@/components/FavouritesPreview'
-import QuickSettings from '@/components/QuickSettings'
+export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Metadata> => {
+  const { username } = await params
 
-const ProfilePage = () => {
-  const params = useParams()
-  const { authFetch: rawAuthFetch, user: me } = useAuth()
-
-  const username = params.username as string
-
-  const [loading, setLoading] = useState(true)
-  const [isPrivate, setIsPrivate] = useState(false)
-  const [profile, setProfile] = useState<User | null>(null)
-  const [mediaList, setMediaList] = useState<Media[]>([])
-
-  useEffect(() => {
-    if (!username) return
-    ;(async () => {
-      const fetcher = me
-        ? (i: RequestInfo | URL, init?: RequestInit) => rawAuthFetch(i.toString(), init)
-        : fetch
-
-      try {
-        // Load the profile
-        const { private: privateFlag, profile: prof } = await getUserProfile(fetcher, username)
-
-        if (!prof && !privateFlag) return notFound()
-
-        // If it’s public, load the first few favourites
-        if (!privateFlag) {
-          const firstPage = await getUserFavs(fetcher, username, 1, 6)
-          setMediaList(firstPage.results.map((item) => item.media)) // Extract just the Media[]
-        }
-
-        setIsPrivate(privateFlag)
-        setProfile(prof)
-        setLoading(false)
-      } catch {
-        notFound()
-      }
-    })()
-  }, [username])
-
-  if (loading) {
-    return <div className="p-6">Loading…</div>
+  return {
+    title: `${username}'s Profile | OpenGalaxy`,
+    description: `View ${username}'s profile on OpenGalaxy.`,
   }
+}
 
-  // Private and no profile data, show privacy fallback
-  if (isPrivate && profile === null) {
-    return (
-      <div className="max-w-xl mx-auto p-6 text-center">
-        <UserIcon size={64} className="mx-auto mb-4 text-gray-400" />
-        <h2 className="text-2xl font-semibold">This profile is private</h2>
-        <p className="text-gray-500 mt-2">
-          {me?.username === username
-            ? 'You can change this in Settings.'
-            : 'The user has chosen to keep their details private.'}
-        </p>
-      </div>
-    )
-  }
-
-  // We know profile is non-null from above
-  const userProfile = profile!
+const ProfilePage = async ({ params }: ProfilePageProps) => {
+  const { username } = await params
 
   return (
-    <div className="flex flex-col flex-grow mx-auto p-6 space-y-8 w-full">
-      <div className="flex flex-row">
-        <div>
-          <UserInfo user={userProfile} />
-          <div className="flex-grow" />
-        </div>
-        <div className="flex-grow" />
-        {me?.username === username && <QuickSettings username={username} />}
-      </div>
-      <div className="flex-grow" />
-      <div className="flex w-full items-center justify-center">
-        <FavouritesPreview username={username} media={mediaList} isPrivate={isPrivate} />
-      </div>
-    </div>
+    <ClientOnly>
+      <ProfileInner username={username} />
+    </ClientOnly>
   )
 }
 

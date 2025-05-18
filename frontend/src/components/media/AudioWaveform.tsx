@@ -1,4 +1,4 @@
-// src/components/common/AudioWaveform.tsx
+// src/components/media/AudioWaveform.tsx
 
 'use client'
 

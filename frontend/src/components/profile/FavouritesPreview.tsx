@@ -1,26 +1,23 @@
-// src/components/FavouritesPreview.tsx
+// src/components/profile/FavouritesPreview.tsx
 
 'use client'
 
 import { useRouter } from 'next/navigation'
-import MediaCard from '@/components/common/MediaCard'
+import MediaCard from '@/components/media/MediaCard'
 import { Media } from '@/lib/media/types'
 
 interface FavouritesPreviewProps {
   username: string
   media: Media[]
-  isPrivate: boolean
 }
 
-const FavouritesPreview = ({ username, media, isPrivate }: FavouritesPreviewProps) => {
+const FavouritesPreview = ({ username, media }: FavouritesPreviewProps) => {
   const router = useRouter()
 
   return (
-    <div className="max-w-180">
+    <div className="max-w-180 w-full">
       <h2 className="text-2xl font-bold mb-4">Favourites</h2>
-      {isPrivate ? (
-        <p>This profile is private. You cannot see the favourites.</p>
-      ) : media && media.length > 0 ? (
+      {media && media.length > 0 ? (
         <div className="grid grid-cols-3 gap-4">
           {media.map((media, index) => (
             <MediaCard key={index} media={media} mini={true} />
@@ -29,14 +26,12 @@ const FavouritesPreview = ({ username, media, isPrivate }: FavouritesPreviewProp
       ) : (
         <p className="text-gray-500">No favourites yet.</p>
       )}
-      {!isPrivate && (
-        <button
-          className="btn btn-outline mt-4"
-          onClick={() => router.push(`${username}/favourites`)}
-        >
-          View all favourites →
-        </button>
-      )}
+      <button
+        className="btn btn-outline mt-4"
+        onClick={() => router.push(`${username}/favourites`)}
+      >
+        View all favourites →
+      </button>
     </div>
   )
 }

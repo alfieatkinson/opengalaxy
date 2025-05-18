@@ -1,4 +1,4 @@
-// src/components/UserInfo.tsx
+// src/components/profile/UserInfo.tsx
 
 'use client'
 
