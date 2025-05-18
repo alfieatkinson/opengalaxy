@@ -1,4 +1,4 @@
-// src/components/common/AttributeCard.tsx
+// src/components/media/AttributeCard.tsx
 
 'use client'
 

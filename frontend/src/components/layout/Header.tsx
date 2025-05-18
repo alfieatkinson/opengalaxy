@@ -6,9 +6,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { User as UserIcon, Star as StarIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
-import SearchBar from '@/components/common/SearchBar'
-import HighlightedText from '@/components/common/HighlightedText'
-import Dropdown from '@/components/common/Dropdown'
+import SearchBar from '@/components/search/SearchBar'
+import HighlightedText from '@/components/shared/HighlightedText'
+import Dropdown from '@/components/layout/Dropdown'
 
 const Header = ({
   isScrollable,

@@ -1,4 +1,4 @@
-// src/components/common/LinkButton.tsx
+// src/components/shared/LinkButton.tsx
 
 'use client'
 

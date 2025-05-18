@@ -1,4 +1,4 @@
-// src/components/common/SearchBar.tsx
+// src/components/search/SearchBar.tsx
 
 'use client'
 

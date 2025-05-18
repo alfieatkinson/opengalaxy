@@ -1,4 +1,4 @@
-// src/components/common/FavouriteButton.tsx
+// src/components/media/FavouriteButton.tsx
 
 'use client'
 

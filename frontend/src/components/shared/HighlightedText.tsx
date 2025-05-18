@@ -1,4 +1,4 @@
-// src/components/common/HighlightedText.tsx
+// src/components/shared/HighlightedText.tsx
 
 const HighlightedText = ({ children }: { children: React.ReactNode }) => {
   return (
