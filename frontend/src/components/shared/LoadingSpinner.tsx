@@ -2,7 +2,9 @@
 
 const LoadingSpinner = () => {
   return (
-    <div className="loading-spinner text-primary w-full h-full flex items-center justify-center" />
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="loading loading-spinner text-primary" />
+    </div>
   )
 }
 
