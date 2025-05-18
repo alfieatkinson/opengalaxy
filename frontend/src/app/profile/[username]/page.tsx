@@ -4,17 +4,21 @@ import { Metadata } from 'next'
 import ClientOnly from '@/components/shared/ClientOnly'
 import ProfileInner from '@/components/profile/ProfileInner'
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: { username: string }
-}): Promise<Metadata> => ({
-  title: `${params.username}'s Profile | OpenGalaxy`,
-  description: `View ${params.username}'s profile on OpenGalaxy.`,
-})
+interface ProfilePageProps {
+  params: Promise<{ username: string }>
+}
 
-const ProfilePage = ({ params }: { params: { username: string } }) => {
-  const { username } = params
+export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Metadata> => {
+  const { username } = await params
+
+  return {
+    title: `${username}'s Profile | OpenGalaxy`,
+    description: `View ${username}'s profile on OpenGalaxy.`,
+  }
+}
+
+const ProfilePage = async ({ params }: ProfilePageProps) => {
+  const { username } = await params
 
   return (
     <ClientOnly>
