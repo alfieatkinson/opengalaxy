@@ -4,17 +4,22 @@ import type { Metadata } from 'next'
 import ClientOnly from '@/components/shared/ClientOnly'
 import FavouritesInner from '@/components/profile/FavouritesInner'
 
-interface FavouritesPageProps {
+export const generateMetadata = async ({
+  params,
+}: {
   params: { username: string }
-  searchParams: { page?: string; page_size?: string }
-}
-
-export const generateMetadata = async ({ params }: FavouritesPageProps): Promise<Metadata> => ({
+}): Promise<Metadata> => ({
   title: `${params.username}'s Favourites | OpenGalaxy`,
   description: `View ${params.username}'s favourited open-license media.`,
 })
 
-const FavouritesPage = ({ params, searchParams }: FavouritesPageProps) => {
+const FavouritesPage = ({
+  params,
+  searchParams,
+}: {
+  params: { username: string }
+  searchParams: { page?: string; page_size?: string }
+}) => {
   const { username } = params
   const page = Math.max(Number(searchParams.page ?? '1'), 1)
   const pageSize = Math.max(Number(searchParams.page_size ?? '18'), 1)
