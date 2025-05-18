@@ -1,7 +1,8 @@
 // src/app/search/page.tsx
 
-import SearchClient from '@/components/search/SearchClient'
 import type { Metadata } from 'next'
+import ClientOnly from '@/components/shared/ClientOnly'
+import SearchInner from '@/components/search/SearchInner'
 
 export const metadata: Metadata = {
   title: 'Search | OpenGalaxy',
@@ -9,7 +10,11 @@ export const metadata: Metadata = {
 }
 
 const SearchPage = () => {
-  return <SearchClient />
+  return (
+    <ClientOnly>
+      <SearchInner />
+    </ClientOnly>
+  )
 }
 
 export default SearchPage
