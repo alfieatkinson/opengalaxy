@@ -15,6 +15,7 @@ class Media(models.Model):
     license_version = models.CharField(max_length=25, null=True)
     license_url = models.URLField(max_length=1000)
     attribution = models.CharField(max_length=1000, null=True)
+    source = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=80, null=True)
     file_size = models.PositiveIntegerField(null=True)
     file_type = models.CharField(max_length=80, null=True)
