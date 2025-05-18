@@ -13,7 +13,7 @@ export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Me
   description: `View ${params.username}'s profile on OpenGalaxy.`,
 })
 
-const ProfilePage = async ({ params }: ProfilePageProps) => {
+const ProfilePage = ({ params }: ProfilePageProps) => {
   const { username } = params
 
   return (

@@ -14,10 +14,10 @@ export const generateMetadata = async ({ params }: FavouritesPageProps): Promise
   description: `View ${params.username}'s favourited open-license media.`,
 })
 
-const FavouritesPage = async ({ params, searchParams }: FavouritesPageProps) => {
+const FavouritesPage = ({ params, searchParams }: FavouritesPageProps) => {
   const { username } = params
   const page = Math.max(Number(searchParams.page ?? '1'), 1)
-  const pageSize = Math.max(Number(searchParams.page_size ?? '12'), 1)
+  const pageSize = Math.max(Number(searchParams.page_size ?? '18'), 1)
 
   return (
     <ClientOnly>
