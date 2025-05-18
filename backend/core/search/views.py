@@ -68,20 +68,37 @@ class SearchView(View):
         # Log total count and pages
         logger.info(f"Total results: {total_count}, Total pages: {total_pages}")
 
-        # Merge and tag the results
-        merged = []
+        # Process image and audio items and add media_type and mature flags
+        img_items = []
         for item in img_resp.get("results", []):
             item["media_type"] = "image"
-            # treat either mature flag or any sensitivity tag as sensitive
             is_sensitive = bool(item.get("mature")) or bool(item.get("unstable__sensitivity"))
             item["mature"] = is_sensitive
-            merged.append(item)
+            img_items.append(item)
 
+        aud_items = []
         for item in aud_resp.get("results", []):
             item["media_type"] = "audio"
             is_sensitive = bool(item.get("mature")) or bool(item.get("unstable__sensitivity"))
             item["mature"] = is_sensitive
-            merged.append(item)
+            aud_items.append(item)
+            
+        # Merge the two lists respecting the sort order
+        if sort_by == "relevance":
+            # Interleave
+            merged = []
+            # zip_longest from itertools handles uneven lists
+            from itertools import zip_longest
+            for img, aud in zip_longest(img_items, aud_items, fillvalue=None):
+                if img: merged.append(img)
+                if aud: merged.append(aud)
+        else:
+            # Timestamp or other global sort
+            merged = sorted(
+                img_items + aud_items,
+                key=lambda i: i.get(sort_by) or "indexed_on",
+                reverse=(sort_dir == "desc")
+            )
 
         # Slice for this page
         start = (page - 1) * page_size
