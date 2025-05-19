@@ -28,7 +28,7 @@ class SearchView(View):
         page = max(int(request.GET.get("page", 1)), 1)
         page_size = max(int(request.GET.get("page_size", 18)), 1)
         mature = request.GET.get("mature", "false").lower() == "true"
-        sort_by = request.GET.get("sort_by", "indexed_on").lower()
+        sort_by = request.GET.get("sort_by", "relevance").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
         collection = request.GET.get("collection", "").lower()
         tag = request.GET.get("tag", "").lower()
