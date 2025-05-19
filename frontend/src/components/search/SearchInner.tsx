@@ -5,13 +5,12 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, notFound } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
-import type { Media } from '@/lib/media/types'
 import type { SearchAPIResponse, SearchFilters } from '@/lib/search/types'
 import { fetchSearchResults } from '@/lib/search/api'
-import MediaCard from '@/components/media/MediaCard'
 import PageNavigator from '@/components/shared/PageNavigator'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
 import FilterBar from '@/components/search/FilterBar'
+import SearchResults from '@/components/search/SearchResults'
 
 const SearchInner = () => {
   const params = useSearchParams()
@@ -56,40 +55,27 @@ const SearchInner = () => {
     filters.collection,
     filters.tag,
     filters.source,
-    filters.creator,
   ])
 
   if (!query) return <p className="p-8 text-center">Enter a search term.</p>
   if (error) return notFound()
-  if (loading || !data) return <LoadingSpinner />
 
-  const { results, total_pages } = data
-
-  if (results.length === 0) {
-    return (
-      <div className="p-8">
-        <p className="text-lg text-center text-gray-500">No results found for "{query}".</p>
-      </div>
-    )
+  const { results, total_pages } = data || {
+    results: [],
+    total_pages: 0,
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">Search results for "{query}"</h1>
         <FilterBar />
       </div>
 
-      <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((media: Media) => (
-          <MediaCard key={media.openverse_id} media={media} />
-        ))}
-      </div>
-
-      {results.length < perPage && (
-        <div className="p-8 text-center text-sm text-gray-500">
-          There are currently no further results due to Openverse API limitations.
-        </div>
+      {!(loading || !data) ? (
+        <SearchResults query={query} results={results} perPage={perPage} />
+      ) : (
+        <LoadingSpinner />
       )}
 
       <PageNavigator
