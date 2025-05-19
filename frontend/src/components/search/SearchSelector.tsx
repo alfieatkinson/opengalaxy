@@ -3,6 +3,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Search as SearchIcon } from 'lucide-react'
 import Dropdown from '@/components/shared/Dropdown'
 
 interface SearchSelectorProps {
@@ -16,8 +17,9 @@ const SearchSelector = ({ initialSearchBy, onSearchChange }: SearchSelectorProps
   return (
     <Dropdown
       trigger={
-        <button className="btn btn-outline btn-sm">
-          Search by: {searchBy.charAt(0).toUpperCase() + searchBy.slice(1)}
+        <button className="btn btn-outline btn-sm px-2">
+          <SearchIcon size={14} strokeWidth={3} />{' '}
+          {searchBy.charAt(0).toUpperCase() + searchBy.slice(1)}
         </button>
       }
       items={[
