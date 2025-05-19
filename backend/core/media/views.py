@@ -139,14 +139,3 @@ class SourceListView(APIView):
             .order_by('source')
         )
         return Response(sources)
-
-class CreatorListView(APIView):
-    def get(self, request):
-        creators = (
-            Media.objects
-            .exclude(creator__isnull=True)
-            .values_list('creator', flat=True)
-            .distinct()
-            .order_by('creator')
-        )
-        return Response(creators)
