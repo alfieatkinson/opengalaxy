@@ -61,7 +61,7 @@ const FilterBar = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-4 p-8">
+    <div className="flex flex-wrap gap-4 py-8">
       <FilterDropdown
         title="Tag"
         options={tagOptions}
@@ -96,7 +96,7 @@ const FilterBar = () => {
         onSelect={(val) => {
           const [sb, sd] = val.split(',') as ['relevance' | 'indexed_on', 'asc' | 'desc']
           updateParam('sort_by', sb)
-          updateParam('sort_order', sd)
+          updateParam('sort_dir', sd)
         }}
       />
     </div>
