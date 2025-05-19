@@ -4,12 +4,22 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import SortSelector from '@/components/search/SortSelector'
+import SearchSelector from '@/components/search/SearchSelector'
+import { SEARCH_KEYS } from '@/constants/search'
+
+type SearchKey = (typeof SEARCH_KEYS)[number]
 
 const ParamBar = () => {
   const router = useRouter()
   const params = useSearchParams()
 
-  // Read current filter state
+  // Detect which search key is currently in the URL
+  const searchBy: SearchKey = SEARCH_KEYS.find((key) => params.has(key)) ?? 'query'
+
+  // Read current search value
+  const searchValue = params.get(searchBy)?.trim() ?? ''
+
+  // Read current sorting parameters
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
   const sortDir = (params.get('sort_dir') as 'desc' | 'asc') || 'desc'
 
@@ -23,18 +33,23 @@ const ParamBar = () => {
       else qp.set(key, val)
     }
 
-    // If collection cleared, wipe its siblings
-    if (updates.collection === undefined) {
-      qp.delete('tag')
-      qp.delete('source')
-    }
-
     // Push the new URL
     router.push(`/search?${qp.toString()}`)
   }
 
   return (
     <div className="flex flex-row gap-4">
+      <SearchSelector
+        initialSearchBy={searchBy}
+        onSearchChange={(newSearchBy) => {
+          setParams({
+            [newSearchBy]: searchValue,
+            [searchBy]: undefined,
+            page: '1',
+          })
+        }}
+      />
+
       <SortSelector
         initialSortBy={sortBy}
         initialSortDir={sortDir}
@@ -42,6 +57,7 @@ const ParamBar = () => {
           setParams({
             sort_by: newSortBy,
             sort_dir: newSortDir,
+            page: '1',
           })
         }}
       />
