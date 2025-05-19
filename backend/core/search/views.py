@@ -33,7 +33,6 @@ class SearchView(View):
         collection = request.GET.get("collection", "").lower()
         tag = request.GET.get("tag", "").lower()
         source = request.GET.get("source", "").lower()
-        creator = request.GET.get("creator", "").lower()
 
         if not query:
             logger.warning("Search query is empty, returning 400 response.")
@@ -58,11 +57,8 @@ class SearchView(View):
         elif collection == "source" and source:
             params["unstable__collection"] = "source"
             params["source"] = source
-        elif collection == "creator" and creator:
-            params["unstable__collection"] = "creator"
-            params["creator"] = creator
-            if source:
-                params["source"] = source
+                
+        logger.debug(f"Query parameters: {params}")
         
         # Query both images and audio
         try:
