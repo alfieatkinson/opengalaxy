@@ -2,40 +2,16 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import FilterDropdown from '@/components/search/FilterDropdown'
 import SortSelector from '@/components/search/SortSelector'
-
-interface Option {
-  label: string
-  value: string
-}
 
 const ParamBar = () => {
   const router = useRouter()
   const params = useSearchParams()
 
   // Read current filter state
-  const tag = params.get('tag') || undefined
-  const source = params.get('source') || undefined
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
   const sortDir = (params.get('sort_dir') as 'desc' | 'asc') || 'desc'
-
-  // State for the drop-down options
-  const [tagOptions, setTagOptions] = useState<Option[]>([])
-  const [sourceOptions, setSourceOptions] = useState<Option[]>([])
-
-  // Fetch real lists on mount
-  const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/media/filters`
-  useEffect(() => {
-    fetch(`${BASE_URL}/tags/`)
-      .then((r) => r.json())
-      .then((names: string[]) => setTagOptions(names.map((n) => ({ label: n, value: n }))))
-    fetch(`${BASE_URL}/sources/`)
-      .then((r) => r.json())
-      .then((srcs: string[]) => setSourceOptions(srcs.map((s) => ({ label: s, value: s }))))
-  }, [])
 
   // Update the URL parameters based on the selected filters
   const setParams = (updates: Record<string, string | undefined>) => {
@@ -58,7 +34,7 @@ const ParamBar = () => {
   }
 
   return (
-    <div className="flex flex-row gap-4 py-8">
+    <div className="flex flex-row gap-4">
       <SortSelector
         initialSortBy={sortBy}
         initialSortDir={sortDir}
@@ -66,34 +42,6 @@ const ParamBar = () => {
           setParams({
             sort_by: newSortBy,
             sort_dir: newSortDir,
-          })
-        }}
-      />
-
-      <div className="flex-grow" />
-
-      <FilterDropdown
-        title="Tag"
-        options={tagOptions}
-        selected={params.get('collection') === 'tag' ? tag : undefined}
-        onSelect={(val) => {
-          setParams({
-            collection: 'tag',
-            tag: val,
-            source: undefined,
-          })
-        }}
-      />
-
-      <FilterDropdown
-        title="Source"
-        options={sourceOptions}
-        selected={params.get('collection') === 'source' ? source : undefined}
-        onSelect={(val) => {
-          setParams({
-            collection: 'source',
-            source: val,
-            tag: undefined,
           })
         }}
       />
