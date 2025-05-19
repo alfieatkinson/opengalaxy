@@ -3,9 +3,12 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import { TextSearch as TextSearchIcon, Funnel as FunnelIcon } from 'lucide-react'
 import SortSelector from '@/components/search/SortSelector'
 import SearchSelector from '@/components/search/SearchSelector'
+import FilterSelector from '@/components/search/FilterSelector'
 import { SEARCH_KEYS } from '@/constants/search'
+import { SOURCE_FILTERS, LICENSE_FILTERS, EXTENSION_FILTERS } from '@/constants/filters'
 
 type SearchKey = (typeof SEARCH_KEYS)[number]
 
@@ -38,29 +41,37 @@ const ParamBar = () => {
   }
 
   return (
-    <div className="flex flex-row gap-4">
-      <SearchSelector
-        initialSearchBy={searchBy}
-        onSearchChange={(newSearchBy) => {
-          setParams({
-            [newSearchBy]: searchValue,
-            [searchBy]: undefined,
-            page: '1',
-          })
-        }}
-      />
-
-      <SortSelector
-        initialSortBy={sortBy}
-        initialSortDir={sortDir}
-        onSortChange={(newSortBy, newSortDir) => {
-          setParams({
-            sort_by: newSortBy,
-            sort_dir: newSortDir,
-            page: '1',
-          })
-        }}
-      />
+    <div className="flex flex-col gap-4 pt-4">
+      <div className="flex flex-row items-center gap-4">
+        <TextSearchIcon size={24} strokeWidth={2} />
+        <SearchSelector
+          initialSearchBy={searchBy}
+          onSearchChange={(newSearchBy) => {
+            setParams({
+              [newSearchBy]: searchValue,
+              [searchBy]: undefined,
+              page: '1',
+            })
+          }}
+        />
+        <SortSelector
+          initialSortBy={sortBy}
+          initialSortDir={sortDir}
+          onSortChange={(newSortBy, newSortDir) => {
+            setParams({
+              sort_by: newSortBy,
+              sort_dir: newSortDir,
+              page: '1',
+            })
+          }}
+        />
+      </div>
+      <div className="flex flex-row items-center gap-4">
+        <FunnelIcon size={24} strokeWidth={2} />
+        <FilterSelector filterKey="source" options={SOURCE_FILTERS} />
+        <FilterSelector filterKey="license" options={LICENSE_FILTERS} />
+        <FilterSelector filterKey="extension" options={EXTENSION_FILTERS} />
+      </div>
     </div>
   )
 }
