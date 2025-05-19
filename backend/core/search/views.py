@@ -24,41 +24,38 @@ class SearchView(View):
     client = OpenverseClient()
 
     def get(self, request):
-        query = request.GET.get("q", "").strip()
+        # Get the search key and value from the request
+        SEARCH_KEYS = ["q", "title", "tag", "creator"]
+        search_key = next((k for k in SEARCH_KEYS if k in request.GET), "q")
+        search_value = request.GET.get(search_key, "").strip()
+        
         page = max(int(request.GET.get("page", 1)), 1)
         page_size = max(int(request.GET.get("page_size", 18)), 1)
+        
         mature = request.GET.get("mature", "false").lower() == "true"
+        
         sort_by = request.GET.get("sort_by", "relevance").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
         collection = request.GET.get("collection", "").lower()
-        tag = request.GET.get("tag", "").lower()
-        source = request.GET.get("source", "").lower()
 
-        if not query:
-            logger.warning("Search query is empty, returning 400 response.")
+
+        if not search_value:
+            logger.warning("Search value is empty, returning 400 response.")
             return JsonResponse({"results": []}, status=400)
 
-        logger.info(f"Received search query: {query}, page: {page}, page_size: {page_size}")
+        logger.info(f"Received search: {search_key}='{search_value}', page: {page}, page_size: {page_size}")
 
         # Fetch results from both endpoints
         params = {
-            "q": query,
+            search_key: search_value,
             "page": page,
             "per_page": page_size,
             "unstable__include_sensitive_results": mature,
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
         }
-        
-        # Handle collection, tag, source, and creator filters
-        if collection == "tag" and tag:
-            params["unstable__collection"] = "tag"
-            params["unstable__tag"] = tag
-        elif collection == "source" and source:
-            params["unstable__collection"] = "source"
-            params["source"] = source
                 
-        logger.debug(f"Query parameters: {params}")
+        logger.debug(f"Parameters: {params}")
         
         # Query both images and audio
         try:
