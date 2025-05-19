@@ -1,6 +1,6 @@
 // src/constants/filters.ts
 
-export const LICENSE_EXTENSION = [
+export const LICENSE_FILTERS = [
   // Active Creative Commons licenses
   'by', // CC BY
   'by-sa', // CC BY-SA
