@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FilterDropdown from '@/components/search/FilterDropdown'
+import SortButton from './SortButton'
 
 interface Option {
   label: string
@@ -24,13 +25,6 @@ const FilterBar = () => {
   // State for the drop-down options
   const [tagOptions, setTagOptions] = useState<Option[]>([])
   const [sourceOptions, setSourceOptions] = useState<Option[]>([])
-
-  const sortOptions = [
-    { label: 'Relevance ↑', value: 'relevance,asc' },
-    { label: 'Relevance ↓', value: 'relevance,desc' },
-    { label: 'Date ↑', value: 'indexed_on,asc' },
-    { label: 'Date ↓', value: 'indexed_on,desc' },
-  ]
 
   // Fetch real lists on mount
   const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/media/filters`
@@ -64,7 +58,20 @@ const FilterBar = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-4 py-8">
+    <div className="flex flex-row gap-4 py-8">
+      <SortButton
+        initialSortBy={sortBy}
+        initialSortDir={sortDir}
+        onSortChange={(newSortBy, newSortDir) => {
+          setParams({
+            sort_by: newSortBy,
+            sort_dir: newSortDir,
+          })
+        }}
+      />
+
+      <div className="flex-grow" />
+
       <FilterDropdown
         title="Tag"
         options={tagOptions}
@@ -87,19 +94,6 @@ const FilterBar = () => {
             collection: 'source',
             source: val,
             tag: undefined,
-          })
-        }}
-      />
-
-      <FilterDropdown
-        title="Sort"
-        options={sortOptions}
-        selected={`${sortBy},${sortDir}`}
-        onSelect={(val) => {
-          const [sb, sd] = val.split(',') as ['relevance' | 'indexed_on', 'asc' | 'desc']
-          setParams({
-            sort_by: sb,
-            sort_dir: sd,
           })
         }}
       />
