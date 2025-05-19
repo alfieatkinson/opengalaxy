@@ -31,18 +31,18 @@ const SearchInner = () => {
 
   // re-derive filters from URL
   const filters: SearchFilters = {
-    collection: params.get('unstable__collection') as SearchFilters['collection'] | undefined,
-    tag: params.get('unstable__tag') || undefined,
+    collection: params.get('collection') as SearchFilters['collection'] | undefined,
+    tag: params.get('tag') || undefined,
     source: params.get('source') || undefined,
     creator: params.get('creator') || undefined,
   }
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
-  const sortOrder = (params.get('sort_order') as 'asc' | 'desc') || 'desc'
+  const sortDir = (params.get('sort_dir') as 'asc' | 'desc') || 'desc'
 
   useEffect(() => {
     if (!query) return
     setLoading(true)
-    fetchSearchResults(query, page, perPage, showSensitive, sortBy, sortOrder, filters)
+    fetchSearchResults(query, page, perPage, showSensitive, sortBy, sortDir, filters)
       .then(setData)
       .catch(() => setError(true))
       .finally(() => setLoading(false))
@@ -52,7 +52,7 @@ const SearchInner = () => {
     perPage,
     showSensitive,
     sortBy,
-    sortOrder,
+    sortDir,
     filters.collection,
     filters.tag,
     filters.source,
