@@ -25,10 +25,10 @@ const FilterDropdown = ({ title, options, selected, onSelect }: FilterropdownPro
   return (
     <Dropdown
       trigger={
-        <button className="btn btn-outline btn-sm">
+        <div className="btn btn-outline btn-sm">
           {title}
           {selected ? `: ${selected}` : ''}
-        </button>
+        </div>
       }
       items={items}
     />
