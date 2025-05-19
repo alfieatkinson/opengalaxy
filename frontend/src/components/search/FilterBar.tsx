@@ -5,9 +5,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FilterDropdown from '@/components/search/FilterDropdown'
-import type { SearchFilters } from '@/lib/search/types'
-
-type Collection = SearchFilters['collection']
 
 interface Option {
   label: string
@@ -19,17 +16,14 @@ const FilterBar = () => {
   const params = useSearchParams()
 
   // Read current filter state
-  const collection = params.get('unstable__collection') as Collection | null
-  const tag = params.get('unstable__tag') || undefined
+  const tag = params.get('tag') || undefined
   const source = params.get('source') || undefined
-  const creator = params.get('creator') || undefined
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
-  const sortOrder = (params.get('sort_order') as 'desc' | 'asc') || 'desc'
+  const sortDir = (params.get('sort_dir') as 'desc' | 'asc') || 'desc'
 
   // State for the drop-down options
   const [tagOptions, setTagOptions] = useState<Option[]>([])
   const [sourceOptions, setSourceOptions] = useState<Option[]>([])
-  const [creatorOptions, setCreatorOptions] = useState<Option[]>([])
 
   const sortOptions = [
     { label: 'Relevance ↑', value: 'relevance,asc' },
@@ -47,16 +41,25 @@ const FilterBar = () => {
     fetch(`${BASE_URL}/sources/`)
       .then((r) => r.json())
       .then((srcs: string[]) => setSourceOptions(srcs.map((s) => ({ label: s, value: s }))))
-    fetch(`${BASE_URL}/creators/`)
-      .then((r) => r.json())
-      .then((crs: string[]) => setCreatorOptions(crs.map((c) => ({ label: c, value: c }))))
   }, [])
 
-  // Update the URL parameters based on the selected filter
-  const updateParam = (key: string, value: string) => {
-    const qp = new URLSearchParams(Array.from(params.entries()))
-    if (value) qp.set(key, value)
-    else qp.delete(key)
+  // Update the URL parameters based on the selected filters
+  const setParams = (updates: Record<string, string | undefined>) => {
+    const qp = new URLSearchParams(params.toString())
+
+    // Apply each update
+    for (const [key, val] of Object.entries(updates)) {
+      if (val == null) qp.delete(key)
+      else qp.set(key, val)
+    }
+
+    // If collection cleared, wipe its siblings
+    if (updates.collection === undefined) {
+      qp.delete('tag')
+      qp.delete('source')
+    }
+
+    // Push the new URL
     router.push(`/search?${qp.toString()}`)
   }
 
@@ -65,38 +68,39 @@ const FilterBar = () => {
       <FilterDropdown
         title="Tag"
         options={tagOptions}
-        selected={collection === 'tag' ? tag : undefined}
+        selected={params.get('collection') === 'tag' ? tag : undefined}
         onSelect={(val) => {
-          updateParam('unstable__collection', 'tag')
-          updateParam('unstable__tag', val)
+          setParams({
+            collection: 'tag',
+            tag: val,
+            source: undefined,
+          })
         }}
       />
+
       <FilterDropdown
         title="Source"
         options={sourceOptions}
-        selected={collection === 'source' ? source : undefined}
+        selected={params.get('collection') === 'source' ? source : undefined}
         onSelect={(val) => {
-          updateParam('unstable__collection', 'source')
-          updateParam('source', val)
+          setParams({
+            collection: 'source',
+            source: val,
+            tag: undefined,
+          })
         }}
       />
-      <FilterDropdown
-        title="Creator"
-        options={creatorOptions}
-        selected={collection === 'creator' ? creator : undefined}
-        onSelect={(val) => {
-          updateParam('unstable__collection', 'creator')
-          updateParam('creator', val)
-        }}
-      />
+
       <FilterDropdown
         title="Sort"
         options={sortOptions}
-        selected={`${sortBy},${sortOrder}`}
+        selected={`${sortBy},${sortDir}`}
         onSelect={(val) => {
           const [sb, sd] = val.split(',') as ['relevance' | 'indexed_on', 'asc' | 'desc']
-          updateParam('sort_by', sb)
-          updateParam('sort_dir', sd)
+          setParams({
+            sort_by: sb,
+            sort_dir: sd,
+          })
         }}
       />
     </div>
