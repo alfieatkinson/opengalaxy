@@ -18,7 +18,7 @@ export const fetchSearchResults = async (
     page_size: String(pageSize),
     mature: String(mature),
     sort_by: sortBy,
-    sort_order: sortOrder,
+    sort_dir: sortOrder,
   })
 
   if (filters.collection) params.set('unstable__collection', filters.collection)
