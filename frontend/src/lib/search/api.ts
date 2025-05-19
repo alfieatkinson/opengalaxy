@@ -1,13 +1,7 @@
 // src/lib/search/types.ts
 
 import type { SearchAPIResponse } from '@/lib/search/types'
-
-export interface SearchFilters {
-  collection?: 'tag' | 'source' | 'creator'
-  tag?: string
-  source?: string
-  creator?: string
-}
+import type { SearchFilters } from '@/lib/search/types'
 
 export const fetchSearchResults = async (
   query: string,
