@@ -168,7 +168,7 @@ class SearchView(View):
                     tag_obj, _ = Tag.objects.get_or_create(name=name)
                     MediaTag.objects.get_or_create(media=media, tag=tag_obj, accuracy=accuracy)
 
-        logger.info(f"Search complete for query '{query}' with {len(results)} results.")
+        logger.info(f"Search complete for {search_key}'{search_value}' with {len(results)} results.")
 
         return JsonResponse(
             {
