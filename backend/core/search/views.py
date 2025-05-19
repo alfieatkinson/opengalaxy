@@ -13,7 +13,7 @@ from core.media.models.tag import Tag, MediaTag
 
 logger = logging.getLogger(__name__)
 
-TAG_ACCURACY_THRESHOLD = 0.6
+TAG_ACCURACY_THRESHOLD = 0.5
 
 class SearchView(View):
     """
@@ -173,7 +173,7 @@ class SearchView(View):
                 # Only keep tags with a defined accuracy >= threshold
                 if name and isinstance(accuracy, (int, float)) and accuracy >= TAG_ACCURACY_THRESHOLD:
                     tag_obj, _ = Tag.objects.get_or_create(name=name)
-                    MediaTag.objects.get_or_create(media=media, tag=tag_obj)
+                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, accuracy=accuracy)
 
         logger.info(f"Search complete for query '{query}' with {len(results)} results.")
 
