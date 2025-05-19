@@ -12,7 +12,7 @@ interface Option {
   value: string
 }
 
-const FilterBar = () => {
+const ParamBar = () => {
   const router = useRouter()
   const params = useSearchParams()
 
@@ -101,4 +101,4 @@ const FilterBar = () => {
   )
 }
 
-export default FilterBar
+export default ParamBar

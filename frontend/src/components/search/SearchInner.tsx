@@ -9,7 +9,7 @@ import type { SearchAPIResponse, SearchFilters } from '@/lib/search/types'
 import { fetchSearchResults } from '@/lib/search/api'
 import PageNavigator from '@/components/shared/PageNavigator'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
-import FilterBar from '@/components/search/ParamBar'
+import ParamBar from '@/components/search/ParamBar'
 import SearchResults from '@/components/search/SearchResults'
 
 const SearchInner = () => {
@@ -69,7 +69,7 @@ const SearchInner = () => {
     <div className="flex flex-col w-full h-full">
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">Search results for "{query}"</h1>
-        <FilterBar />
+        <ParamBar />
       </div>
 
       <div className="flex-grow" />
