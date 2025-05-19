@@ -3,7 +3,11 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp as ChevronUpIcon, ChevronDown as ChevronDownIcon } from 'lucide-react'
+import {
+  ChevronUp as ChevronUpIcon,
+  ChevronDown as ChevronDownIcon,
+  ArrowUpDown as SortIcon,
+} from 'lucide-react'
 import Dropdown from '@/components/shared/Dropdown'
 
 interface SortButtonProps {
@@ -17,11 +21,12 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
   const [sortDir, setSortDir] = useState(initialSortDir)
 
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-0">
       <Dropdown
         trigger={
-          <button className="btn btn-outline btn-sm">
-            Sort by: {sortBy === 'relevance' ? 'Relevance' : 'Date Added'}
+          <button className="btn btn-outline btn-sm px-2 rounded-r-none">
+            <SortIcon size={14} strokeWidth={3} />{' '}
+            {sortBy === 'relevance' ? 'Relevance' : 'Date Added'}
           </button>
         }
         items={[
@@ -42,16 +47,16 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
         ]}
       />
       <button
-        className="btn btn-outline btn-sm"
+        className="btn btn-outline btn-sm px-2 rounded-l-none border-l-0"
         onClick={() => {
           setSortDir(sortDir === 'asc' ? 'desc' : 'asc')
           onSortChange(sortBy, sortDir === 'asc' ? 'desc' : 'asc')
         }}
       >
         {sortDir === 'asc' ? (
-          <ChevronUpIcon className="w-4 h-4" />
+          <ChevronUpIcon size={16} strokeWidth={3} />
         ) : (
-          <ChevronDownIcon className="w-4 h-4" />
+          <ChevronDownIcon size={16} strokeWidth={3} />
         )}
       </button>
     </div>
