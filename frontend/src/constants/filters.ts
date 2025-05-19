@@ -1,81 +1,77 @@
 // src/constants/filters.ts
 
-export const SOURCE_FILTERS = [
-  'wikimedia',
-  'animaldiversity',
-  'bio_diversity',
-  'brooklynmuseum',
-  'clevelandmuseum',
-  'spacex',
-  'svgsilh',
-  'digitaltmuseum',
-  'thingiverse',
-  'WoRMS',
-  'smithsonian_air_and_space_museum',
-  'smithsonian_american_art_museum',
-  'smithsonian_american_history_museum',
-  'smithsonian_american_indian_museum',
-  'smithsonian_gardens',
-  'smithsonian_anacostia_museum',
-  'geographorguk',
-  'met',
-  'museumsvictoria',
-  'nasa',
-  'rawpixel',
-  'rijksmuseum',
-  'sketchfab',
-  'smithsonian_libraries',
-  'smithsonian_african_american_history_museum',
-  'smithsonian_african_art_museum',
-  'smithsonian_national_museum_of_natural_history',
-  'smithsonian_cooper_hewitt_museum',
-  'smithsonian_freer_gallery_of_art',
-  'smithsonian_hirshhorn_museum',
-  'smithsonian_portrait_gallery',
-  'smithsonian_postal_museum',
-  'smithsonian_zoo_and_conservation',
-  'smithsonian_institution_archives',
-  'woc_tech',
-]
+export const SOURCE_FILTERS = {
+  wikimedia: 'Wikimedia Commons',
+  animaldiversity: 'Animal Diversity Web',
+  bio_diversity: 'Biodiversity Heritage Library',
+  brooklynmuseum: 'Brooklyn Museum',
+  clevelandmuseum: 'Cleveland Museum of Art',
+  spacex: 'SpaceX',
+  svgsilh: 'SVG Silh',
+  digitaltmuseum: 'DigitaltMuseum',
+  thingiverse: 'Thingiverse',
+  WoRMS: 'World Register of Marine Species',
+  smithsonian_air_and_space_museum: 'Smithsonian Air and Space Museum',
+  smithsonian_american_art_museum: 'Smithsonian American Art Museum',
+  smithsonian_american_history_museum: 'Smithsonian American History Museum',
+  smithsonian_american_indian_museum: 'Smithsonian National Museum of the American Indian',
+  smithsonian_gardens: 'Smithsonian Gardens',
+  smithsonian_anacostia_museum: 'Smithsonian Anacostia Community Museum',
+  geographorguk: 'Geograph UK',
+  met: 'The Met',
+  museumsvictoria: 'Museums Victoria',
+  nasa: 'NASA',
+  rawpixel: 'Rawpixel',
+  rijksmuseum: 'Rijksmuseum',
+  sketchfab: 'Sketchfab',
+  smithsonian_libraries: 'Smithsonian Libraries',
+  smithsonian_african_american_history_museum: 'Smithsonian African American History Museum',
+  smithsonian_african_art_museum: 'Smithsonian National Museum of African Art',
+  smithsonian_national_museum_of_natural_history: 'Smithsonian Natural History Museum',
+  smithsonian_cooper_hewitt_museum: 'Smithsonian Cooper Hewitt Design Museum',
+  smithsonian_freer_gallery_of_art: 'Smithsonian Freer Gallery of Art',
+  smithsonian_hirshhorn_museum: 'Smithsonian Hirshhorn Museum',
+  smithsonian_portrait_gallery: 'Smithsonian National Portrait Gallery',
+  smithsonian_postal_museum: 'Smithsonian Postal Museum',
+  smithsonian_zoo_and_conservation: 'Smithsonian National Zoo and Conservation Biology Institute',
+  smithsonian_institution_archives: 'Smithsonian Institution Archives',
+  woc_tech: 'WOCinTech',
+}
 
-export const LICENSE_FILTERS = [
-  // Active Creative Commons licenses
-  'by', // CC BY
-  'by-sa', // CC BY-SA
-  'by-nd', // CC BY-ND
-  'by-nc', // CC BY-NC
-  'by-nc-sa', // CC BY-NC-SA
-  'by-nc-nd', // CC BY-NC-ND
+export const LICENSE_FILTERS = {
+  by: 'CC BY',
+  'by-sa': 'CC BY-SA',
+  'by-nd': 'CC BY-ND',
+  'by-nc': 'CC BY-NC',
+  'by-nc-sa': 'CC BY-NC-SA',
+  'by-nc-nd': 'CC BY-NC-ND',
+  cc0: 'CC0 (Public Domain)',
+  sampling: 'CC Sampling+ (Deprecated)',
+  'nc-sampling': 'CC NC-Sampling+ (Deprecated)',
+}
 
-  // Public domain dedication
-  'cc0', // CC0
-
-  // Deprecated licenses
-  'sampling', // CC Sampling+
-  'nc-sampling', // CC NC-Sampling+
-]
-
-export const EXTENSION_FILTERS = [
-  // Images
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'svg',
-  'tiff',
-  'tif',
-  'bmp',
-  'webp',
-  'heic',
-  'heif',
-  'avif',
-
-  // Audio
-  'mp3',
-  'wav',
-  'ogg',
-  'flac',
-  'm4a',
-  'aiff',
-  'aac',
-]
+export const EXTENSION_FILTERS = {
+  image: {
+    jpg: 'JPEG',
+    jpeg: 'JPEG',
+    png: 'PNG',
+    gif: 'GIF',
+    svg: 'SVG',
+    tiff: 'TIFF',
+    tif: 'TIFF',
+    bmp: 'Bitmap',
+    webp: 'WebP',
+    heic: 'HEIC',
+    heif: 'HEIF',
+    avif: 'AVIF',
+  },
+  audio: {
+    mp3: 'MP3',
+    wav: 'WAV',
+    ogg: 'OGG',
+    flac: 'FLAC',
+    m4a: 'M4A',
+    aiff: 'AIFF',
+    aac: 'AAC',
+  },
+}
