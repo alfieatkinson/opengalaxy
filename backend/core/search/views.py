@@ -45,7 +45,7 @@ class SearchView(View):
         params = {
             "q": query,
             "page": page,
-            "per_page": page_size // 2,
+            "per_page": page_size,
             "unstable__include_sensitive_results": mature,
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
