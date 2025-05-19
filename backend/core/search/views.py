@@ -13,6 +13,7 @@ from core.media.models.tag import Tag, MediaTag
 
 logger = logging.getLogger(__name__)
 
+TAG_ACCURACY_THRESHOLD = 0.6
 
 class SearchView(View):
     """
@@ -166,9 +167,13 @@ class SearchView(View):
             media = get_object_or_404(Media, openverse_id=data["openverse_id"])
             
             # Upsert tags for the media item
-            for tag_name in item.get("tags", []):
-                tag_obj, _ = Tag.objects.get_or_create(name=tag_name)
-                MediaTag.objects.get_or_create(media_id=media.id, tag=tag_obj)
+            for tag_dict in item.get("tags", []):
+                name = tag_dict.get("name")
+                accuracy = tag_dict.get("accuracy")
+                # Only keep tags with a defined accuracy >= threshold
+                if name and isinstance(accuracy, (int, float)) and accuracy >= TAG_ACCURACY_THRESHOLD:
+                    tag_obj, _ = Tag.objects.get_or_create(name=name)
+                    MediaTag.objects.get_or_create(media=media, tag=tag_obj)
 
         logger.info(f"Search complete for query '{query}' with {len(results)} results.")
 
