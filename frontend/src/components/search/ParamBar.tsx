@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import FilterDropdown from '@/components/search/FilterDropdown'
-import SortButton from './SortButton'
+import SortSelector from '@/components/search/SortSelector'
 
 interface Option {
   label: string
@@ -59,7 +59,7 @@ const ParamBar = () => {
 
   return (
     <div className="flex flex-row gap-4 py-8">
-      <SortButton
+      <SortSelector
         initialSortBy={sortBy}
         initialSortDir={sortDir}
         onSortChange={(newSortBy, newSortDir) => {
