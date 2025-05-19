@@ -5,9 +5,11 @@ from math import ceil
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
+from django.shortcuts import get_object_or_404
 
 from core.openverse_client import OpenverseClient
 from core.media.models.media import Media
+from core.media.models.tag import Tag, MediaTag
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +29,10 @@ class SearchView(View):
         mature = request.GET.get("mature", "false").lower() == "true"
         sort_by = request.GET.get("sort_by", "indexed_on").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
+        collection = request.GET.get("collection", "").lower()
+        tag = request.GET.get("tag", "").lower()
+        source = request.GET.get("source", "").lower()
+        creator = request.GET.get("creator", "").lower()
 
         if not query:
             logger.warning("Search query is empty, returning 400 response.")
@@ -43,6 +49,21 @@ class SearchView(View):
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
         }
+        
+        # Handle collection, tag, source, and creator filters
+        if collection == "tag" and tag:
+            params["unstable__collection"] = "tag"
+            params["unstable__tag"] = tag
+        elif collection == "source" and source:
+            params["unstable__collection"] = "source"
+            params["source"] = source
+        elif collection == "creator" and creator:
+            params["unstable__collection"] = "creator"
+            params["creator"] = creator
+            if source:
+                params["source"] = source
+        
+        # Query both images and audio
         try:
             img_resp = self.client.query("images", params={**params})
             aud_resp = self.client.query("audio", params={**params})
@@ -123,6 +144,7 @@ class SearchView(View):
                 "license_version": item.get("license_version"),
                 "license_url": item.get("license_url"),
                 "attribution": item.get("attribution"),
+                "source": item.get("source"),
                 "category": item.get("category"),
                 "file_size": item.get("filesize"),
                 "file_type": item.get("filetype"),
@@ -139,6 +161,14 @@ class SearchView(View):
             # Upsert so you can revisit later
             Media.objects.update_or_create(openverse_id=data["openverse_id"], defaults=data)
             results.append(data)
+            
+            # Get the media object to associate tags
+            media = get_object_or_404(Media, openverse_id=data["openverse_id"])
+            
+            # Upsert tags for the media item
+            for tag_name in item.get("tags", []):
+                tag_obj, _ = Tag.objects.get_or_create(name=tag_name)
+                MediaTag.objects.get_or_create(media_id=media.id, tag=tag_obj)
 
         logger.info(f"Search complete for query '{query}' with {len(results)} results.")
 
