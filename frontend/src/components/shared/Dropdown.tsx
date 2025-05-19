@@ -28,10 +28,10 @@ const Dropdown = ({ trigger, items }: DropdownProps) => {
   }, [])
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative max-h-120 max-w-screen" ref={ref}>
       <button onClick={() => setOpen((o) => !o)}>{trigger}</button>
       {open && (
-        <ul className="menu bg-base-100 shadow-lg rounded-box w-48 absolute right-0 mt-2 z-50">
+        <ul className="menu bg-base-100 shadow-lg rounded-box max-w-200 absolute right-0 mt-2 z-50 max-h-120 overflow-y-scroll mx-auto">
           {items.map((item, i) => (
             <li key={i}>
               <button
