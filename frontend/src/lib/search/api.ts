@@ -11,6 +11,9 @@ export const fetchSearchResults = async (
   mature = false,
   sortBy: 'relevance' | 'indexed_on' = 'relevance',
   sortDir: 'desc' | 'asc' = 'desc',
+  sources: string[] = [],
+  licenses: string[] = [],
+  extensions: string[] = [],
 ): Promise<SearchAPIResponse> => {
   const params = new URLSearchParams({
     [searchBy === 'query' ? 'q' : searchBy]: searchValue,
@@ -20,6 +23,10 @@ export const fetchSearchResults = async (
     sort_by: sortBy,
     sort_dir: sortDir,
   })
+
+  if (sources.length) params.set('source', sources.join(','))
+  if (licenses.length) params.set('license', licenses.join(','))
+  if (extensions.length) params.set('extension', extensions.join(','))
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/search/?${params.toString()}`,
