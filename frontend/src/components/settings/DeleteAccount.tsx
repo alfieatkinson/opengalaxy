@@ -5,9 +5,15 @@
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
+import { deleteUser } from '@/lib/profile/api'
 
 const DeleteAccount = () => {
-  const { user: me, authFetch, signOut } = useAuth()
+  const { user: me, authFetch: rawAuthFetch, signOut } = useAuth()
+
+  // Wrap authFetch so it matches the standard fetch signature
+  const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
+    rawAuthFetch(input.toString(), init)
+
   const router = useRouter()
   const [confirming, setConfirming] = useState(false)
   const [password, setPassword] = useState('')
@@ -20,15 +26,7 @@ const DeleteAccount = () => {
       return
     }
     try {
-      const res = await authFetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users/${me!.username}/`,
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password }),
-        },
-      )
-      if (!res.ok) throw new Error()
+      await deleteUser(authFetch, me!.username, password)
       await signOut()
       router.push('/')
     } catch {
