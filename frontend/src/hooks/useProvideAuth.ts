@@ -184,5 +184,5 @@ export const useProvideAuth = () => {
     setUser(null)
   }
 
-  return { user, prefs, isLoggedIn, signIn, signUp, signOut, authFetch, updateLocalPrefs }
+  return { user, setUser, prefs, isLoggedIn, signIn, signUp, signOut, authFetch, updateLocalPrefs }
 }
