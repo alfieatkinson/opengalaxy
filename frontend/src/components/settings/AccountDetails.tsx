@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { Pencil as PencilIcon, X as CrossIcon, Save as SaveIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { UpdateDetailsSchema, type UpdateDetailsForm } from '@/lib/auth/validation'
+import { updateUserDetails } from '@/lib/profile/api'
 
 const fields: Array<keyof UpdateDetailsForm> = [
   'username',
@@ -17,7 +18,12 @@ const fields: Array<keyof UpdateDetailsForm> = [
 type Field = keyof UpdateDetailsForm
 
 const AccountDetails = () => {
-  const { user: me, authFetch } = useAuth()
+  const { user: me, authFetch: rawAuthFetch } = useAuth()
+
+  // Wrap authFetch so it matches the standard fetch signature
+  const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
+    rawAuthFetch(input.toString(), init)
+
   const [form, setForm] = useState<UpdateDetailsForm>({
     username: '',
     email_address: '',
@@ -80,15 +86,7 @@ const AccountDetails = () => {
     }
 
     try {
-      const res = await authFetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users/${me!.username}/`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        },
-      )
-      if (!res.ok) throw new Error()
+      await updateUserDetails(authFetch, me!.username, payload)
       setEditing(null)
       setCurrentPassword('')
     } catch {
