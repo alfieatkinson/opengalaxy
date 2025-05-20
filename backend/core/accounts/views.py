@@ -63,14 +63,78 @@ class LogoutView(APIView):
 class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
     GET    /api/accounts/users/<username>/        → retrieve
-    PATCH  /api/accounts/users/<username>/        → update
+    PATCH  /api/accounts/users/<username>/        → update (with password check)
     DELETE /api/accounts/users/<username>/        → delete
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsOwnerOrAdmin]  # only owner or admin
+    authentication_classes = [
+        JWTAuthentication,
+        SessionAuthentication,
+        BasicAuthentication,
+    ]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
+
+    def update(self, request, *args, **kwargs):
+        print("→ request.user.username:", request.user.username)
+        print("→ URL username param:", self.kwargs['username'])
+        # Check ownership/admin
+        username = self.kwargs['username']
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        # Ensure password is provided
+        current_password = request.data.get('password')
+        if not current_password:
+            return Response(
+                {'detail': 'Current password is required to update details'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Verify it
+        if not request.user.check_password(current_password):
+            return Response(
+                {'detail': 'Incorrect password'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Remove password from data so serializer won't try to set it
+        data = request.data.copy()
+        data.pop('password', None)
+
+        # Perform the normal partial_update (PATCH)
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        username = self.kwargs['username']
+        # Owner / admin check
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        # Password required
+        pwd = request.data.get('password')
+        if not pwd:
+            return Response(
+                {'detail': 'Password is required to delete account'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not request.user.check_password(pwd):
+            return Response(
+                {'detail': 'Incorrect password'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # perform delete
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     
 class UserPreferencesView(generics.RetrieveUpdateAPIView):
     """
