@@ -2,6 +2,7 @@
 
 import HighlightedText from '@/components/shared/HighlightedText'
 import SearchBar from '@/components/search/SearchBar'
+import ClientOnly from '@/components/shared/ClientOnly'
 
 const Hero = () => {
   return (
@@ -10,7 +11,9 @@ const Hero = () => {
         Open<HighlightedText>Galaxy</HighlightedText>
       </h1>
       <p className="text-lg mb-8">Explore a universe of open-license media, free for all.</p>
-      <SearchBar placeholder="Search for open-license media..." />
+      <ClientOnly>
+        <SearchBar placeholder="Search for open-license media..." />
+      </ClientOnly>
     </div>
   )
 }
