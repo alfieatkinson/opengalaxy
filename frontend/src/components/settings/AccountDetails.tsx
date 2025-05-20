@@ -18,7 +18,7 @@ const fields: Array<keyof UpdateDetailsForm> = [
 type Field = keyof UpdateDetailsForm
 
 const AccountDetails = () => {
-  const { user: me, authFetch: rawAuthFetch } = useAuth()
+  const { user: me, authFetch: rawAuthFetch, setUser } = useAuth()
 
   // Wrap authFetch so it matches the standard fetch signature
   const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
@@ -75,18 +75,26 @@ const AccountDetails = () => {
     }
 
     if (!currentPassword) {
-      setErrors({ field: '', password: 'Enter your current password' })
+      setErrors({ field: '', password: 'Enter your password' })
       setSaving(false)
       return
     }
 
+    const apiKey = editing === 'email_address' ? 'email' : editing
+
     const payload: Partial<UpdateDetailsForm> & { password: string } = {
-      [editing]: form[editing],
+      [apiKey]: form[editing],
       password: currentPassword,
     }
 
     try {
-      await updateUserDetails(authFetch, me!.username, payload)
+      const updatedUser = await updateUserDetails(authFetch, me!.username, payload)
+      setUser(updatedUser)
+      setForm((prev) => ({
+        ...prev,
+        [editing]:
+          editing === 'email_address' ? updatedUser.email : (updatedUser[editing] as string),
+      }))
       setEditing(null)
       setCurrentPassword('')
     } catch {
@@ -109,6 +117,14 @@ const AccountDetails = () => {
               placeholder={`Enter your ${field.replace('_', ' ')}`}
               disabled={editing !== field || saving}
               onChange={(e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleFieldSave()
+                }
+                if (e.key === 'Escape') {
+                  cancelEdit()
+                }
+              }}
             />
             <div className="flex-grow" />
             {editing !== field ? (
@@ -127,6 +143,14 @@ const AccountDetails = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   className="input input-bordered input-sm"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleFieldSave()
+                    }
+                    if (e.key === 'Escape') {
+                      cancelEdit()
+                    }
+                  }}
                   disabled={saving}
                 />
                 <button
