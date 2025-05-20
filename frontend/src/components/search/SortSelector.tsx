@@ -21,13 +21,13 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
   const [sortDir, setSortDir] = useState(initialSortDir)
 
   return (
-    <div className="flex flex-row gap-0">
+    <div className="flex flex-row gap-0 min-w-60 max-w-80">
       <Dropdown
         trigger={
-          <button className="btn btn-outline btn-sm px-2 rounded-r-none">
+          <div className="btn btn-outline btn-sm px-2 rounded-r-none">
             <SortIcon size={14} strokeWidth={3} />{' '}
             {sortBy === 'relevance' ? 'Relevance' : 'Date Added'}
-          </button>
+          </div>
         }
         items={[
           {

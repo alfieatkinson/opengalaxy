@@ -17,10 +17,10 @@ const SearchSelector = ({ initialSearchBy, onSearchChange }: SearchSelectorProps
   return (
     <Dropdown
       trigger={
-        <button className="btn btn-outline btn-sm px-2">
+        <div className="btn btn-outline btn-sm px-2">
           <SearchIcon size={14} strokeWidth={3} />{' '}
           {searchBy.charAt(0).toUpperCase() + searchBy.slice(1)}
-        </button>
+        </div>
       }
       items={[
         {
