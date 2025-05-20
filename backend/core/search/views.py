@@ -32,12 +32,26 @@ class SearchView(View):
         page = max(int(request.GET.get("page", 1)), 1)
         page_size = max(int(request.GET.get("page_size", 18)), 1)
         
+        # Get mature flag
         mature = request.GET.get("mature", "false").lower() == "true"
         
+        # Get sort parameters
         sort_by = request.GET.get("sort_by", "relevance").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
-        collection = request.GET.get("collection", "").lower()
-
+        
+        # Get filter parameters, split list by comma
+        source_list = [
+            s.strip() for s in request.GET.get("source", "").split(",")
+            if s.strip()
+        ]
+        license_list = [
+            l.strip() for l in request.GET.get("license", "").split(",")
+            if l.strip()
+        ]
+        extension_list = [
+            e.strip() for e in request.GET.get("extension", "").split(",")
+            if e.strip()
+        ]
 
         if not search_value:
             logger.warning("Search value is empty, returning 400 response.")
@@ -54,7 +68,16 @@ class SearchView(View):
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
         }
-                
+        
+        # Add optional parameters if provided
+        if source_list:
+            params["source"] = ",".join(source_list)
+        if license_list:
+            params["license"] = ",".join(license_list)
+        if extension_list:
+            params["extension"] = ",".join(extension_list)
+        
+        # Log the parameters being sent to Openverse
         logger.debug(f"Parameters: {params}")
         
         # Query both images and audio
