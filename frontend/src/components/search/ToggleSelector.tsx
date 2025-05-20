@@ -46,7 +46,7 @@ const ToggleSelector = ({
     // Reset the page to 1
     qp.set('page', '1')
     router.push(`/search?${qp.toString()}`)
-  }, [isOn, params])
+  }, [isOn, params, paramKey, offValue, onValue, clearParams, router])
 
   return (
     <button
