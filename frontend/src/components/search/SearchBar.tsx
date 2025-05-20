@@ -3,20 +3,30 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Search as SearchIcon } from 'lucide-react'
+import { SEARCH_KEYS } from '@/constants/search'
+
+type SearchKey = (typeof SEARCH_KEYS)[number]
 
 interface SearchBarProps {
   placeholder: string
 }
 
 const SearchBar = ({ placeholder }: SearchBarProps) => {
-  const [query, setQuery] = useState('')
   const router = useRouter()
+  const params = useSearchParams()
+
+  const searchBy: SearchKey = SEARCH_KEYS.find((key) => params.has(key)) ?? 'query'
+
+  const [searchValue, setSearchValue] = useState(params.get(searchBy) ?? '')
 
   const handleSearch = async () => {
-    if (!query.trim()) return
-    console.log(`Search clicked with query: ${query}`)
-    router.push(`/search?query=${encodeURIComponent(query)}`)
+    if (!searchValue.trim()) return
+    const qp = new URLSearchParams(params.toString())
+    qp.set(searchBy, searchValue.trim())
+    qp.set('page', '1')
+    router.push(`/search?${qp.toString()}`)
   }
 
   return (
@@ -25,16 +35,16 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
         className="input input-bordered join-item w-4/5"
         type="text"
         placeholder={placeholder}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') {
             handleSearch()
           }
         }}
       />
-      <button className="btn btn-primary join-item w-1/5 ml-2" onClick={handleSearch}>
-        Search
+      <button className="btn btn-primary join-item px-2 shadow-none" onClick={handleSearch}>
+        <SearchIcon size={24} strokeWidth={3} />
       </button>
     </div>
   )
