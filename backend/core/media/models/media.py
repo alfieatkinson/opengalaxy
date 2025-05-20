@@ -9,7 +9,7 @@ class Media(models.Model):
     indexed_on = models.DateTimeField()
     foreign_landing_url = models.URLField(max_length=1000)
     url = models.URLField(max_length=1000)
-    creator = models.CharField(max_length=255, null=True)
+    creator = models.CharField(max_length=1000, null=True)
     creator_url = models.URLField(max_length=1000, null=True)
     license = models.CharField(max_length=50)
     license_version = models.CharField(max_length=25, null=True)
