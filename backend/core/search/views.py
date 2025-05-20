@@ -32,7 +32,8 @@ class SearchView(View):
         page = max(int(request.GET.get("page", 1)), 1)
         page_size = max(int(request.GET.get("page_size", 18)), 1)
         
-        # Get mature flag
+        # Get media_type and mature flags
+        media_type = request.GET.get("media_type", "image").lower()
         mature = request.GET.get("mature", "false").lower() == "true"
         
         # Get sort parameters
@@ -80,10 +81,17 @@ class SearchView(View):
         # Log the parameters being sent to Openverse
         logger.debug(f"Parameters: {params}")
         
-        # Query both images and audio
+        # Only hit the endpoint the user wants
         try:
-            img_resp = self.client.query("images", params={**params})
-            aud_resp = self.client.query("audio", params={**params})
+            if media_type == "image":
+                img_resp = self.client.query("images", params={**params})
+                aud_resp = {"results": [], "result_count": 0}
+            elif media_type == "audio":
+                img_resp = {"results": [], "result_count": 0}
+                aud_resp = self.client.query("audio", params={**params})
+            else:
+                img_resp = self.client.query("images", params={**params})
+                aud_resp = self.client.query("audio", params={**params})
         except Exception as e:
             logger.error(f"Error while querying Openverse: {e}")
             return JsonResponse({"error": "Error fetching data from Openverse."}, status=500)
