@@ -39,6 +39,7 @@ class RegisterView(generics.CreateAPIView):
 # /api/accounts/users/me/
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -59,17 +60,17 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_205_RESET_CONTENT)
 
 # /api/accounts/users/<username>/
-class UserDetailByUsernameView(generics.RetrieveAPIView):
+class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET    /api/accounts/users/<username>/        → retrieve
+    PATCH  /api/accounts/users/<username>/        → update
+    DELETE /api/accounts/users/<username>/        → delete
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = "username"
-    lookup_url_kwarg = "username"
-    authentication_classes = [
-        JWTAuthentication,
-        SessionAuthentication,
-        BasicAuthentication,
-    ]
-    permission_classes = [PublicOrOwnerPermission]
+    lookup_field = 'username'
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsOwnerOrAdmin]  # only owner or admin
     
 class UserPreferencesView(generics.RetrieveUpdateAPIView):
     """
@@ -119,3 +120,22 @@ class UserFavouritesView(generics.ListAPIView):
             .annotate(media__favourites_count=Count('media__favourite'))
             .order_by('-added_at')
         )
+    
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, username):
+        # must be owner
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        old = request.data.get('old_password')
+        new = request.data.get('password')
+        user = request.user
+
+        if not user.check_password(old):
+            return Response({'detail': 'Old password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new)
+        user.save()
+        return Response({'detail': 'Password changed'}, status=status.HTTP_200_OK)
