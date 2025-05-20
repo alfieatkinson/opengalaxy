@@ -17,7 +17,7 @@ const SearchResults = ({ searchBy, searchValue, results, perPage }: SearchResult
   if (results.length === 0) {
     return (
       <div className="p-8">
-        <p className="text-lg text-center text-gray-500">{`No results found for "${searchValue}"${searchBy === 'query' ? '' : `in '${searchBy}'s`}.`}</p>
+        <p className="text-lg text-center text-gray-500">{`No results found for "${searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}'s`}.`}</p>
       </div>
     )
   }
