@@ -55,6 +55,15 @@ const DeleteAccount = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="input input-bordered w-full"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleDelete()
+              }
+              if (e.key === 'Escape') {
+                setConfirming(false)
+                setError('')
+              }
+            }}
           />
           {error && <p className="text-xs text-red-500">{error}</p>}
           <div className="flex space-x-2">
