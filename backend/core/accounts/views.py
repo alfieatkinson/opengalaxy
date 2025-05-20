@@ -77,8 +77,6 @@ class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
 
     def update(self, request, *args, **kwargs):
-        print("→ request.user.username:", request.user.username)
-        print("→ URL username param:", self.kwargs['username'])
         # Check ownership/admin
         username = self.kwargs['username']
         if request.user.username != username and not request.user.is_staff:
