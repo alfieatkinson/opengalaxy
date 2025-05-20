@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams, notFound } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import type { SearchAPIResponse } from '@/lib/search/types'
@@ -36,10 +36,20 @@ const SearchInner = () => {
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
   const sortDir = (params.get('sort_dir') as 'asc' | 'desc') || 'desc'
 
-  // Get the filter parameters from the URL
-  const sources = params.get('source')?.split(',').filter(Boolean) ?? []
-  const licenses = params.get('license')?.split(',').filter(Boolean) ?? []
-  const extensions = params.get('extension')?.split(',').filter(Boolean) ?? []
+  // Get the filter parameters from the URL, stabilising to prevent unnecessary re-renders
+  const paramString = params.toString()
+  const sources = useMemo(
+    () => (params.get('source') ?? '').split(',').filter(Boolean),
+    [paramString],
+  )
+  const licenses = useMemo(
+    () => (params.get('license') ?? '').split(',').filter(Boolean),
+    [paramString],
+  )
+  const extensions = useMemo(
+    () => (params.get('extension') ?? '').split(',').filter(Boolean),
+    [paramString],
+  )
 
   useEffect(() => {
     if (!searchValue) return
@@ -67,9 +77,9 @@ const SearchInner = () => {
     sortBy,
     sortDir,
     searchBy,
-    sources,
-    licenses,
-    extensions,
+    sources.join(','),
+    licenses.join(','),
+    extensions.join(','),
   ])
 
   if (!searchValue) return <p className="p-8 text-center">Enter a search term.</p>
@@ -83,7 +93,7 @@ const SearchInner = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">{`Search results for "{searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}'s`}`}</h1>
+        <h1 className="text-3xl font-bold mb-4">{`Search results for "${searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}'s`}`}</h1>
         <ParamBar />
       </div>
 
