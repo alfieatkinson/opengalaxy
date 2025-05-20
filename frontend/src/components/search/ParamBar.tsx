@@ -3,16 +3,28 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { TextSearch as TextSearchIcon, Funnel as FunnelIcon } from 'lucide-react'
+import {
+  TextSearch as TextSearchIcon,
+  Funnel as FunnelIcon,
+  Image as ImageIcon,
+  Volume2 as AudioIcon,
+  Flame as FlameIcon,
+  EyeOff as EyeOffIcon,
+} from 'lucide-react'
 import SortSelector from '@/components/search/SortSelector'
 import SearchSelector from '@/components/search/SearchSelector'
 import FilterSelector from '@/components/search/FilterSelector'
+import ToggleSelector from '@/components/search/ToggleSelector'
 import { SEARCH_KEYS } from '@/constants/search'
 import { SOURCE_FILTERS, LICENSE_FILTERS, EXTENSION_FILTERS } from '@/constants/filters'
 
 type SearchKey = (typeof SEARCH_KEYS)[number]
 
-const ParamBar = () => {
+interface ParamBarProps {
+  defaultShowSensitive: boolean
+}
+
+const ParamBar = ({ defaultShowSensitive }: ParamBarProps) => {
   const router = useRouter()
   const params = useSearchParams()
 
@@ -25,6 +37,9 @@ const ParamBar = () => {
   // Read current sorting parameters
   const sortBy = (params.get('sort_by') as 'relevance' | 'indexed_on') || 'relevance'
   const sortDir = (params.get('sort_dir') as 'desc' | 'asc') || 'desc'
+
+  // Read current filter parameters
+  const mediaType = (params.get('media_type') as 'image' | 'audio') || 'image'
 
   // Update the URL parameters based on the selected filters
   const setParams = (updates: Record<string, string | undefined>) => {
@@ -68,9 +83,27 @@ const ParamBar = () => {
       </div>
       <div className="flex flex-row items-center gap-4">
         <FunnelIcon size={24} strokeWidth={2} />
-        <FilterSelector filterKey="source" options={SOURCE_FILTERS} />
-        <FilterSelector filterKey="license" options={LICENSE_FILTERS} />
-        <FilterSelector filterKey="extension" options={EXTENSION_FILTERS} />
+        <ToggleSelector
+          paramKey="media_type"
+          values={['audio', 'image']}
+          icons={[<AudioIcon size={16} strokeWidth={3} />, <ImageIcon size={16} strokeWidth={3} />]}
+        />
+        <ToggleSelector
+          paramKey="mature"
+          values={['false', 'true']}
+          icons={[
+            <EyeOffIcon size={16} strokeWidth={3} />,
+            <FlameIcon size={16} strokeWidth={3} />,
+          ]}
+          classNames={[
+            'btn-outline',
+            'btn-active text-orange-400 border-orange-400 hover:border-black',
+          ]}
+          defaultIndex={defaultShowSensitive ? 1 : 0}
+        />
+        <FilterSelector filterKey="source" options={SOURCE_FILTERS} activeGroup={mediaType} />
+        <FilterSelector filterKey="license" options={LICENSE_FILTERS} activeGroup={mediaType} />
+        <FilterSelector filterKey="extension" options={EXTENSION_FILTERS} activeGroup={mediaType} />
       </div>
     </div>
   )
