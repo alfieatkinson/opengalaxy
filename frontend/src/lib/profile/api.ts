@@ -31,7 +31,7 @@ export const getUserFavs = async (
     `${BASE_URL}/${username}/favourites/?page=${page}&page_size=${pageSize}`,
   )
   if (res.status === 401 || res.status === 403) {
-    throw new Error('Private account – cannot fetch favourites')
+    throw new Error('Private account - cannot fetch favourites')
   }
   if (!res.ok) throw new Error('Failed to load favourites')
   return res.json() as Promise<PaginatedFavourites>
@@ -68,4 +68,50 @@ export const updateUserPreferences = async (
     throw new Error(`Failed to update preferences: ${res.status}`)
   }
   return (await res.json()) as UserPreferences
+}
+
+// PATCH /api/accounts/users/:username/
+export const updateUserDetails = async (
+  fetcher: typeof fetch,
+  username: string,
+  updates: Partial<Pick<User, 'first_name' | 'last_name' | 'email' | 'username'>> & {
+    password: string
+  },
+): Promise<User> => {
+  const res = await fetcher(`${BASE_URL}/${username}/`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates),
+  })
+  if (!res.ok) throw new Error(`Failed to update user: ${res.status}`)
+  return res.json()
+}
+
+// DELETE /api/accounts/users/:username/
+export const deleteUser = async (
+  fetcher: typeof fetch,
+  username: string,
+  password: string,
+): Promise<void> => {
+  const res = await fetcher(`${BASE_URL}/${username}/`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  })
+  if (!res.ok) throw new Error(`Failed to delete user: ${res.status}`)
+}
+
+// POST /api/accounts/users/:username/password/
+export const changePassword = async (
+  fetcher: typeof fetch,
+  username: string,
+  oldPassword: string,
+  newPassword: string,
+): Promise<void> => {
+  const res = await fetcher(`${BASE_URL}/${username}/password/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ old_password: oldPassword, password: newPassword }),
+  })
+  if (!res.ok) throw new Error(`Failed to change password: ${res.status}`)
 }
