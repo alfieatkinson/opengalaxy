@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext'
 import SearchBar from '@/components/search/SearchBar'
 import HighlightedText from '@/components/shared/HighlightedText'
 import Dropdown from '@/components/shared/Dropdown'
+import ClientOnly from '@/components/shared/ClientOnly'
 
 const Header = ({
   isScrollable,
@@ -45,7 +46,11 @@ const Header = ({
         )}
       </div>
       <div className="flex-grow flex justify-center">
-        {isScrollable && <SearchBar placeholder="Search for media..." />}
+        {isScrollable && (
+          <ClientOnly>
+            <SearchBar placeholder="Search for media..." />
+          </ClientOnly>
+        )}
       </div>
       <div className="w-1/4 flex justify-end items-center space-x-4">
         {isLoggedIn ? (
