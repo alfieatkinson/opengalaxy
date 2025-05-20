@@ -25,8 +25,13 @@ const SearchInner = () => {
   const page = Math.max(Number(params.get('page') ?? '1'), 1)
   const perPage = Math.max(Number(params.get('page_size') ?? '18'), 1)
 
-  // Get the user's preferences for sensitive content
-  const showSensitive = prefs.show_sensitive
+  // Get the media type from the URL
+  const mediaType = (params.get('media_type') as 'image' | 'audio') || 'image'
+
+  // Get the mature flag from the URL or use user's preferences for sensitive content
+  const showSensitive = params.get('mature')
+    ? params.get('mature') === 'true'
+    : prefs.show_sensitive
 
   // Get the search key from the URL
   const searchBy = SEARCH_KEYS.find((key) => params.has(key)) ?? 'query'
@@ -59,6 +64,7 @@ const SearchInner = () => {
       searchValue,
       page,
       perPage,
+      mediaType,
       showSensitive,
       sortBy,
       sortDir,
@@ -73,6 +79,7 @@ const SearchInner = () => {
     searchValue,
     page,
     perPage,
+    mediaType,
     showSensitive,
     sortBy,
     sortDir,
@@ -94,7 +101,7 @@ const SearchInner = () => {
     <div className="flex flex-col w-full h-full">
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">{`Search results for "${searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}'s`}`}</h1>
-        <ParamBar />
+        <ParamBar defaultShowSensitive={showSensitive} />
       </div>
 
       <div className="flex-grow" />
@@ -114,7 +121,6 @@ const SearchInner = () => {
 
       <PageNavigator
         basePath="/search"
-        queryParams={{ [searchBy]: searchValue }}
         page={page}
         totalPages={total_pages}
         pageSize={perPage}
