@@ -34,6 +34,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </main>
+      <div className="flex-grow" />
       <Footer isScrollable={isScrollable} />
     </div>
   )
