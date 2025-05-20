@@ -1,7 +1,7 @@
 // src/constants/filters.ts
 
 export const SOURCE_FILTERS = {
-  images: {
+  image: {
     flickr: 'Flickr',
     inaturalist: 'iNaturalist',
     wikimedia: 'Wikimedia Commons',
