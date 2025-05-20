@@ -39,6 +39,7 @@ class RegisterView(generics.CreateAPIView):
 # /api/accounts/users/me/
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -59,17 +60,79 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_205_RESET_CONTENT)
 
 # /api/accounts/users/<username>/
-class UserDetailByUsernameView(generics.RetrieveAPIView):
+class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET    /api/accounts/users/<username>/        → retrieve
+    PATCH  /api/accounts/users/<username>/        → update (with password check)
+    DELETE /api/accounts/users/<username>/        → delete
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = "username"
-    lookup_url_kwarg = "username"
+    lookup_field = 'username'
     authentication_classes = [
         JWTAuthentication,
         SessionAuthentication,
         BasicAuthentication,
     ]
-    permission_classes = [PublicOrOwnerPermission]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
+
+    def update(self, request, *args, **kwargs):
+        # Check ownership/admin
+        username = self.kwargs['username']
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        # Ensure password is provided
+        current_password = request.data.get('password')
+        if not current_password:
+            return Response(
+                {'detail': 'Current password is required to update details'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Verify it
+        if not request.user.check_password(current_password):
+            return Response(
+                {'detail': 'Incorrect password'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Remove password from data so serializer won't try to set it
+        data = request.data.copy()
+        data.pop('password', None)
+
+        # Perform the normal partial_update (PATCH)
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        username = self.kwargs['username']
+        # Owner / admin check
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        # Password required
+        pwd = request.data.get('password')
+        if not pwd:
+            return Response(
+                {'detail': 'Password is required to delete account'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not request.user.check_password(pwd):
+            return Response(
+                {'detail': 'Incorrect password'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # perform delete
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     
 class UserPreferencesView(generics.RetrieveUpdateAPIView):
     """
@@ -119,3 +182,22 @@ class UserFavouritesView(generics.ListAPIView):
             .annotate(media__favourites_count=Count('media__favourite'))
             .order_by('-added_at')
         )
+    
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, username):
+        # must be owner
+        if request.user.username != username and not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        old = request.data.get('old_password')
+        new = request.data.get('password')
+        user = request.user
+
+        if not user.check_password(old):
+            return Response({'detail': 'Old password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new)
+        user.save()
+        return Response({'detail': 'Password changed'}, status=status.HTTP_200_OK)
