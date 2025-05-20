@@ -5,9 +5,15 @@
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { ChangePasswordSchema, type ChangePasswordForm } from '@/lib/auth/validation'
+import { changePassword } from '@/lib/profile/api'
 
 const ChangePassword = () => {
-  const { user: me, authFetch } = useAuth()
+  const { user: me, authFetch: rawAuthFetch } = useAuth()
+
+  // Wrap authFetch so it matches the standard fetch signature
+  const authFetch = (input: RequestInfo | URL, init?: RequestInit) =>
+    rawAuthFetch(input.toString(), init)
+
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState<ChangePasswordForm>({
     old_password: '',
@@ -50,15 +56,7 @@ const ChangePassword = () => {
 
     setSaving(true)
     try {
-      const res = await authFetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users/${me!.username}/password/`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ old_password: form.old_password, password: form.password }),
-        },
-      )
-      if (!res.ok) throw new Error()
+      await changePassword(authFetch, me!.username, form.old_password, form.password)
       setSuccess('Password changed successfully')
       setForm({ old_password: '', password: '', confirm_password: '' })
       setEditing(false)
