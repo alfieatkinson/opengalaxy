@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.views import View
 
 from core.media.models import Media, Favourite
+from core.media.models.tag import Tag
 from core.openverse_client import OpenverseClient
 
 
@@ -122,3 +123,19 @@ class MediaFavouriteView(APIView):
         media.save(update_fields=['favourites_count'])
         
         return Response({"is_favourite": False}, status=status.HTTP_200_OK)
+
+class TagListView(APIView):
+    def get(self, request):
+        names = Tag.objects.values_list('name', flat=True).distinct().order_by('name')
+        return Response(names)
+
+class SourceListView(APIView):
+    def get(self, request):
+        sources = (
+            Media.objects
+            .exclude(source__isnull=True)
+            .values_list('source', flat=True)
+            .distinct()
+            .order_by('source')
+        )
+        return Response(sources)

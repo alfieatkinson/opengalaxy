@@ -9,3 +9,10 @@ export interface SearchAPIResponse {
   total_count: number
   total_pages: number
 }
+
+export interface SearchFilters {
+  collection?: 'tag' | 'source' | 'creator'
+  tag?: string
+  source?: string
+  creator?: string
+}

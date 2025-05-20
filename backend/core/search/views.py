@@ -5,12 +5,15 @@ from math import ceil
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
+from django.shortcuts import get_object_or_404
 
 from core.openverse_client import OpenverseClient
 from core.media.models.media import Media
+from core.media.models.tag import Tag, MediaTag
 
 logger = logging.getLogger(__name__)
 
+TAG_ACCURACY_THRESHOLD = 0.5
 
 class SearchView(View):
     """
@@ -21,31 +24,74 @@ class SearchView(View):
     client = OpenverseClient()
 
     def get(self, request):
-        query = request.GET.get("q", "").strip()
+        # Get the search key and value from the request
+        SEARCH_KEYS = ["q", "title", "tag", "creator"]
+        search_key = next((k for k in SEARCH_KEYS if k in request.GET), "q")
+        search_value = request.GET.get(search_key, "").strip()
+        
         page = max(int(request.GET.get("page", 1)), 1)
         page_size = max(int(request.GET.get("page_size", 18)), 1)
+        
+        # Get media_type and mature flags
+        media_type = request.GET.get("media_type", "image").lower()
         mature = request.GET.get("mature", "false").lower() == "true"
-        sort_by = request.GET.get("sort_by", "indexed_on").lower()
+        
+        # Get sort parameters
+        sort_by = request.GET.get("sort_by", "relevance").lower()
         sort_dir = request.GET.get("sort_dir", "desc").lower()
+        
+        # Get filter parameters, split list by comma
+        source_list = [
+            s.strip() for s in request.GET.get("source", "").split(",")
+            if s.strip()
+        ]
+        license_list = [
+            l.strip() for l in request.GET.get("license", "").split(",")
+            if l.strip()
+        ]
+        extension_list = [
+            e.strip() for e in request.GET.get("extension", "").split(",")
+            if e.strip()
+        ]
 
-        if not query:
-            logger.warning("Search query is empty, returning 400 response.")
+        if not search_value:
+            logger.warning("Search value is empty, returning 400 response.")
             return JsonResponse({"results": []}, status=400)
 
-        logger.info(f"Received search query: {query}, page: {page}, page_size: {page_size}")
+        logger.info(f"Received search: {search_key}='{search_value}', page: {page}, page_size: {page_size}")
 
         # Fetch results from both endpoints
         params = {
-            "q": query,
+            search_key: search_value,
             "page": page,
-            "per_page": page_size // 2,
+            "per_page": page_size,
             "unstable__include_sensitive_results": mature,
             "unstable__sort_by": sort_by,
             "unstable__sort_dir": sort_dir,
         }
+        
+        # Add optional parameters if provided
+        if source_list:
+            params["source"] = ",".join(source_list)
+        if license_list:
+            params["license"] = ",".join(license_list)
+        if extension_list:
+            params["extension"] = ",".join(extension_list)
+        
+        # Log the parameters being sent to Openverse
+        logger.debug(f"Parameters: {params}")
+        
+        # Only hit the endpoint the user wants
         try:
-            img_resp = self.client.query("images", params={**params})
-            aud_resp = self.client.query("audio", params={**params})
+            if media_type == "image":
+                img_resp = self.client.query("images", params={**params})
+                aud_resp = {"results": [], "result_count": 0}
+            elif media_type == "audio":
+                img_resp = {"results": [], "result_count": 0}
+                aud_resp = self.client.query("audio", params={**params})
+            else:
+                img_resp = self.client.query("images", params={**params})
+                aud_resp = self.client.query("audio", params={**params})
         except Exception as e:
             logger.error(f"Error while querying Openverse: {e}")
             return JsonResponse({"error": "Error fetching data from Openverse."}, status=500)
@@ -123,6 +169,7 @@ class SearchView(View):
                 "license_version": item.get("license_version"),
                 "license_url": item.get("license_url"),
                 "attribution": item.get("attribution"),
+                "source": item.get("source"),
                 "category": item.get("category"),
                 "file_size": item.get("filesize"),
                 "file_type": item.get("filetype"),
@@ -139,8 +186,20 @@ class SearchView(View):
             # Upsert so you can revisit later
             Media.objects.update_or_create(openverse_id=data["openverse_id"], defaults=data)
             results.append(data)
+            
+            # Get the media object to associate tags
+            media = get_object_or_404(Media, openverse_id=data["openverse_id"])
+            
+            # Upsert tags for the media item
+            for tag_dict in item.get("tags", []):
+                name = tag_dict.get("name")
+                accuracy = tag_dict.get("accuracy")
+                # Only keep tags with a defined accuracy >= threshold
+                if name and isinstance(accuracy, (int, float)) and accuracy >= TAG_ACCURACY_THRESHOLD:
+                    tag_obj, _ = Tag.objects.get_or_create(name=name)
+                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, accuracy=accuracy)
 
-        logger.info(f"Search complete for query '{query}' with {len(results)} results.")
+        logger.info(f"Search complete for {search_key}'{search_value}' with {len(results)} results.")
 
         return JsonResponse(
             {

@@ -18,6 +18,7 @@ class Tag(models.Model):
 class MediaTag(models.Model):
     media = models.ForeignKey("media.Media", on_delete=models.CASCADE)
     tag = models.ForeignKey("media.Tag", on_delete=models.CASCADE)
+    accuracy = models.FloatField(default=0.0)
 
     class Meta:
         db_table = "media_tags"

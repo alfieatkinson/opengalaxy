@@ -2,12 +2,11 @@
 
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 interface PageNavigatorProps {
   basePath: string
-  queryParams?: Record<string, string>
   page: number
   totalPages: number
   pageSize: number
@@ -16,19 +15,19 @@ interface PageNavigatorProps {
 
 const PageNavigator = ({
   basePath,
-  queryParams = {},
   page,
   totalPages,
   pageSize,
   hasMorePages = true,
 }: PageNavigatorProps) => {
   const router = useRouter()
+  const params = useSearchParams()
 
   const changePage = (to: number) => {
-    const params = new URLSearchParams(queryParams)
-    params.set('page', String(to))
-    params.set('page_size', String(pageSize))
-    router.push(`${basePath}?${params.toString()}`)
+    const qp = new URLSearchParams(params.toString())
+    qp.set('page', String(to))
+    qp.set('page_size', String(pageSize))
+    router.push(`${basePath}?${qp.toString()}`)
   }
 
   return (
