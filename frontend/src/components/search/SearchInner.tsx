@@ -12,6 +12,7 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner'
 import ParamBar from '@/components/search/ParamBar'
 import SearchResults from '@/components/search/SearchResults'
 import { SEARCH_KEYS } from '@/constants/search'
+import { getCachedSearch, setCachedSearch } from '@/lib/search/cache'
 
 const SearchInner = () => {
   const params = useSearchParams()
@@ -56,8 +57,45 @@ const SearchInner = () => {
     [paramString],
   )
 
+  // Check if the search results are already cached
+  const cacheKey = useMemo(() => {
+    const stableParams = new URLSearchParams()
+
+    stableParams.set(searchBy, searchValue)
+    stableParams.set('page', page.toString())
+    stableParams.set('page_size', perPage.toString())
+    stableParams.set('media_type', mediaType)
+    stableParams.set('mature', String(showSensitive))
+    stableParams.set('sort_by', sortBy)
+    stableParams.set('sort_dir', sortDir)
+    if (sources.length) stableParams.set('source', sources.join(','))
+    if (licenses.length) stableParams.set('license', licenses.join(','))
+    if (extensions.length) stableParams.set('extension', extensions.join(','))
+
+    return stableParams.toString()
+  }, [
+    searchBy,
+    searchValue,
+    page,
+    perPage,
+    mediaType,
+    showSensitive,
+    sortBy,
+    sortDir,
+    sources.join(','),
+    licenses.join(','),
+    extensions.join(','),
+    prefs.show_sensitive,
+  ])
+
   useEffect(() => {
     if (!searchValue) return
+
+    const cached = getCachedSearch(cacheKey)
+    if (cached) {
+      setData(cached)
+      return
+    }
 
     const fetcher = isLoggedIn
       ? (input: RequestInfo | URL, init?: RequestInit) => authFetch(input.toString(), init)
@@ -78,24 +116,13 @@ const SearchInner = () => {
       licenses,
       extensions,
     )
-      .then(setData)
+      .then((res) => {
+        setCachedSearch(cacheKey, res)
+        setData(res)
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false))
-  }, [
-    searchValue,
-    page,
-    perPage,
-    mediaType,
-    showSensitive,
-    sortBy,
-    sortDir,
-    searchBy,
-    sources.join(','),
-    licenses.join(','),
-    extensions.join(','),
-    authFetch,
-    isLoggedIn,
-  ])
+  }, [cacheKey, searchValue, authFetch, isLoggedIn])
 
   if (!searchValue) return <p className="p-8 text-center">Enter a search term.</p>
   if (error) return notFound()
