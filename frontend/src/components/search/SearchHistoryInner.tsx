@@ -15,7 +15,8 @@ import PageNavigator from '@/components/shared/PageNavigator'
 
 interface HistoryItem {
   id: number
-  query: string
+  search_key: string
+  search_value: string
   searched_at: string
 }
 
@@ -85,12 +86,16 @@ const SearchHistoryInner = () => {
             <div
               key={item.id}
               className="flex items-center btn-xs text-secondary "
-              onClick={() => router.push(`/search?query=${encodeURIComponent(item.query)}`)}
+              onClick={() =>
+                router.push(
+                  `/search?${item.search_key === 'q' ? 'query' : item.search_key}=${encodeURIComponent(item.search_value)}`,
+                )
+              }
             >
               <div className="flex items-center justify-between border-1 rounded-sm hover:text-primary hover:underline p-2 w-full">
                 <div className="flex items-center space-x-2">
                   <SearchIcon size={16} strokeWidth={3} />
-                  <p className="text-sm">"{item.query}"</p>
+                  <p className="text-sm">{`"${item.search_value}"${item.search_key === 'q' ? '' : `in "${item.search_key}s"`}`}</p>
                 </div>
                 <p className="text-xs text-gray-500">
                   {new Date(item.searched_at).toLocaleDateString('en-US', {
