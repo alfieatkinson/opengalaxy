@@ -3,7 +3,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Search as SearchIcon, Trash2 as TrashIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import {
@@ -11,6 +11,7 @@ import {
   deleteSearchHistoryEntry,
   clearSearchHistory,
 } from '@/lib/search/api'
+import PageNavigator from '@/components/shared/PageNavigator'
 
 interface HistoryItem {
   id: number
@@ -20,9 +21,16 @@ interface HistoryItem {
 
 const SearchHistoryInner = () => {
   const [items, setItems] = useState<HistoryItem[]>([])
-  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const router = useRouter()
+
+  const searchParams = useSearchParams()
+  const rawPage = searchParams.get('page')
+  const rawPageSize = searchParams.get('page_size')
+
+  const page = Math.max(Number(rawPage ?? '1'), 1)
+  const pageSize = Math.max(Number(rawPageSize ?? '50'), 1)
+
   const { authFetch: rawAuthFetch, isLoggedIn } = useAuth()
 
   // Wrap authFetch so it matches the standard fetch signature
@@ -34,8 +42,7 @@ const SearchHistoryInner = () => {
     fetchSearchHistoryList(authFetch, p)
       .then((data) => {
         setItems(data.results)
-        setTotalPages(data.total_pages)
-        setPage(data.page)
+        setTotalPages(Math.ceil(data.count / pageSize))
       })
       .catch(console.error)
   }
@@ -110,26 +117,12 @@ const SearchHistoryInner = () => {
       ) : (
         <p className="text-gray-500">No recent searches.</p>
       )}
-
-      <div className="flex items-center space-x-4">
-        <button
-          className="px-2 py-1 border rounded"
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
-          disabled={page <= 1}
-        >
-          Prev
-        </button>
-        <span>
-          Page {page} of {totalPages}
-        </span>
-        <button
-          className="px-2 py-1 border rounded"
-          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-          disabled={page >= totalPages}
-        >
-          Next
-        </button>
-      </div>
+      <PageNavigator
+        basePath={'/search-history'}
+        page={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+      />
     </div>
   )
 }
