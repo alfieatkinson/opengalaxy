@@ -18,6 +18,7 @@ import {
   Paperclip as PaperclipIcon,
   Flame as FlameIcon,
   Database as DatabaseIcon,
+  Globe as GlobeIcon,
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -101,6 +102,17 @@ const MediaPage = async ({ params }: MediaPageProps) => {
                 icon={<UserIcon size={24} />}
                 text={media.creator}
                 href={media.creator_url}
+              />
+            )}
+
+            {media.source && (
+              <AttributeCard
+                title="Source"
+                icon={<GlobeIcon size={24} />}
+                text={media.source}
+                href={
+                  media.foreign_landing_url ? new URL(media.foreign_landing_url).origin : undefined
+                }
               />
             )}
 
