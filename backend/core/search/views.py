@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from core.openverse_client import OpenverseClient
 from core.media.models.media import Media
 from core.media.models.tag import Tag, MediaTag
+from models import SearchHistory
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,10 @@ class SearchView(View):
             return JsonResponse({"results": []}, status=400)
 
         logger.info(f"Received search: {search_key}='{search_value}', page: {page}, page_size: {page_size}")
+        
+        # Save to search history
+        if request.user.is_authenticated:
+            SearchHistory.objects.create(user=request.user, query=search_value)
 
         # Fetch results from both endpoints
         params = {
