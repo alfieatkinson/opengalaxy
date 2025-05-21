@@ -12,6 +12,7 @@ export interface Media {
   license_version: string | null
   license_url: string
   attribution: string
+  source: string
   category: string | null
   file_size: number | null
   file_type: string | null
