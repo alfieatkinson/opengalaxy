@@ -29,35 +29,36 @@ const SearchHistoryPreview = () => {
     fetchSearchHistoryPreview(authFetch).then(setItems).catch(console.error)
   }, [authFetch, isLoggedIn])
 
-  if (!items.length) {
-    return <p className="text-gray-500">No recent searches.</p>
-  }
-
   return (
-    <div className="space-y-1 w-full rounded-lg border-1 p-4">
+    <div className="flex flex-col space-y-1 w-full rounded-lg border-1 p-4">
       <h2 className="text-lg font-semibold mb-3">Recent Searches</h2>
-      <ul>
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center justify-between btn-xs text-primary hover:underline"
-            onClick={() => router.push(`/search?query=${encodeURIComponent(item.query)}`)}
-          >
-            <p className="text-sm">"{item.query}"</p>
-            <p className="text-xs text-gray-500">
-              {new Date(item.searched_at).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
-          </div>
-        ))}
-      </ul>
+      {items.length ? (
+        <div className="flex flex-col">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between btn-xs text-primary hover:underline"
+              onClick={() => router.push(`/search?query=${encodeURIComponent(item.query)}`)}
+            >
+              <p className="text-sm">"{item.query}"</p>
+              <p className="text-xs text-gray-500">
+                {new Date(item.searched_at).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-500">No recent searches.</p>
+      )}
+      <div className="flex-grow" />
       <button
-        className="mt-2 btn btn-xs btn-outline hover:underline"
+        className="mt-2 btn btn-xs max-w-20 btn-outline hover:underline"
         onClick={() => router.push('/search-history')}
       >
         View all →
