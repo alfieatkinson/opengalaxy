@@ -7,7 +7,7 @@ export const metadata = {
   description: 'Review and manage your past search queries.',
 }
 
-export default function SearchHistoryPage() {
+const SearchHistoryPage = () => {
   return (
     <div className="flex flex-col items-center w-full mx-auto p-6 space-y-8">
       <h1 className="text-3xl font-bold">Search History</h1>
@@ -17,3 +17,5 @@ export default function SearchHistoryPage() {
     </div>
   )
 }
+
+export default SearchHistoryPage
