@@ -26,6 +26,7 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
     const qp = new URLSearchParams(params.toString())
     qp.set(searchBy, searchValue.trim())
     qp.set('page', '1')
+    qp.set('page_size', '18')
     router.push(`/search?${qp.toString()}`)
   }
 

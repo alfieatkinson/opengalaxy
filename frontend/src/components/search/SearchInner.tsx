@@ -15,7 +15,7 @@ import { SEARCH_KEYS } from '@/constants/search'
 
 const SearchInner = () => {
   const params = useSearchParams()
-  const { prefs } = useAuth()
+  const { prefs, authFetch, isLoggedIn } = useAuth()
 
   const [data, setData] = useState<SearchAPIResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -58,8 +58,14 @@ const SearchInner = () => {
 
   useEffect(() => {
     if (!searchValue) return
+
+    const fetcher = isLoggedIn
+      ? (input: RequestInfo | URL, init?: RequestInit) => authFetch(input.toString(), init)
+      : fetch
+
     setLoading(true)
     fetchSearchResults(
+      fetcher,
       searchBy,
       searchValue,
       page,
@@ -87,6 +93,8 @@ const SearchInner = () => {
     sources.join(','),
     licenses.join(','),
     extensions.join(','),
+    authFetch,
+    isLoggedIn,
   ])
 
   if (!searchValue) return <p className="p-8 text-center">Enter a search term.</p>

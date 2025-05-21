@@ -6,20 +6,37 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, permissions, status
+from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.openverse_client import OpenverseClient
 from core.media.models.media import Media
 from core.media.models.tag import Tag, MediaTag
+from .models import SearchHistory
+from .serializer import SearchHistorySerializer
 
 logger = logging.getLogger(__name__)
 
 TAG_ACCURACY_THRESHOLD = 0.5
 
-class SearchView(View):
+class SearchView(APIView):
     """
     GET /api/search/?q=foo
     Hits both images and audio endpoints, merges and returns a flat list.
     """
+    
+    authentication_classes = [
+        JWTAuthentication,
+        SessionAuthentication,
+        BasicAuthentication,
+    ]
+    
+    permission_classes = [AllowAny]
 
     client = OpenverseClient()
 
@@ -59,6 +76,13 @@ class SearchView(View):
             return JsonResponse({"results": []}, status=400)
 
         logger.info(f"Received search: {search_key}='{search_value}', page: {page}, page_size: {page_size}")
+        
+        # Save to search history
+        if request.user.is_authenticated:
+            SearchHistory.objects.create(user=request.user, search_key=search_key, search_value=search_value)
+            logger.info(f"Saved search history for user {request.user.id}: {search_value}")
+        else:
+            logger.info("Anonymous user, not saving search history.")
 
         # Fetch results from both endpoints
         params = {
@@ -197,11 +221,11 @@ class SearchView(View):
                 # Only keep tags with a defined accuracy >= threshold
                 if name and isinstance(accuracy, (int, float)) and accuracy >= TAG_ACCURACY_THRESHOLD:
                     tag_obj, _ = Tag.objects.get_or_create(name=name)
-                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, accuracy=accuracy)
+                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, defaults={"accuracy": accuracy})
 
         logger.info(f"Search complete for {search_key}'{search_value}' with {len(results)} results.")
 
-        return JsonResponse(
+        return Response(
             {
                 "results": results,
                 "page": page,
@@ -210,3 +234,57 @@ class SearchView(View):
                 "total_pages": total_pages,
             }
         )
+
+class SearchHistoryPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class SearchHistoryPreviewView(generics.ListAPIView):
+    """
+    GET /api/search/history/preview/
+    Returns the last 5 searches for the authenticated user.
+    """
+    serializer_class = SearchHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return SearchHistory.objects.filter(user=self.request.user)[:5]
+
+class SearchHistoryListView(generics.ListAPIView):
+    """
+    GET /api/search/history/?page=1&page_size=24
+    Paginated list of all searches for the authenticated user.
+    """
+    serializer_class = SearchHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = SearchHistoryPagination
+
+    def get_queryset(self):
+        return (
+            SearchHistory.objects
+            .filter(user=self.request.user)
+            .order_by('-searched_at')
+        )
+
+class SearchHistoryDeleteView(generics.DestroyAPIView):
+    """
+    DELETE /api/search/history/<pk>/
+    Delete a single history entry.
+    """
+    serializer_class = SearchHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return SearchHistory.objects.filter(user=self.request.user)
+
+class SearchHistoryClearView(APIView):
+    """
+    DELETE /api/search/history/clear/
+    Remove all history for the authenticated user.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request):
+        SearchHistory.objects.filter(user=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -16,3 +16,10 @@ export interface SearchFilters {
   source?: string
   creator?: string
 }
+
+export interface PaginatedSearchHistory {
+  count: number
+  next: string | null
+  previous: string | null
+  results: { id: number; search_key: string; search_value: string; searched_at: string }[]
+}
