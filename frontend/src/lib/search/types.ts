@@ -18,9 +18,8 @@ export interface SearchFilters {
 }
 
 export interface PaginatedSearchHistory {
+  count: number
+  next: string | null
+  previous: string | null
   results: { id: number; query: string; searched_at: string }[]
-  page: number
-  page_size: number
-  total_count: number
-  total_pages: number
 }
