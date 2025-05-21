@@ -23,7 +23,7 @@ const SearchResults = ({ searchBy, searchValue, results, perPage }: SearchResult
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full bg-base-200 rounded-lg">
       <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map((media: Media) => (
           <MediaCard key={media.openverse_id} media={media} />

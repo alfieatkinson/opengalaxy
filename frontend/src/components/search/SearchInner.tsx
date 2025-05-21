@@ -135,7 +135,7 @@ const SearchInner = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">{`Search results for "${searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}'s`}`}</h1>
+        <h1 className="text-3xl font-bold mb-4">{`Search results for "${searchValue}"${searchBy === 'query' ? '' : ` in '${searchBy}s'`}`}</h1>
         <ParamBar defaultShowSensitive={showSensitive} />
       </div>
 
