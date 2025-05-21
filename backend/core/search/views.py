@@ -79,7 +79,7 @@ class SearchView(APIView):
         
         # Save to search history
         if request.user.is_authenticated:
-            SearchHistory.objects.create(user=request.user, query=search_value)
+            SearchHistory.objects.create(user=request.user, search_key=search_key, search_value=search_value)
             logger.info(f"Saved search history for user {request.user.id}: {search_value}")
         else:
             logger.info("Anonymous user, not saving search history.")
