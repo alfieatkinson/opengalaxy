@@ -62,9 +62,9 @@ class LogoutView(APIView):
 # /api/accounts/users/<username>/
 class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET    /api/accounts/users/<username>/        → retrieve
-    PATCH  /api/accounts/users/<username>/        → update (with password check)
-    DELETE /api/accounts/users/<username>/        → delete
+    GET    /api/accounts/users/<username>/ => retrieve
+    PATCH  /api/accounts/users/<username>/ => update (with password check)
+    DELETE /api/accounts/users/<username>/ => delete
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -136,8 +136,8 @@ class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     
 class UserPreferencesView(generics.RetrieveUpdateAPIView):
     """
-    GET  /users/<username>/preferences/  → retrieve prefs
-    PATCH /users/<username>/preferences/  → update prefs
+    GET  /users/<username>/preferences/  => retrieve prefs
+    PATCH /users/<username>/preferences/ => update prefs
     """
     serializer_class = UserPreferencesSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication, BasicAuthentication]
@@ -184,6 +184,9 @@ class UserFavouritesView(generics.ListAPIView):
         )
     
 class ChangePasswordView(APIView):
+    """
+    POST /api/accounts/users/<username>/password/ => change password
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, username):
