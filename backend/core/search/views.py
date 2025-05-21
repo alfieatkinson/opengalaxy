@@ -221,7 +221,7 @@ class SearchView(APIView):
                 # Only keep tags with a defined accuracy >= threshold
                 if name and isinstance(accuracy, (int, float)) and accuracy >= TAG_ACCURACY_THRESHOLD:
                     tag_obj, _ = Tag.objects.get_or_create(name=name)
-                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, accuracy=accuracy)
+                    MediaTag.objects.get_or_create(media=media, tag=tag_obj, defaults={"accuracy": accuracy})
 
         logger.info(f"Search complete for {search_key}'{search_value}' with {len(results)} results.")
 
