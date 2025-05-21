@@ -21,5 +21,5 @@ export interface PaginatedSearchHistory {
   count: number
   next: string | null
   previous: string | null
-  results: { id: number; query: string; searched_at: string }[]
+  results: { id: number; search_key: string; search_value: string; searched_at: string }[]
 }
