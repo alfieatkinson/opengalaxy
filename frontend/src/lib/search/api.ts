@@ -41,7 +41,7 @@ export const fetchSearchResults = async (
 
 export const fetchSearchHistoryPreview = async (
   fetcher: typeof fetch = fetch,
-): Promise<{ id: number; query: string; searched_at: string }[]> => {
+): Promise<{ id: number; search_key: string; search_value: string; searched_at: string }[]> => {
   const res = await fetcher(`${BASE_URL}/history/preview/`, { credentials: 'include' })
   if (!res.ok) throw new Error(`Failed to fetch history preview: ${res.statusText}`)
   return res.json()
