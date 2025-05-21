@@ -3,13 +3,15 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { Search as SearchIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { fetchSearchHistoryPreview } from '@/lib/search/api'
 import { useRouter } from 'next/navigation'
 
 interface HistoryItem {
   id: number
-  query: string
+  search_key: string
+  search_value: string
   searched_at: string
 }
 
@@ -37,10 +39,17 @@ const SearchHistoryPreview = () => {
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between btn-xs text-primary hover:underline"
-              onClick={() => router.push(`/search?query=${encodeURIComponent(item.query)}`)}
+              className="flex items-center justify-between btn-xs text-secondary hover:text-primary hover:underline"
+              onClick={() =>
+                router.push(
+                  `/search?${item.search_key === 'q' ? 'query' : item.search_key}=${encodeURIComponent(item.search_value)}`,
+                )
+              }
             >
-              <p className="text-sm">"{item.query}"</p>
+              <div className="flex items-center space-x-2">
+                <SearchIcon size={16} strokeWidth={3} />
+                <p className="text-sm">{`"${item.search_value}"${item.search_key === 'q' ? '' : `in "${item.search_key}s"`}`}</p>
+              </div>
               <p className="text-xs text-gray-500">
                 {new Date(item.searched_at).toLocaleDateString('en-US', {
                   month: 'short',
