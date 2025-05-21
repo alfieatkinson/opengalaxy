@@ -58,7 +58,7 @@ export const fetchSearchHistoryList = async (
   })
   const res = await fetcher(`${BASE_URL}/history/?${params.toString()}`, { credentials: 'include' })
   if (!res.ok) throw new Error(`Failed to fetch history list: ${res.statusText}`)
-  return res.json()
+  return res.json() as Promise<PaginatedSearchHistory>
 }
 
 export const deleteSearchHistoryEntry = async (
