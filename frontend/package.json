@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext js,ts,tsx",
-    "lint:fix": "eslint . --ext js,ts,tsx --fix",
+    "lint": "eslint . --ext js,ts,tsx,cy.ts",
+    "lint:fix": "eslint . --ext js,ts,tsx,cy.ts --fix",
     "format": "prettier --write .",
     "prepare": "husky",
     "cypress:open": "cypress open"
