@@ -15,15 +15,14 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/v1/audio/**',
       },
-    ],
-  },
-  async rewrites() {
-    return [
       {
-        source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        // For Cypress tests
+        protocol: 'https',
+        hostname: 'example.com',
+        port: '',
+        pathname: '/media/**',
       },
-    ]
+    ],
   },
 }
 
