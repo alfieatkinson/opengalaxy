@@ -52,14 +52,11 @@ export const useProvideAuth = () => {
       const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
       if (!refresh) throw new Error('No refresh token available')
 
-      const tokenRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/token/refresh/`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ refresh }),
-        },
-      )
+      const tokenRes = await fetch('/api/accounts/token/refresh/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh }),
+      })
       if (!tokenRes.ok) throw new Error('Failed to refresh token')
 
       const data = await tokenRes.json()
@@ -85,9 +82,7 @@ export const useProvideAuth = () => {
       if (!token) return
 
       try {
-        const res = await authFetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users/me/`,
-        )
+        const res = await authFetch('/api/accounts/users/me/')
         if (!res.ok) throw new Error('Not authorised')
 
         const me = await res.json()
@@ -111,7 +106,7 @@ export const useProvideAuth = () => {
 
   // Sign in: Exchange credentials for tokens and fetch user
   const signIn = async (username: string, password: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/token/`, {
+    const res = await fetch('/api/accounts/token/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -136,9 +131,7 @@ export const useProvideAuth = () => {
     localStorage.setItem(ACCESS_TOKEN_KEY, access)
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
 
-    const meRes = await authFetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users/me/`,
-    )
+    const meRes = await authFetch('/api/accounts/users/me/')
     const me = await meRes.json()
     setUser(me)
   }
@@ -151,7 +144,7 @@ export const useProvideAuth = () => {
     last_name: string,
     password: string,
   ) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/register/`, {
+    const res = await fetch('/api/accounts/register/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, email, first_name, last_name, password }),
@@ -170,7 +163,7 @@ export const useProvideAuth = () => {
     const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
     try {
       if (refresh) {
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/logout/`, {
+        await fetch('/api/accounts/logout/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ refresh }),

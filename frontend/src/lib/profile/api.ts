@@ -2,14 +2,12 @@
 
 import { User, UserPreferences, PaginatedFavourites } from '@/lib/profile/types'
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/accounts/users`
-
 // GET /api/accounts/users/:username/
 export const getUserProfile = async (
   fetcher: typeof fetch = fetch,
   username: string,
 ): Promise<{ private: boolean; profile: User | null }> => {
-  const res = await fetcher(`${BASE_URL}/${username}/`)
+  const res = await fetcher(`/api/accounts/users/${username}/`)
   if (res.status === 401 || res.status === 403) {
     return { private: true, profile: null } as const
   }
@@ -28,7 +26,7 @@ export const getUserFavs = async (
   pageSize = 24,
 ): Promise<PaginatedFavourites> => {
   const res = await fetcher(
-    `${BASE_URL}/${username}/favourites/?page=${page}&page_size=${pageSize}`,
+    `/api/accounts/users/${username}/favourites/?page=${page}&page_size=${pageSize}`,
   )
   if (res.status === 401 || res.status === 403) {
     throw new Error('Private account - cannot fetch favourites')
@@ -42,7 +40,7 @@ export const getUserPreferences = async (
   fetcher: typeof fetch = fetch,
   username: string,
 ): Promise<UserPreferences> => {
-  const res = await fetcher(`${BASE_URL}/${username}/preferences/`)
+  const res = await fetcher(`/api/accounts/users/${username}/preferences/`)
   if (res.status === 404) {
     // Preferences should exist via signal in RegisterView
     throw new Error('Preferences not found')
@@ -59,7 +57,7 @@ export const updateUserPreferences = async (
   username: string,
   updates: Partial<UserPreferences>,
 ): Promise<UserPreferences> => {
-  const res = await fetcher(`${BASE_URL}/${username}/preferences/`, {
+  const res = await fetcher(`/api/accounts/users/${username}/preferences/`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -78,7 +76,7 @@ export const updateUserDetails = async (
     password: string
   },
 ): Promise<User> => {
-  const res = await fetcher(`${BASE_URL}/${username}/`, {
+  const res = await fetcher(`/api/accounts/users/${username}/`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -93,7 +91,7 @@ export const deleteUser = async (
   username: string,
   password: string,
 ): Promise<void> => {
-  const res = await fetcher(`${BASE_URL}/${username}/`, {
+  const res = await fetcher(`/api/accounts/users/${username}/`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ password }),
@@ -108,7 +106,7 @@ export const changePassword = async (
   oldPassword: string,
   newPassword: string,
 ): Promise<void> => {
-  const res = await fetcher(`${BASE_URL}/${username}/password/`, {
+  const res = await fetcher(`/api/accounts/users/${username}/password/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ old_password: oldPassword, password: newPassword }),
