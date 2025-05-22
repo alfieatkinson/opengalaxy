@@ -14,7 +14,7 @@ describe('Search flow', () => {
 
   it('performs a search and displays results', () => {
     // Stub your backend proxy to return a saved fixture
-    cy.intercept('GET', '**/api/search*', { fixture: 'searchResults.json' }).as('getSearch')
+    cy.intercept('GET', '**/api/search/*', { fixture: 'searchResults.json' }).as('getSearch')
 
     // Type in the search box and submit
     cy.get('input[type=text]').type(queryTerm)
@@ -31,7 +31,7 @@ describe('Search flow', () => {
   })
 
   it('applies a filter and updates results', () => {
-    cy.intercept('GET', '**/api/search*', { fixture: 'searchResults.json' }).as('getFiltered')
+    cy.intercept('GET', '**/api/search/*', { fixture: 'searchResults.json' }).as('getFiltered')
 
     // Perform initial search
     cy.get('input[type=text]').type(queryTerm)
@@ -54,7 +54,7 @@ describe('Search flow', () => {
   })
 
   it('changes sort order', () => {
-    cy.intercept('GET', '**/api/search*', { fixture: 'searchResults.json' }).as('getSorted')
+    cy.intercept('GET', '**/api/search/*', { fixture: 'searchResults.json' }).as('getSorted')
 
     // Initial search
     cy.get('input[type=text]').type(queryTerm)
@@ -83,7 +83,7 @@ describe('Search flow', () => {
 
   it('paginates if there are multiple pages', () => {
     // Use a fixture with total_pages > 1
-    cy.intercept('GET', '**/api/search*', { fixture: 'searchResults.json' }).as('getPaged')
+    cy.intercept('GET', '**/api/search/*', { fixture: 'searchResults.json' }).as('getPaged')
 
     cy.get('input[type=text]').type(queryTerm)
     cy.get('[data-cy=search-button]').click()
