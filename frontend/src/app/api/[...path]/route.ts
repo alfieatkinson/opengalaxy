@@ -2,6 +2,10 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
+interface RequestInitWithDuplex extends RequestInit {
+  duplex?: 'half'
+}
+
 const proxy = async (req: NextRequest) => {
   const backend = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8000'
 
@@ -10,12 +14,20 @@ const proxy = async (req: NextRequest) => {
 
   console.log(`Proxying request to: ${url}`)
 
-  const response = await fetch(url, {
+  // Prepare fetch options
+  const fetchOptions: RequestInitWithDuplex = {
     method: req.method,
     headers: req.headers,
-    body: ['GET', 'HEAD'].includes(req.method) ? undefined : req.body,
-  })
+  }
 
+  if (!['GET', 'HEAD'].includes(req.method)) {
+    fetchOptions.body = req.body
+    fetchOptions.duplex = 'half' // required for streaming bodies in Node.js fetch
+  }
+
+  const response = await fetch(url, fetchOptions)
+
+  // Clone headers to plain object for NextResponse
   const headers: Record<string, string> = {}
   response.headers.forEach((value, key) => {
     headers[key] = value
@@ -27,7 +39,6 @@ const proxy = async (req: NextRequest) => {
   })
 }
 
-// Named exports for each method you want to handle
 export const GET = proxy
 export const POST = proxy
 export const PUT = proxy
