@@ -44,7 +44,11 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
           }
         }}
       />
-      <button className="btn btn-primary join-item px-2 shadow-none" onClick={handleSearch}>
+      <button
+        data-cy="search-button"
+        className="btn btn-primary join-item px-2 shadow-none"
+        onClick={handleSearch}
+      >
         <SearchIcon size={24} strokeWidth={3} />
       </button>
     </div>
