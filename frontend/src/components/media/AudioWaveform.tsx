@@ -85,7 +85,7 @@ export const AudioWaveform = ({
   }, [src])
 
   return (
-    <div className={`${width ? `w-${width}` : 'w-full'} h-fit`}>
+    <div data-cy="waveform" className={`${width ? `w-${width}` : 'w-full'} h-fit`}>
       {loading && (
         <div className="flex items-center justify-center w-full translate-y-24">
           <div className="loading loading-spinner loading-lg text-primary" />
@@ -101,6 +101,7 @@ export const AudioWaveform = ({
       {!hideControls && (
         <div className="flex flex-row items-center justify-between m-6 gap-4">
           <button
+            data-cy="play-pause-button"
             onClick={() => togglePlayback()}
             className="btn btn-primary aspect-square h-fit w-fit rounded-lg p-2"
           >
