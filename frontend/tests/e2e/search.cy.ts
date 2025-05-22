@@ -27,7 +27,7 @@ describe('Search flow', () => {
     cy.contains(`Search results for "${queryTerm}"`).should('be.visible')
 
     // Result cards should appear (using an attribute you know, e.g. data-cy or a class)
-    cy.get('.media-card').its('length').should('be.gte', 1)
+    cy.get('[data-cy=media-card]').its('length').should('be.gte', 1)
   })
 
   it('applies a filter and updates results', () => {
@@ -39,9 +39,7 @@ describe('Search flow', () => {
     cy.wait('@getFiltered')
 
     // Open the "License" filter dropdown
-    cy.get('button')
-      .contains(/^License/)
-      .click()
+    cy.get('[data-cy=filter-source]').click()
     // Select the first license option
     cy.get('.dropdown-content button').first().click()
 
@@ -49,10 +47,10 @@ describe('Search flow', () => {
     cy.wait('@getFiltered')
 
     // URL should include license param
-    cy.url().should('include', 'license=')
+    cy.url().should('include', 'source=')
 
     // Cards still render
-    cy.get('.media-card').should('exist')
+    cy.get('[data-cy=media-card]').should('exist')
   })
 
   it('changes sort order', () => {
@@ -64,25 +62,35 @@ describe('Search flow', () => {
     cy.wait('@getSorted')
 
     // Open sort selector and choose "Date Added"
-    cy.get('button').contains('Date Added').click()
+    cy.get('[data-cy=sort-selector]').click()
+    cy.get('[data-cy=sort-date-added]').click()
 
     // Wait for resorted results
     cy.wait('@getSorted')
 
     // URL should include sort_by=indexed_on
     cy.url().should('include', 'sort_by=indexed_on')
+
+    // Change sort direction
+    cy.get('[data-cy=sort-direction]').click()
+
+    // Wait for resorted results
+    cy.wait('@getSorted')
+
+    // URL should include sort_dir=asc
+    cy.url().should('include', 'sort_dir=asc')
   })
 
   it('paginates if there are multiple pages', () => {
     // Use a fixture with total_pages > 1
-    cy.intercept('GET', '**/api/search*', { fixture: 'searchResultsMultiPage.json' }).as('getPaged')
+    cy.intercept('GET', '**/api/search*', { fixture: 'searchResults.json' }).as('getPaged')
 
     cy.get('input[type=text]').type(queryTerm)
     cy.get('[data-cy=search-button]').click()
     cy.wait('@getPaged')
 
     // Next‐page button should exist
-    cy.get('button').contains('Next').should('be.visible').click()
+    cy.get('[data-cy=next-page]').should('be.visible').click()
 
     cy.wait('@getPaged')
 
