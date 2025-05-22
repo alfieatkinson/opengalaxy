@@ -41,11 +41,6 @@ const FavouriteButton = ({ mediaId, size = 24, onToggle }: FavouriteButtonProps)
   }, [mediaId, me])
 
   const toggleFav = async () => {
-    if (!me) {
-      router.push('/login')
-      return
-    }
-
     try {
       const next = !isFav
       if (next) {
@@ -56,6 +51,10 @@ const FavouriteButton = ({ mediaId, size = 24, onToggle }: FavouriteButtonProps)
       setIsFav(next)
       onToggle?.(next)
     } catch (error) {
+      if (!me) {
+        router.push('/login')
+        return
+      }
       console.error('Error toggling favourite:', error)
     }
   }
