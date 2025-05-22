@@ -95,7 +95,9 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
         </div>
         <div className="card-body text-secondary">
           <div className="flex flex-row justify-between">
-            <h1 className="text-2xl font-bold mb-2">{media.title}</h1>
+            <h1 data-cy="media-title" className="text-2xl font-bold mb-2">
+              {media.title}
+            </h1>
             <div className="flex flex-row items-center ml-4 mb-4">
               <FavouriteControl
                 mediaId={media.openverse_id}
