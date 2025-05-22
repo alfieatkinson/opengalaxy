@@ -33,6 +33,7 @@ const PageNavigator = ({
   return (
     <div className="flex justify-center items-center space-x-4 my-8">
       <button
+        data-cy="prev-page"
         onClick={() => changePage(page - 1)}
         disabled={page <= 1}
         className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50"
@@ -43,6 +44,7 @@ const PageNavigator = ({
         Page {page} of {totalPages}
       </span>
       <button
+        data-cy="next-page"
         onClick={() => changePage(page + 1)}
         disabled={!hasMorePages || page >= totalPages}
         className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50"
