@@ -22,6 +22,7 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
 
   return (
     <div
+      data-cy="media-card"
       className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow
         ${mini ? 'w-full h-40' : 'w-full h-56'}`}
     >
