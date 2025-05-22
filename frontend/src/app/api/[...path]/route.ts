@@ -5,12 +5,10 @@ import { NextRequest, NextResponse } from 'next/server'
 const proxy = async (req: NextRequest) => {
   const backend = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8000'
 
-  console.log('Request to backend:', backend)
-
   const { pathname, search } = req.nextUrl
   const url = `${backend}${pathname}${search}`
 
-  console.log('Proxied URL:', url)
+  console.log(`Proxying request to: ${url}`)
 
   const response = await fetch(url, {
     method: req.method,
