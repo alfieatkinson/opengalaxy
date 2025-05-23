@@ -86,9 +86,9 @@ class MediaDetailView(View):
 
 class MediaFavouriteView(APIView):
     """
-    :GET /api/media/<openverse_id>/favourite/ → { is_favourite: bool }
-    :POST /api/media/<openverse_id>/favourite/ → add, returns { is_favourite: True }
-    :DELETE /api/media/<openverse_id>/favourite/ → remove, returns { is_favourite: False }
+    :GET /api/media/<openverse_id>/favourite/ => { is_favourite: bool }
+    :POST /api/media/<openverse_id>/favourite/ => add, returns { is_favourite: True }
+    :DELETE /api/media/<openverse_id>/favourite/ => remove, returns { is_favourite: False }
     """
     
     def get(self, request, openverse_id):
