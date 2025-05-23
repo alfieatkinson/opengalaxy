@@ -50,7 +50,7 @@ const SearchHistoryInner = () => {
 
   useEffect(() => {
     load(page)
-  }, [page, authFetch, isLoggedIn])
+  }, [page, isLoggedIn])
 
   const onDelete = (id: number) => {
     deleteSearchHistoryEntry(authFetch, id)
