@@ -67,6 +67,7 @@ const SearchHistoryPreview = () => {
       )}
       <div className="flex-grow" />
       <button
+        data-cy="view-all-search-history"
         className="mt-2 btn btn-xs max-w-20 btn-outline hover:underline"
         onClick={() => router.push('/search-history')}
       >
