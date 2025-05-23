@@ -30,7 +30,7 @@ describe('Media page flows', () => {
     beforeEach(() => {
       // Stub the media details endpoint
       cy.intercept('GET', `**/api/media/${imageId}`, {
-        fixture: 'mediaImage.json',
+        fixture: 'media-image.json',
       }).as('getImageMedia')
 
       // Stub favourite status
@@ -100,7 +100,7 @@ describe('Media page flows', () => {
   context('Audio media', () => {
     beforeEach(() => {
       cy.intercept('GET', `**/api/media/${audioId}`, {
-        fixture: 'mediaAudio.json',
+        fixture: 'media-audio.json',
       }).as('getAudioMedia')
 
       cy.intercept('GET', `**/api/media/${audioId}/favourite/`, {

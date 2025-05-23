@@ -1,0 +1,61 @@
+{
+  "count": 3,
+  "next": "/api/accounts/users/{{username}}/favourites?page=2&page_size=2",
+  "previous": null,
+  "results": [
+    {
+      "media": {
+        "openverse_id": "1",
+        "title": "Cat Pic",
+        "url": "https://example.com/cat.jpg",
+        "thumbnail_url": "https://example.com/cat-thumb.jpg",
+        "indexed_on": "2025-01-01T00:00:00Z",
+        "foreign_landing_url": "https://example.com/cat.jpg",
+        "creator": "Jane Doe",
+        "creator_url": "https://example.com/janedoe",
+        "license": "cc0",
+        "license_version": "1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "attribution": "Jane Doe / Public Domain",
+        "source": "Openverse",
+        "category": null,
+        "file_size": null,
+        "file_type": "image/jpeg",
+        "mature": false,
+        "height": 800,
+        "width": 600,
+        "duration": null,
+        "media_type": "image",
+        "favourites_count": 10
+      },
+      "added_at": "2025-05-20T12:00:00Z"
+    },
+    {
+      "media": {
+        "openverse_id": "2",
+        "title": "Dog Pic",
+        "url": "https://example.com/dog.mp3",
+        "thumbnail_url": "https://example.com/dog-thumb.jpg",
+        "indexed_on": "2025-01-02T00:00:00Z",
+        "foreign_landing_url": "https://example.com/dog.mp3",
+        "creator": "John Smith",
+        "creator_url": "https://example.com/johnsmith",
+        "license": "cc-by",
+        "license_version": "4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": "John Smith / CC BY 4.0",
+        "source": "Openverse",
+        "category": null,
+        "file_size": null,
+        "file_type": "audio/mpeg",
+        "mature": false,
+        "height": null,
+        "width": null,
+        "duration": 120,
+        "media_type": "audio",
+        "favourites_count": 5
+      },
+      "added_at": "2025-05-21T15:30:00Z"
+    }
+  ]
+}
