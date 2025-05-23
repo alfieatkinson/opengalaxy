@@ -123,7 +123,7 @@ export const useProvideAuth = () => {
     }
 
     if (!res.ok) {
-      // e.g. 401 → { detail: 'No active account found' }
+      // e.g. 401 => { detail: 'No active account found' }
       throw new Error(payload.detail || 'Login failed')
     }
 
