@@ -15,44 +15,46 @@ const SearchSelector = ({ initialSearchBy, onSearchChange }: SearchSelectorProps
   const [searchBy, setSearchBy] = useState(initialSearchBy)
 
   return (
-    <Dropdown
-      trigger={
-        <div className="btn btn-outline btn-sm px-2">
-          <SearchIcon size={14} strokeWidth={3} />{' '}
-          {searchBy.charAt(0).toUpperCase() + searchBy.slice(1)}
-        </div>
-      }
-      items={[
-        {
-          label: 'Query',
-          onClick: () => {
-            setSearchBy('query')
-            onSearchChange('query')
+    <div data-cy="search-selector">
+      <Dropdown
+        trigger={
+          <div className="btn btn-outline btn-sm px-2">
+            <SearchIcon size={14} strokeWidth={3} />{' '}
+            {searchBy.charAt(0).toUpperCase() + searchBy.slice(1)}
+          </div>
+        }
+        items={[
+          {
+            label: 'Query',
+            onClick: () => {
+              setSearchBy('query')
+              onSearchChange('query')
+            },
           },
-        },
-        {
-          label: 'Title',
-          onClick: () => {
-            setSearchBy('title')
-            onSearchChange('title')
+          {
+            label: 'Title',
+            onClick: () => {
+              setSearchBy('title')
+              onSearchChange('title')
+            },
           },
-        },
-        {
-          label: 'Tag',
-          onClick: () => {
-            setSearchBy('tag')
-            onSearchChange('tag')
+          {
+            label: 'Tag',
+            onClick: () => {
+              setSearchBy('tag')
+              onSearchChange('tag')
+            },
           },
-        },
-        {
-          label: 'Creator',
-          onClick: () => {
-            setSearchBy('creator')
-            onSearchChange('creator')
+          {
+            label: 'Creator',
+            onClick: () => {
+              setSearchBy('creator')
+              onSearchChange('creator')
+            },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+    </div>
   )
 }
 

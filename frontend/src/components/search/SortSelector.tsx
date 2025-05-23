@@ -23,6 +23,7 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
   return (
     <div className="flex flex-row gap-0 min-w-60 max-w-80">
       <Dropdown
+        dataCy="sort-selector"
         trigger={
           <div className="btn btn-outline btn-sm px-2 rounded-r-none">
             <SortIcon size={14} strokeWidth={3} />{' '}
@@ -31,6 +32,7 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
         }
         items={[
           {
+            dataCy: 'sort-relevance',
             label: 'Relevance',
             onClick: () => {
               setSortBy('relevance')
@@ -38,6 +40,7 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
             },
           },
           {
+            dataCy: 'sort-date-added',
             label: 'Date Added',
             onClick: () => {
               setSortBy('indexed_on')
@@ -47,6 +50,7 @@ const SortButton = ({ initialSortBy, initialSortDir, onSortChange }: SortButtonP
         ]}
       />
       <button
+        data-cy="sort-direction"
         className="btn btn-outline btn-sm px-2 rounded-l-none border-l-0"
         onClick={() => {
           setSortDir(sortDir === 'asc' ? 'desc' : 'asc')

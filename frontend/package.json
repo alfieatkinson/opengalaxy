@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext js,ts,tsx",
-    "lint:fix": "eslint . --ext js,ts,tsx --fix",
+    "lint": "eslint . --ext js,ts,tsx,cy.ts",
+    "lint:fix": "eslint . --ext js,ts,tsx,cy.ts --fix",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
@@ -36,6 +38,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/wavesurfer.js": "^6.0.12",
+    "cypress": "^14.4.0",
     "daisyui": "^5.0.35",
     "eslint": "^9.26.0",
     "eslint-config-next": "15.2.2",

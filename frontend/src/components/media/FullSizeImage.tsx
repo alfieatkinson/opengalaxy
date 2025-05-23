@@ -25,7 +25,10 @@ const FullSizeImage = ({ media }: FullSizeImageProps) => {
   }, [media.url])
 
   return (
-    <figure className="relative w-full overflow-hidden aspect-[16/9] rounded-t-lg">
+    <figure
+      data-cy={`image-${media.openverse_id}`}
+      className="relative w-full overflow-hidden aspect-[16/9] rounded-t-lg"
+    >
       <BlurOverlay active={media.mature && blurSensitive}>
         <div className="relative w-full h-full">
           {media.thumbnail_url && (

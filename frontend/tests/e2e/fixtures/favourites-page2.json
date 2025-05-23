@@ -1,0 +1,34 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": "/api/accounts/users/{{username}}/favourites/?page=1&page_size=2",
+  "results": [
+    {
+      "media": {
+        "openverse_id": "3",
+        "title": "Bird Pic",
+        "url": "https://example.com/bird.jpg",
+        "thumbnail_url": "https://example.com/bird-thumb.jpg",
+        "indexed_on": "2025-01-03T00:00:00Z",
+        "foreign_landing_url": "https://example.com/bird.jpg",
+        "creator": "Alex Roe",
+        "creator_url": "https://example.com/alexroe",
+        "license": "cc0",
+        "license_version": "1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "attribution": "Alex Roe / Public Domain",
+        "source": "Openverse",
+        "category": null,
+        "file_size": null,
+        "file_type": "image/jpeg",
+        "mature": false,
+        "height": 1024,
+        "width": 768,
+        "duration": null,
+        "media_type": "image",
+        "favourites_count": 2
+      },
+      "added_at": "2025-05-22T08:45:00Z"
+    }
+  ]
+}

@@ -4,8 +4,6 @@ import type { SearchAPIResponse } from '@/lib/search/types'
 import { SEARCH_KEYS } from '@/constants/search'
 import type { PaginatedSearchHistory } from '@/lib/search/types'
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/search`
-
 export const fetchSearchResults = async (
   fetcher: typeof fetch = fetch,
   searchBy: (typeof SEARCH_KEYS)[number],
@@ -34,7 +32,7 @@ export const fetchSearchResults = async (
   if (licenses.length) params.set('license', licenses.join(','))
   if (extensions.length) params.set('extension', extensions.join(','))
 
-  const res = await fetcher(`${BASE_URL}/?${params.toString()}`, { cache: 'no-store' })
+  const res = await fetcher(`/api/search/?${params.toString()}`, { cache: 'no-store' })
   if (!res.ok) throw new Error(`Search failed: ${res.statusText}`)
   return res.json()
 }
@@ -42,7 +40,7 @@ export const fetchSearchResults = async (
 export const fetchSearchHistoryPreview = async (
   fetcher: typeof fetch = fetch,
 ): Promise<{ id: number; search_key: string; search_value: string; searched_at: string }[]> => {
-  const res = await fetcher(`${BASE_URL}/history/preview/`, { credentials: 'include' })
+  const res = await fetcher('/api/search/history/preview/', { credentials: 'include' })
   if (!res.ok) throw new Error(`Failed to fetch history preview: ${res.statusText}`)
   return res.json()
 }
@@ -56,7 +54,7 @@ export const fetchSearchHistoryList = async (
     page: String(page),
     page_size: String(pageSize),
   })
-  const res = await fetcher(`${BASE_URL}/history/?${params.toString()}`, { credentials: 'include' })
+  const res = await fetcher(`/api/search/history/?${params.toString()}`, { credentials: 'include' })
   if (!res.ok) throw new Error(`Failed to fetch history list: ${res.statusText}`)
   return res.json() as Promise<PaginatedSearchHistory>
 }
@@ -65,7 +63,7 @@ export const deleteSearchHistoryEntry = async (
   fetcher: typeof fetch = fetch,
   id: number,
 ): Promise<void> => {
-  const res = await fetcher(`${BASE_URL}/history/${id}/`, {
+  const res = await fetcher(`/api/search/history/${id}/`, {
     method: 'DELETE',
     credentials: 'include',
   })
@@ -73,7 +71,7 @@ export const deleteSearchHistoryEntry = async (
 }
 
 export const clearSearchHistory = async (fetcher: typeof fetch = fetch): Promise<void> => {
-  const res = await fetcher(`${BASE_URL}/history/clear/`, {
+  const res = await fetcher('/api/search/history/clear/', {
     method: 'DELETE',
     credentials: 'include',
   })

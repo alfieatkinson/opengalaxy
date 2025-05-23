@@ -50,6 +50,7 @@ const ToggleSelector = ({
 
   return (
     <button
+      data-cy={`toggle-${paramKey}`}
       onClick={handleToggle}
       className={`btn btn-sm px-2 flex items-center gap-1 ${isOn ? onClassName : offClassName} whitespace-nowrap`}
     >

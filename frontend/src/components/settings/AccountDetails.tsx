@@ -112,6 +112,7 @@ const AccountDetails = () => {
           <span className="text-sm capitalize ml-3">{field.replace('_', ' ')}</span>
           <div className="flex flex-row items-center space-x-4">
             <input
+              data-cy={`input-${field}`}
               className="input input-bordered max-w-80"
               value={form[field] as string}
               placeholder={`Enter your ${field.replace('_', ' ')}`}
@@ -129,6 +130,7 @@ const AccountDetails = () => {
             <div className="flex-grow" />
             {editing !== field ? (
               <button
+                data-cy={`edit-${field}`}
                 className="btn btn-sm btn-outline px-2"
                 onClick={() => startEdit(field)}
                 disabled={saving}
@@ -138,6 +140,7 @@ const AccountDetails = () => {
             ) : (
               <div className="flex space-x-2">
                 <input
+                  data-cy={`password-${field}`}
                   type="password"
                   placeholder="Enter your password"
                   value={currentPassword}
@@ -154,6 +157,7 @@ const AccountDetails = () => {
                   disabled={saving}
                 />
                 <button
+                  data-cy={`save-${field}`}
                   className="btn btn-sm btn-primary px-2"
                   onClick={handleFieldSave}
                   disabled={saving}
@@ -161,6 +165,7 @@ const AccountDetails = () => {
                   <SaveIcon size={16} strokeWidth={3} />
                 </button>
                 <button
+                  data-cy={`cancel-${field}`}
                   className="btn btn-sm btn-outline btn-error px-2"
                   onClick={cancelEdit}
                   disabled={saving}

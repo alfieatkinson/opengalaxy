@@ -27,8 +27,9 @@ const FavouritesPreview = ({ username, media }: FavouritesPreviewProps) => {
         <p className="text-gray-500">No favourites yet.</p>
       )}
       <button
+        data-cy="view-all-favourites"
         className="btn btn-outline mt-4"
-        onClick={() => router.push(`${username}/favourites`)}
+        onClick={() => router.push(`/profile/${username}/favourites`)}
       >
         View all favourites →
       </button>

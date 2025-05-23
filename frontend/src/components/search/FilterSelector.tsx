@@ -53,7 +53,7 @@ const FilterSelector = ({ filterKey, options, label, activeGroup }: FilterSelect
   }
 
   return (
-    <div className="dropdown">
+    <div data-cy={`filter-${filterKey}`} className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-outline btn-sm whitespace-nowrap">
         {label ?? filterKey[0].toUpperCase() + filterKey.slice(1)}
         {selected.length > 0 && ` [${selected.length}]`}

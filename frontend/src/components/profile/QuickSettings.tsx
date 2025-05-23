@@ -102,7 +102,11 @@ const QuickSettings = ({ username }: QuickSettingsProps) => {
         />
       </label>
 
-      <button className="btn btn-outline btn-xs self-end" onClick={() => router.push('/settings')}>
+      <button
+        data-cy="more-settings"
+        className="btn btn-outline btn-xs self-end"
+        onClick={() => router.push('/settings')}
+      >
         More settings →
       </button>
     </div>

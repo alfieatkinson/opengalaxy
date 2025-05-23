@@ -15,8 +15,16 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/v1/audio/**',
       },
+      // For Cypress tests
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
+  trailingSlash: true,
 }
 
 export default nextConfig
