@@ -1,0 +1,8 @@
+{ 
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        { "id":2,"search_key":"tag","search_value":"bar","searched_at":"2025-05-21T15:30:00Z"}
+    ]
+}
