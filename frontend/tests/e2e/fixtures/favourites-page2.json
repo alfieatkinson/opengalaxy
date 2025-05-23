@@ -1,7 +1,7 @@
 {
   "count": 3,
   "next": null,
-  "previous": "/api/accounts/users/{{username}}/favourites?page=1&page_size=2",
+  "previous": "/api/accounts/users/{{username}}/favourites/?page=1&page_size=2",
   "results": [
     {
       "media": {

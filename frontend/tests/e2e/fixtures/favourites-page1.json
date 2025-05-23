@@ -1,6 +1,6 @@
 {
   "count": 3,
-  "next": "/api/accounts/users/{{username}}/favourites?page=2&page_size=2",
+  "next": "/api/accounts/users/{{username}}/favourites/?page=2&page_size=2",
   "previous": null,
   "results": [
     {
