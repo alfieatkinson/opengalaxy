@@ -71,7 +71,7 @@ describe('Settings page flows', () => {
 
     cy.wait('@getHistory')
     cy.contains('"dog"').should('exist')
-    cy.contains('View all →').click()
+    cy.get('[data-cy=view-all-search-history]').click()
     cy.url().should('include', '/search-history')
   })
 
