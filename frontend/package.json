@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --ext js,ts,tsx,cy.ts --fix",
     "format": "prettier --write .",
     "prepare": "husky",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
