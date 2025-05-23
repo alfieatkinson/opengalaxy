@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { ChangePasswordSchema, type ChangePasswordForm } from '@/lib/auth/validation'
 import { changePassword } from '@/lib/profile/api'
@@ -67,6 +67,14 @@ const ChangePassword = () => {
     }
   }
 
+  useEffect(() => {
+    if (!success) return
+    const timer = setTimeout(() => {
+      setSuccess('')
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [success])
+
   return (
     <div className="pt-4 border-t space-y-2">
       <h3 className="text-lg font-semibold">Password</h3>
@@ -83,6 +91,11 @@ const ChangePassword = () => {
               value={form.old_password}
               placeholder="Enter current password"
               onChange={(e) => setForm((prev) => ({ ...prev, old_password: e.target.value }))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave()
+                }
+              }}
               className="input input-bordered w-full"
               disabled={saving}
             />
@@ -96,6 +109,11 @@ const ChangePassword = () => {
               value={form.password}
               placeholder="Enter new password"
               onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave()
+                }
+              }}
               className="input input-bordered w-full"
               disabled={saving}
             />
@@ -108,6 +126,11 @@ const ChangePassword = () => {
               value={form.confirm_password}
               placeholder="Confirm new password"
               onChange={(e) => setForm((prev) => ({ ...prev, confirm_password: e.target.value }))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave()
+                }
+              }}
               className="input input-bordered w-full"
               disabled={saving}
             />
@@ -124,10 +147,9 @@ const ChangePassword = () => {
               Cancel
             </button>
           </div>
-
-          {success && <p className="text-xs text-green-600">{success}</p>}
         </div>
       )}
+      {success && <p className="text-xs text-green-600">{success}</p>}
     </div>
   )
 }
