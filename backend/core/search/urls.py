@@ -11,8 +11,8 @@ from .views import (
 
 urlpatterns = [
     path("", SearchView.as_view(), name="search"),
-    path("/history/preview/", SearchHistoryPreviewView.as_view(), name="/history-preview"),
-    path("/history/",         SearchHistoryListView.as_view(),    name="/history-list"),
-    path("/history/<int:pk>/",SearchHistoryDeleteView.as_view(),  name="/history-delete"),
-    path("/history/clear/",   SearchHistoryClearView.as_view(),   name="/history-clear"),
+    path("history/preview/", SearchHistoryPreviewView.as_view(), name="/history-preview"),
+    path("history/",         SearchHistoryListView.as_view(),    name="/history-list"),
+    path("history/<int:pk>/",SearchHistoryDeleteView.as_view(),  name="/history-delete"),
+    path("history/clear/",   SearchHistoryClearView.as_view(),   name="/history-clear"),
 ]
