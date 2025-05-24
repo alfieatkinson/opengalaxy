@@ -17,7 +17,17 @@ const proxy = async (req: NextRequest) => {
   // Prepare fetch options
   const fetchOptions: RequestInitWithDuplex = {
     method: req.method,
-    headers: req.headers,
+    headers: new Headers({
+      // Copy all incoming headers except the host
+      ...Object.fromEntries(req.headers.entries()),
+      // Explicitly forward the cookie header
+      cookie: req.headers.get('cookie') || '',
+    }),
+    // For non-GET/HEAD:
+    ...(!['GET', 'HEAD'].includes(req.method) && {
+      body: req.body,
+      duplex: 'half',
+    }),
   }
 
   if (!['GET', 'HEAD'].includes(req.method)) {
