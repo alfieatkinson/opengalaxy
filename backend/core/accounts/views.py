@@ -7,7 +7,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework_simplejwt.exceptions import TokenError
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 
@@ -20,6 +22,52 @@ from core.media.serializers import FavouriteSerializer
 
 User = get_user_model()
 
+# /api/accounts/token/
+class CookieTokenObtainPairView(TokenObtainPairView):
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super().finalize_response(request, response, *args, **kwargs)
+        if response.status_code == 200:
+            data = response.data
+            access = data.pop('access', None)
+            refresh = data.pop('refresh', None)
+            cookie_params = {
+                'httponly': True,
+                'secure': False,      # HTTP in dev
+                'samesite': 'None',   # allow cross-site
+                'path': '/',
+            }
+            if access:
+                response.set_cookie('accessToken', access, max_age=60*15, **cookie_params)
+            if refresh:
+                response.set_cookie('refreshToken', refresh, max_age=60*60*24*7, **cookie_params)
+        return response
+
+# /api/accounts/token/refresh/
+class CookieTokenRefreshView(TokenRefreshView):
+    permission_classes = []  # AllowAny if you want public access here
+
+    def post(self, request, *args, **kwargs):
+        refresh = request.COOKIES.get('refreshToken')
+        if not refresh:
+            return Response({'detail': 'No refresh token cookie found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token = RefreshToken(refresh)
+            new_access = str(token.access_token)
+        except TokenError:
+            return Response({'detail': 'Invalid refresh token'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        response = Response({'detail': 'Access token refreshed'}, status=status.HTTP_200_OK)
+        # Use the same cookie params as obtain
+        cookie_params = {
+            'httponly': True,
+            'secure': False,    # HTTP in dev
+            'samesite': 'None', # must be None for cross-site
+            'path': '/',
+        }
+        response.set_cookie('accessToken', new_access, max_age=60*15, **cookie_params)
+        return response
+    
 # /api/accounts/register/
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -48,16 +96,13 @@ class UserDetailView(generics.RetrieveAPIView):
 # /api/accounts/logout/
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-
     def post(self, request):
-        try:
-            # the client must send {"refresh": "<token>"}
-            refresh_token = request.data["refresh"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+        # blacklist the refresh token as before…
+        response = Response(status=status.HTTP_205_RESET_CONTENT)
+        # clear cookies
+        response.delete_cookie('accessToken')
+        response.delete_cookie('refreshToken')
+        return response
 
 # /api/accounts/users/<username>/
 class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
