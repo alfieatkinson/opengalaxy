@@ -10,9 +10,9 @@ const Hero = () => {
       <h1 className="text-5xl font-bold mb-4">
         Open<HighlightedText>Galaxy</HighlightedText>
       </h1>
-      <p className="text-lg mb-8">Explore a universe of open-license media, free for all.</p>
+      <p className="text-lg mb-8">Explore a universe of open-licence media, free for all.</p>
       <ClientOnly>
-        <SearchBar placeholder="Search for open-license media..." />
+        <SearchBar placeholder="Search for open-licence media..." />
       </ClientOnly>
     </div>
   )

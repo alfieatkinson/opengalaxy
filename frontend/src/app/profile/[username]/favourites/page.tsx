@@ -14,7 +14,7 @@ export const generateMetadata = async ({ params }: FavouritesPageProps): Promise
 
   return {
     title: `${username}'s Favourites | OpenGalaxy`,
-    description: `View ${username}'s favourited open-license media.`,
+    description: `View ${username}'s favourited open-licence media.`,
   }
 }
 
