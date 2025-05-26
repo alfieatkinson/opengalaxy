@@ -10,6 +10,7 @@ import SearchBar from '@/components/search/SearchBar'
 import HighlightedText from '@/components/shared/HighlightedText'
 import Dropdown from '@/components/shared/Dropdown'
 import ClientOnly from '@/components/shared/ClientOnly'
+import ThemeSwitcher from '@/components/shared/ThemeSwitcher'
 
 const Header = () => {
   const router = useRouter()
@@ -27,6 +28,7 @@ const Header = () => {
     { label: 'Profile', onClick: () => router.push(`/profile/${user!.username}`) },
     { label: 'Settings', onClick: () => router.push('/settings') },
     { label: 'Logout', onClick: handleLogout },
+    { label: <ThemeSwitcher />, onClick: () => {} },
   ]
 
   const dropdownItemsMobile = []
@@ -37,11 +39,13 @@ const Header = () => {
       { label: 'Favourites', onClick: () => router.push(`/profile/${user?.username}/favourites`) },
       { label: 'Settings', onClick: () => router.push('/settings') },
       { label: 'Logout', onClick: handleLogout },
+      { label: <ThemeSwitcher />, onClick: () => {} },
     )
   } else {
     dropdownItemsMobile.push(
       { label: 'Login', onClick: () => router.push('/login') },
       { label: 'Register', onClick: () => router.push('/register') },
+      { label: <ThemeSwitcher />, onClick: () => {} },
     )
   }
 
