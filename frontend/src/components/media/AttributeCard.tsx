@@ -13,7 +13,7 @@ const AttributeCard = ({ title, icon, text, href }: AttributeCardProps) => {
   if (!href) href = undefined
 
   return (
-    <div className="card bg-base-300 shadow-lg w-50 h-32">
+    <div className="flex-grow card bg-base-300 shadow-lg min-w-32 xs:min-w-50 xs:w-50 h-32">
       <div className="card-body items-center justify-center">
         <h1 className="items-center">{icon}</h1>
         <a
