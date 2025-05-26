@@ -56,7 +56,7 @@ const PreferenceSettings = () => {
   if (!prefs) return <div className="p-4">Unable to load preferences.</div>
 
   return (
-    <div className="min-w-64 max-w-80 p-4 rounded-lg border-1">
+    <div className="min-w-50 w-full md:max-w-80 p-4 rounded-lg border-1">
       <h2 className="text-lg font-semibold mb-3">User Preferences</h2>
 
       <label className="flex items-center justify-between mb-2">
