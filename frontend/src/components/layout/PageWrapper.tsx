@@ -9,7 +9,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
       <Header />
       <main
         className={
-          'flex flex-grow items-center justify-center mt-18 p-4 h-full overflow-hidden w-2/3 min-w-200'
+          'flex flex-grow items-center justify-center h-full flex-1 max-w-5xl w-11/12 sm:w-5/6 mx-auto mt-18 p-4 overflow-auto'
         }
       >
         {children}
