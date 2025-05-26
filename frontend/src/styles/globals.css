@@ -12,6 +12,7 @@
   prefersdark: false;
   --color-secondary: black;
   --color-secondary-content: white;
+  --color-accent: oklch(0.6867 0.3124 328.34);
 }
 
 @plugin 'daisyui/theme' {
@@ -20,6 +21,7 @@
   prefersdark: false;
   --color-secondary: white;
   --color-secondary-content: black;
+  --color-accent: oklch(0.6867 0.3124 328.34);
 }
 
 @layer base {
