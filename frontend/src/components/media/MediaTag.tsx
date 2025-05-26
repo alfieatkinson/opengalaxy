@@ -9,7 +9,7 @@ interface MediaTagProps {
 }
 
 const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
-  const innaccurate = accuracy < 0.5
+  const inaccurate = accuracy < 0.5
 
   const handleClick = () => {
     if (onClick) {
@@ -22,11 +22,11 @@ const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
       onClick={handleClick}
       className={`
         flex items-center cursor-pointer px-2 py-0 rounded-sm w-fit h-6
-        ${innaccurate ? 'bg-primary/20 hover:bg-primary/60 text-primary-content/60' : 'bg-primary hover:bg-primary/60'} gap-1 text-xs align-middle
+        ${inaccurate ? 'bg-primary/20 hover:bg-primary/60 text-primary-content/60' : 'bg-primary hover:bg-primary/60'} gap-1 text-xs align-middle
       `}
     >
       <p>{tag}</p>
-      {innaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={2} />}
+      {inaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={2} />}
     </div>
   )
 }
