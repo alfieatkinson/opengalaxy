@@ -9,7 +9,7 @@ interface DropdownProps {
   trigger: ReactNode
   items: Array<{
     dataCy?: string
-    label: string
+    label: string | ReactNode
     onClick: () => void
   }>
 }
