@@ -42,7 +42,7 @@ class SearchView(APIView):
 
     def get(self, request):
         # Get the search key and value from the request
-        SEARCH_KEYS = ["q", "title", "tag", "creator"]
+        SEARCH_KEYS = ["q", "title", "tags", "creator"]
         search_key = next((k for k in SEARCH_KEYS if k in request.GET), "q")
         search_value = request.GET.get(search_key, "").strip()
         

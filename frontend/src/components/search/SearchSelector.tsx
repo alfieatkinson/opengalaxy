@@ -5,10 +5,13 @@
 import { useState } from 'react'
 import { Search as SearchIcon } from 'lucide-react'
 import Dropdown from '@/components/shared/Dropdown'
+import { SEARCH_KEYS } from '@/constants/search'
+
+type SearchKey = (typeof SEARCH_KEYS)[number] // 'query' | 'title' | 'tag' | 'creator'
 
 interface SearchSelectorProps {
-  initialSearchBy: 'query' | 'title' | 'tag' | 'creator'
-  onSearchChange: (newSearchBy: 'query' | 'title' | 'tag' | 'creator') => void
+  initialSearchBy: SearchKey
+  onSearchChange: (newSearchBy: SearchKey) => void
 }
 
 const SearchSelector = ({ initialSearchBy, onSearchChange }: SearchSelectorProps) => {
@@ -41,8 +44,8 @@ const SearchSelector = ({ initialSearchBy, onSearchChange }: SearchSelectorProps
           {
             label: 'Tag',
             onClick: () => {
-              setSearchBy('tag')
-              onSearchChange('tag')
+              setSearchBy('tags')
+              onSearchChange('tags')
             },
           },
           {
