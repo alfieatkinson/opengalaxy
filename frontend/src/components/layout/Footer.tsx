@@ -10,9 +10,7 @@ const Footer = () => {
 
   return (
     <footer
-      className={`w-screen ${
-        isLandingPage ? 'bg-transparent' : 'bg-base-200'
-      } text-white text-center py-4`}
+      className={`w-screen ${isLandingPage ? 'bg-transparent' : 'bg-base-200'} text-center py-4`}
     >
       <p>&copy; 2025 Alfie Atkinson. All rights reserved.</p>
       <p>

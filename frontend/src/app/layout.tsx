@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import PageWrapper from '@/components/layout/PageWrapper'
 import { AuthProvider } from '@/context/AuthContext'
+import { ThemeProvider } from '@/context/ThemeContext'
 
 export const metadata: Metadata = {
   title: 'OpenGalaxy',
@@ -16,11 +17,13 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en">
-      <body className="bg-base-300 text-white">
-        <AuthProvider>
-          <PageWrapper>{children}</PageWrapper>
-        </AuthProvider>
+    <html lang="en" data-theme="">
+      <body className="bg-base-300 text-secondary">
+        <ThemeProvider>
+          <AuthProvider>
+            <PageWrapper>{children}</PageWrapper>
+          </AuthProvider>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

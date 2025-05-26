@@ -10,6 +10,7 @@ import SearchBar from '@/components/search/SearchBar'
 import HighlightedText from '@/components/shared/HighlightedText'
 import Dropdown from '@/components/shared/Dropdown'
 import ClientOnly from '@/components/shared/ClientOnly'
+import ThemeSwitcher from '@/components/shared/ThemeSwitcher'
 
 const Header = () => {
   const router = useRouter()
@@ -27,6 +28,7 @@ const Header = () => {
     { label: 'Profile', onClick: () => router.push(`/profile/${user!.username}`) },
     { label: 'Settings', onClick: () => router.push('/settings') },
     { label: 'Logout', onClick: handleLogout },
+    { label: <ThemeSwitcher />, onClick: () => {} },
   ]
 
   const dropdownItemsMobile = []
@@ -37,11 +39,13 @@ const Header = () => {
       { label: 'Favourites', onClick: () => router.push(`/profile/${user?.username}/favourites`) },
       { label: 'Settings', onClick: () => router.push('/settings') },
       { label: 'Logout', onClick: handleLogout },
+      { label: <ThemeSwitcher />, onClick: () => {} },
     )
   } else {
     dropdownItemsMobile.push(
       { label: 'Login', onClick: () => router.push('/login') },
       { label: 'Register', onClick: () => router.push('/register') },
+      { label: <ThemeSwitcher />, onClick: () => {} },
     )
   }
 
@@ -75,7 +79,7 @@ const Header = () => {
             <>
               <Dropdown
                 trigger={
-                  <div className="flex items-center space-x-2 hover:opacity-80">
+                  <div className="flex items-center space-x-2 hover:text-primary">
                     <span className="text-sm font-bold">{user?.username}</span>
                     <UserIcon size={32} />
                   </div>
@@ -84,7 +88,7 @@ const Header = () => {
               />
               <button
                 onClick={() => router.push(`/profile/${user?.username}/favourites`)}
-                className="flex items-center space-x-2 hover:opacity-80"
+                className="flex items-center space-x-2 hover:text-primary"
               >
                 <StarIcon size={32} />
               </button>
