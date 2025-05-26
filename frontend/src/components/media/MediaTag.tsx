@@ -1,11 +1,16 @@
 // src/components/media/MediaTag.tsx
 
+import { TriangleAlert as AlertIcon } from 'lucide-react'
+
 interface MediaTagProps {
   tag: string
+  accuracy?: number
   onClick?: (tag: string) => void
 }
 
-const MediaTag = ({ tag, onClick }: MediaTagProps) => {
+const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
+  const innaccurate = accuracy < 0.5
+
   const handleClick = () => {
     if (onClick) {
       onClick(tag)
@@ -13,12 +18,16 @@ const MediaTag = ({ tag, onClick }: MediaTagProps) => {
   }
 
   return (
-    <span
-      className="cursor-pointer text-sm bg-primary hover:opacity-60 hover:underline px-2 py-1 rounded-sm"
+    <div
       onClick={handleClick}
+      className={`
+        flex items-center cursor-pointer px-2 py-0 rounded-sm w-fit h-6
+        ${innaccurate ? 'bg-primary/20 hover:bg-primary/60 text-primary-content/60' : 'bg-primary hover:bg-primary/60'} gap-1 text-xs align-middle
+      `}
     >
-      {tag}
-    </span>
+      <p>{tag}</p>
+      {innaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={2} />}
+    </div>
   )
 }
 
