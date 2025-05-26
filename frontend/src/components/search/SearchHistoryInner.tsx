@@ -71,14 +71,22 @@ const SearchHistoryInner = () => {
   return (
     <div className="flex flex-col gap-4 w-full max-w-200 p-4 bg-base-200 rounded-lg items-center justify-center">
       <div className="flex flex-row items-baseline justify-between w-full mb-4">
-        <h2 className="text-lg font-semibold">Manage your search history:</h2>
+        <h2 className="text-lg font-semibold">Manage search history:</h2>
         <button
           data-cy="clear-search-history"
-          className="float-right btn btn-outline btn-error max-w-60"
+          className="hidden sm:flex float-right btn btn-outline btn-error max-w-60"
           onClick={onClear}
           disabled={!items.length}
         >
           CLEAR SEARCH HISTORY
+        </button>
+        <button
+          data-cy="clear-search-history"
+          className="flex sm:hidden float-right btn btn-outline btn-error max-w-60"
+          onClick={onClear}
+          disabled={!items.length}
+        >
+          CLEAR
         </button>
       </div>
       {items.length ? (
@@ -94,7 +102,7 @@ const SearchHistoryInner = () => {
                 )
               }
             >
-              <div className="flex items-center justify-between border-1 rounded-sm hover:text-primary hover:underline p-2 w-full">
+              <div className="flex flex-col sm:flex-row sm:flex sm:items-center justify-between border-1 rounded-sm hover:text-primary hover:underline p-2 w-full">
                 <div data-cy={`search-history-query`} className="flex items-center space-x-2">
                   <SearchIcon size={16} strokeWidth={3} />
                   <p className="text-sm">{`"${item.search_value}"${item.search_key === 'q' ? '' : `in '${item.search_key}s'`}`}</p>
