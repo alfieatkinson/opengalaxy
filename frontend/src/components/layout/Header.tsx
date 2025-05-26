@@ -79,7 +79,7 @@ const Header = () => {
             <>
               <Dropdown
                 trigger={
-                  <div className="flex items-center space-x-2 hover:opacity-80">
+                  <div className="flex items-center space-x-2 hover:text-primary">
                     <span className="text-sm font-bold">{user?.username}</span>
                     <UserIcon size={32} />
                   </div>
@@ -88,7 +88,7 @@ const Header = () => {
               />
               <button
                 onClick={() => router.push(`/profile/${user?.username}/favourites`)}
-                className="flex items-center space-x-2 hover:opacity-80"
+                className="flex items-center space-x-2 hover:text-primary"
               >
                 <StarIcon size={32} />
               </button>
