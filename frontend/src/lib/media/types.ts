@@ -1,5 +1,10 @@
 // src/lib/media/types.ts
 
+export interface Tag {
+  name: string
+  accuracy: number
+}
+
 export interface Media {
   openverse_id: string
   title: string
@@ -24,4 +29,5 @@ export interface Media {
   media_type: 'image' | 'audio'
   accessed_at?: string // Only present in MediaDetailView
   favourites_count?: number
+  tags?: Tag[]
 }

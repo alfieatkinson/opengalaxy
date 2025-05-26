@@ -24,6 +24,7 @@ import {
   Globe as GlobeIcon,
 } from 'lucide-react'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
+import TagList from '@/components/media/TagList'
 
 interface MediaInnerProps {
   uuid: string
@@ -107,6 +108,9 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
               <LinkButton href={media.foreign_landing_url} />
             </div>
           </div>
+
+          <TagList tags={media.tags} />
+
           <div className="flex gap-4 items-center justify-center flex-wrap">
             {media.creator && (
               <AttributeCard
