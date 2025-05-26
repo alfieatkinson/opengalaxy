@@ -59,8 +59,8 @@ const ProfileInner = ({ username }: ProfileInnerProps) => {
 
   return (
     <div className="flex flex-col flex-grow mx-auto p-6 space-y-8 w-full">
-      <div className="flex flex-row">
-        <div>
+      <div className="flex flex-wrap">
+        <div className="pb-8">
           <UserInfo user={userProfile} />
           <div className="flex-grow" />
         </div>
