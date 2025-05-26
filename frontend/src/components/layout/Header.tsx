@@ -53,11 +53,11 @@ const Header = () => {
     >
       {!isLandingPage && (
         <div className="cursor-pointer" onClick={() => router.push('/')}>
-          <span className="hidden md:inline text-2xl font-bold">
+          <span className="hidden sm:inline text-2xl font-bold">
             Open<HighlightedText>Galaxy</HighlightedText>
           </span>
 
-          <div className="block md:hidden text-3xl font-bold">
+          <div className="block sm:hidden text-3xl font-bold">
             O<HighlightedText>G</HighlightedText>
           </div>
         </div>
@@ -70,7 +70,7 @@ const Header = () => {
         )}
       </div>
       <div className="flex justify-end items-center">
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden sm:flex items-center space-x-4">
           {isLoggedIn ? (
             <>
               <Dropdown
@@ -100,7 +100,7 @@ const Header = () => {
             </>
           )}
         </div>
-        <div className="block md:hidden">
+        <div className="block sm:hidden">
           <Dropdown
             trigger={<MenuIcon size={32} className="cursor-pointer hover:opacity-80" />}
             items={dropdownItemsMobile}
