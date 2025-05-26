@@ -30,7 +30,6 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
           if (!data) {
             setError(true)
             setLoading(false)
-            // You cannot call notFound() client-side; handle differently (redirect or show message)
           } else {
             setMedia(data)
             setLoading(false)
