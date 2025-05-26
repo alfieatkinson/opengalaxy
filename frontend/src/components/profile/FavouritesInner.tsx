@@ -85,7 +85,7 @@ const FavouritesInner = ({ username, page, pageSize }: FavouritesInnerProps) => 
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4">{username}'s Favourites</h1>
       </div>
-      <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="card h-full bg-base-100 shadow-lg p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {mediaList.map((media) => (
           <MediaCard key={media.openverse_id} media={media} />
         ))}

@@ -30,4 +30,15 @@ export interface Media {
   accessed_at?: string // Only present in MediaDetailView
   favourites_count?: number
   tags?: Tag[]
+  related_media?: MediaShort[]
+}
+
+export interface MediaShort {
+  openverse_id: string
+  title: string
+  url: string
+  thumbnail_url: string
+  mature: boolean
+  media_type: 'image' | 'audio'
+  favourites_count?: number
 }

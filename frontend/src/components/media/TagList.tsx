@@ -33,7 +33,7 @@ const TagList = ({ tags }: TagListProps) => {
           key={tag.name}
           tag={tag.name}
           accuracy={tag.accuracy}
-          onClick={() => router.push(`/search?query=${encodeURIComponent(tag.name)}`)}
+          onClick={() => router.push(`/search?tag=${encodeURIComponent(tag.name)}`)}
         />
       ))}
 

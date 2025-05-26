@@ -5,20 +5,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
-import { Media } from '@/lib/media/types'
+import { Media, MediaShort } from '@/lib/media/types'
 import FavouriteControl from '@/components/media/FavouriteControl'
 import AudioWaveform from '@/components/media/AudioWaveform'
 import BlurOverlay from '@/components/media/BlurOverlay'
 
 interface MediaCardProps {
-  media: Media
+  media: MediaShort | Media
   mini?: boolean
 }
 
 const MediaCard = ({ media, mini = false }: MediaCardProps) => {
   const { prefs } = useAuth()
 
-  const blurSensitive = prefs.blur_sensitive // TODO: add this to a useEffect to update when the user changes prefs
+  const blurSensitive = prefs.blur_sensitive
 
   return (
     <div
