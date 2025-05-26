@@ -3,7 +3,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { User as UserIcon, Star as StarIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import SearchBar from '@/components/search/SearchBar'
@@ -11,15 +11,12 @@ import HighlightedText from '@/components/shared/HighlightedText'
 import Dropdown from '@/components/shared/Dropdown'
 import ClientOnly from '@/components/shared/ClientOnly'
 
-const Header = ({
-  isScrollable,
-  isLandingPage,
-}: {
-  isScrollable: boolean
-  isLandingPage: boolean
-}) => {
+const Header = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const { user, isLoggedIn, signOut } = useAuth()
+
+  const isLandingPage = pathname === '/'
 
   const handleLogout = async () => {
     await signOut()
@@ -35,7 +32,7 @@ const Header = ({
   return (
     <header
       className={`fixed flex w-full p-4 z-50 text-white ${
-        !isScrollable ? 'bg-transparent' : 'bg-base-200'
+        isLandingPage ? 'bg-transparent' : 'bg-base-200'
       }`}
     >
       <div className="w-1/4 cursor-pointer" onClick={() => router.push('/')}>
@@ -46,7 +43,7 @@ const Header = ({
         )}
       </div>
       <div className="flex-grow flex justify-center">
-        {isScrollable && (
+        {!isLandingPage && (
           <ClientOnly>
             <SearchBar placeholder="Search for media..." />
           </ClientOnly>
