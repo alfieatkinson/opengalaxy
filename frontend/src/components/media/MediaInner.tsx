@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import { fetchMediaById } from '@/lib/media/api'
-import { notFound } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import FullSizeImage from '@/components/media/FullSizeImage'
 import FavouriteControl from '@/components/media/FavouriteControl'
 import AttributeCard from '@/components/media/AttributeCard'
@@ -24,12 +24,14 @@ import {
   Globe as GlobeIcon,
 } from 'lucide-react'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
+import MediaTag from '@/components/media/MediaTag'
 
 interface MediaInnerProps {
   uuid: string
 }
 
 const MediaInner = ({ uuid }: MediaInnerProps) => {
+  const router = useRouter()
   const [media, setMedia] = useState<Media | undefined>(undefined)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -106,6 +108,21 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
               />
               <LinkButton href={media.foreign_landing_url} />
             </div>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {media.tags && media.tags.length > 0 ? (
+              media.tags.map((tag) => (
+                <MediaTag
+                  key={tag}
+                  tag={tag}
+                  onClick={() => {
+                    router.push(`/search?tag=${encodeURIComponent(tag)}`)
+                  }}
+                />
+              ))
+            ) : (
+              <span className="text-sm text-gray-500">No tags available</span>
+            )}
           </div>
           <div className="flex gap-4 items-center justify-center flex-wrap">
             {media.creator && (
