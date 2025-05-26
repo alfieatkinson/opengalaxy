@@ -42,3 +42,16 @@ class Media(models.Model):
         indexes = [
             models.Index(fields=["title"], name="media_title_idx"),
         ]
+
+class RelatedMedia(models.Model):
+    media = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='related_media')
+    related_media = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'related_media'
+        unique_together = (('media', 'related_media'),)
+        indexes = [
+            models.Index(fields=['media'], name='related_media_media_idx'),
+            models.Index(fields=['related_media'], name='related_media_rel_idx'),
+        ]
