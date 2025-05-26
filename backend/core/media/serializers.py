@@ -38,8 +38,7 @@ class MediaSerializer(serializers.ModelSerializer):
         
     def get_tags(self, obj):
         tags = MediaTag.objects.filter(media=obj).select_related('tag')
-        names = [t.tag.name for t in tags]
-        return names
+        return [{"name": tag.tag.name, "accuracy": tag.accuracy} for tag in tags]
         
 class FavouriteSerializer(serializers.ModelSerializer):
     media = MediaSerializer()
