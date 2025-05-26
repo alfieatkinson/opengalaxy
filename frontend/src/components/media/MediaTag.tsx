@@ -8,8 +8,12 @@ interface MediaTagProps {
   onClick?: (tag: string) => void
 }
 
+const ACCURACY_THRESHOLD = 0.5 // Threshold for low confidence tags
+const MIN_OPACITY = 0.3 // Minimum opacity for tags with low accuracy
+
 const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
-  const inaccurate = accuracy < 0.5
+  const inaccurate = accuracy < ACCURACY_THRESHOLD
+  const opacity = Math.max(accuracy, MIN_OPACITY)
 
   const handleClick = () => {
     if (onClick) {
@@ -20,13 +24,14 @@ const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
   return (
     <div
       onClick={handleClick}
+      style={{ opacity }}
       className={`
-        flex items-center cursor-pointer px-2 py-0 rounded-sm w-fit h-6
-        ${inaccurate ? 'bg-primary/20 hover:bg-primary/60 text-primary-content/60' : 'bg-primary hover:bg-primary/60'} gap-1 text-xs align-middle
+        flex items-center cursor-pointer px-2 py-0.5 rounded-sm h-6 gap-1
+        bg-primary hover:underline text-xs font-medium
       `}
     >
-      <p>{tag}</p>
-      {inaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={2} />}
+      <p>{tag.toUpperCase()}</p>
+      {inaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={3} />}
     </div>
   )
 }
