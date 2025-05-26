@@ -8,12 +8,30 @@ interface MediaTagProps {
   onClick?: (tag: string) => void
 }
 
-const ACCURACY_THRESHOLD = 0.5 // Threshold for low confidence tags
 const MIN_OPACITY = 0.3 // Minimum opacity for tags with low accuracy
+const COLOURS = {
+  red: 'text-red-500',
+  orange: 'text-orange-500',
+  yellow: 'text-yellow-500',
+  green: 'text-green-500',
+}
 
 const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
-  const inaccurate = accuracy < ACCURACY_THRESHOLD
   const opacity = Math.max(accuracy, MIN_OPACITY)
+
+  // Pick icon colour band
+  let iconClass = ''
+  if (accuracy < 0.25) {
+    iconClass = COLOURS.red
+  } else if (accuracy < 0.5) {
+    iconClass = COLOURS.orange
+  } else if (accuracy < 0.75) {
+    iconClass = COLOURS.yellow
+  } else {
+    iconClass = COLOURS.green
+  }
+
+  const showIcon = accuracy < 0.75
 
   const handleClick = () => {
     if (onClick) {
@@ -27,11 +45,11 @@ const MediaTag = ({ tag, accuracy = 1, onClick }: MediaTagProps) => {
       style={{ opacity }}
       className={`
         flex items-center cursor-pointer px-2 py-0.5 rounded-sm h-6 gap-1
-        bg-primary hover:underline text-xs font-medium
+        bg-primary text-primary-content/100 hover:underline text-xs font-medium
       `}
     >
       <p>{tag.toUpperCase()}</p>
-      {inaccurate && <AlertIcon className="text-yellow-500" size={14} strokeWidth={3} />}
+      {showIcon && <AlertIcon className={iconClass} size={14} strokeWidth={3} />}
     </div>
   )
 }
