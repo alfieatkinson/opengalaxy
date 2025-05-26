@@ -111,15 +111,19 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
           </div>
           <div className="flex flex-wrap gap-2 mb-4">
             {media.tags && media.tags.length > 0 ? (
-              media.tags.map((tag) => (
-                <MediaTag
-                  key={tag}
-                  tag={tag}
-                  onClick={() => {
-                    router.push(`/search?tag=${encodeURIComponent(tag)}`)
-                  }}
-                />
-              ))
+              // Sort by accuracy descending, then by name
+              media.tags
+                .sort((a, b) => b.accuracy - a.accuracy || a.name.localeCompare(b.name))
+                .map((tag) => (
+                  <MediaTag
+                    key={tag.name}
+                    tag={tag.name}
+                    accuracy={tag.accuracy}
+                    onClick={() => {
+                      router.push(`/search?query=${encodeURIComponent(tag.name)}`)
+                    }}
+                  />
+                ))
             ) : (
               <span className="text-sm text-gray-500">No tags available</span>
             )}
