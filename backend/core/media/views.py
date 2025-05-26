@@ -126,18 +126,3 @@ class MediaFavouriteView(APIView):
         
         return Response({"is_favourite": False}, status=status.HTTP_200_OK)
 
-class TagListView(APIView):
-    def get(self, request):
-        names = Tag.objects.values_list('name', flat=True).distinct().order_by('name')
-        return Response(names)
-
-class SourceListView(APIView):
-    def get(self, request):
-        sources = (
-            Media.objects
-            .exclude(source__isnull=True)
-            .values_list('source', flat=True)
-            .distinct()
-            .order_by('source')
-        )
-        return Response(sources)
