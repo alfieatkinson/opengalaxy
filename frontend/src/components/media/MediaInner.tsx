@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import { fetchMediaById } from '@/lib/media/api'
-import { notFound, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import FullSizeImage from '@/components/media/FullSizeImage'
 import FavouriteControl from '@/components/media/FavouriteControl'
 import AttributeCard from '@/components/media/AttributeCard'
@@ -24,14 +24,13 @@ import {
   Globe as GlobeIcon,
 } from 'lucide-react'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
-import MediaTag from '@/components/media/MediaTag'
+import TagList from '@/components/media/TagList'
 
 interface MediaInnerProps {
   uuid: string
 }
 
 const MediaInner = ({ uuid }: MediaInnerProps) => {
-  const router = useRouter()
   const [media, setMedia] = useState<Media | undefined>(undefined)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -109,25 +108,9 @@ const MediaInner = ({ uuid }: MediaInnerProps) => {
               <LinkButton href={media.foreign_landing_url} />
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {media.tags && media.tags.length > 0 ? (
-              // Sort by accuracy descending, then by name
-              media.tags
-                .sort((a, b) => b.accuracy - a.accuracy || a.name.localeCompare(b.name))
-                .map((tag) => (
-                  <MediaTag
-                    key={tag.name}
-                    tag={tag.name}
-                    accuracy={tag.accuracy}
-                    onClick={() => {
-                      router.push(`/search?query=${encodeURIComponent(tag.name)}`)
-                    }}
-                  />
-                ))
-            ) : (
-              <span className="text-sm text-gray-500">No tags available</span>
-            )}
-          </div>
+
+          <TagList tags={media.tags} />
+
           <div className="flex gap-4 items-center justify-center flex-wrap">
             {media.creator && (
               <AttributeCard
