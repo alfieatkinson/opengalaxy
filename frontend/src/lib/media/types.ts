@@ -24,4 +24,5 @@ export interface Media {
   media_type: 'image' | 'audio'
   accessed_at?: string // Only present in MediaDetailView
   favourites_count?: number
+  tags?: string[]
 }
