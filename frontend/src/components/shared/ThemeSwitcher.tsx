@@ -7,7 +7,7 @@ const ThemeSwitcher = () => {
   const [theme, toggleTheme] = useTheme()
 
   return (
-    <div
+    <label
       data-cy="theme-switcher"
       className="flex min-w-20 items-center justify-between"
       onClick={(e) => e.stopPropagation()}
@@ -19,7 +19,7 @@ const ThemeSwitcher = () => {
         checked={theme === 'dark'}
         onChange={toggleTheme}
       />
-    </div>
+    </label>
   )
 }
 
