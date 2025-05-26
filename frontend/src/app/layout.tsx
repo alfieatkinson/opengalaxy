@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" data-theme="">
-      <body className="bg-base-300 text-white">
+      <body className="bg-base-300 text-secondary">
         <ThemeProvider>
           <AuthProvider>
             <PageWrapper>{children}</PageWrapper>

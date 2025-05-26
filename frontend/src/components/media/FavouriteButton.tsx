@@ -64,9 +64,7 @@ const FavouriteButton = ({ mediaId, size = 24, onToggle }: FavouriteButtonProps)
       <StarIcon
         size={size}
         fill={isFav ? 'currentColor' : 'none'}
-        className={
-          isFav ? 'text-primary hover:text-secondary' : 'text-secondary hover:text-primary'
-        }
+        className={isFav ? 'text-primary hover:opacity-60' : 'hover:text-primary'}
       />
     </button>
   )

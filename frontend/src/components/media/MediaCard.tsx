@@ -51,7 +51,7 @@ const MediaCard = ({ media, mini = false }: MediaCardProps) => {
       <div
         className={`
           absolute flex items-end inset-0 bottom-0 left-0 w-full h-full
-          bg-gradient-to-t from-base-100 via-transparent to-transparent
+          bg-gradient-to-t from-black via-transparent to-transparent
           p-2
           opacity-0 group-hover:opacity-100
           transition-opacity

@@ -36,7 +36,7 @@ const PageNavigator = ({
         data-cy="prev-page"
         onClick={() => changePage(page - 1)}
         disabled={page <= 1}
-        className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50"
+        className="px-4 py-2 bg-base-100 rounded disabled:opacity-50"
       >
         Previous
       </button>
@@ -47,7 +47,7 @@ const PageNavigator = ({
         data-cy="next-page"
         onClick={() => changePage(page + 1)}
         disabled={!hasMorePages || page >= totalPages}
-        className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50"
+        className="px-4 py-2 bg-base-100 rounded disabled:opacity-50"
       >
         Next
       </button>
