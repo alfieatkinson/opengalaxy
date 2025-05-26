@@ -4,16 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 from django.utils import timezone
-from django.views import View
 
 from core.media.models import Media, Favourite
-from core.media.models.tag import Tag
 from core.openverse_client import OpenverseClient
+from core.media.serializers import MediaSerializer
 
-
-class MediaDetailView(View):
+class MediaDetailView(APIView):
     client = OpenverseClient()
 
     def get(self, request, openverse_id):
@@ -54,35 +51,9 @@ class MediaDetailView(View):
 
         media.accessed_at = timezone.now()  # Explicit bump
         media.save()  # Save the updated media object
-
-        # Return the media details as a JSON response
-        return JsonResponse(
-            {
-                "openverse_id": media.openverse_id,
-                "title": media.title,
-                "indexed_on": media.indexed_on.isoformat(),
-                "foreign_landing_url": media.foreign_landing_url,
-                "url": media.url,
-                "creator": media.creator,
-                "creator_url": media.creator_url,
-                "license": media.license,
-                "license_version": media.license_version,
-                "license_url": media.license_url,
-                "attribution": media.attribution,
-                "source": media.source,
-                "category": media.category,
-                "file_size": media.file_size,
-                "file_type": media.file_type,
-                "mature": media.mature,
-                "thumbnail_url": media.thumbnail_url,
-                "height": media.height,
-                "width": media.width,
-                "duration": media.duration,
-                "media_type": media.media_type,
-                "accessed_at": media.accessed_at.isoformat(),
-                "favourites_count": media.favourites_count,
-            }
-        )
+        
+        serializer = MediaSerializer(media)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class MediaFavouriteView(APIView):
     """
