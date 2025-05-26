@@ -66,7 +66,7 @@ const QuickSettings = ({ username }: QuickSettingsProps) => {
   if (!prefs) return null
 
   return (
-    <div className="w-64 p-4 rounded-lg border-1">
+    <div className="w-full md:w-64 p-4 rounded-lg border-1">
       <h2 className="text-lg font-semibold mb-3">Quick Settings</h2>
 
       <label className="flex items-center justify-between mb-2">
