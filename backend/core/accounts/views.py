@@ -4,7 +4,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
@@ -12,15 +11,22 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.exceptions import TokenError
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+from django.conf import settings
 
 from .models import UserPreferences
 from .serializer import UserSerializer, UserPreferencesSerializer
 from .permissions import PublicOrOwnerPermission, IsOwnerOrAdmin
+from .authentication import JWTAuthenticationFromCookie
 
 from core.media.models import Favourite
 from core.media.serializers import FavouriteSerializer
 
 User = get_user_model()
+
+def get_cookie_params():
+    if settings.DEBUG:
+        return {'httponly': True, 'secure': False, 'samesite': 'Lax', 'path': '/'}
+    return {'httponly': True, 'secure': True, 'samesite': 'None', 'path': '/'}
 
 # /api/accounts/token/
 class CookieTokenObtainPairView(TokenObtainPairView):
@@ -30,12 +36,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             data = response.data
             access = data.pop('access', None)
             refresh = data.pop('refresh', None)
-            cookie_params = {
-                'httponly': True,
-                'secure': False,      # HTTP in dev
-                'samesite': 'None',   # allow cross-site
-                'path': '/',
-            }
+            cookie_params = get_cookie_params()
             if access:
                 response.set_cookie('accessToken', access, max_age=60*15, **cookie_params)
             if refresh:
@@ -44,28 +45,38 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 
 # /api/accounts/token/refresh/
 class CookieTokenRefreshView(TokenRefreshView):
-    permission_classes = []  # AllowAny if you want public access here
+    permission_classes = []  # AllowAny
 
     def post(self, request, *args, **kwargs):
-        refresh = request.COOKIES.get('refreshToken')
-        if not refresh:
-            return Response({'detail': 'No refresh token cookie found'}, status=status.HTTP_400_BAD_REQUEST)
+        # Pull the cookie
+        raw_refresh = request.COOKIES.get('refreshToken')
+        if not raw_refresh:
+            return Response({'detail': 'No refresh token cookie found'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            token = RefreshToken(refresh)
-            new_access = str(token.access_token)
-        except TokenError:
-            return Response({'detail': 'Invalid refresh token'}, status=status.HTTP_401_UNAUTHORIZED)
+        # Forge a new request body so the parent sees it
+        request._full_data = {'refresh': raw_refresh}
 
-        response = Response({'detail': 'Access token refreshed'}, status=status.HTTP_200_OK)
-        # Use the same cookie params as obtain
-        cookie_params = {
-            'httponly': True,
-            'secure': False,    # HTTP in dev
-            'samesite': 'None', # must be None for cross-site
-            'path': '/',
-        }
-        response.set_cookie('accessToken', new_access, max_age=60*15, **cookie_params)
+        # Delegate to parent (validate and rotate)
+        response = super().post(request, *args, **kwargs)
+
+        # If anything went wrong, bubble it up
+        if response.status_code != 200:
+            return response
+
+        # Otherwise grab the new tokens…
+        data = response.data
+        new_access = data.get('access')
+        new_refresh = data.get('refresh')
+
+        # And set them as cookies
+        cookie_params = get_cookie_params()
+        if new_access:
+            response.set_cookie('accessToken', new_access,
+                                   max_age=60*15, **cookie_params)
+        if new_refresh:
+            response.set_cookie('refreshToken', new_refresh,
+                                   max_age=60*60*24*7, **cookie_params)
         return response
     
 # /api/accounts/register/
@@ -87,7 +98,7 @@ class RegisterView(generics.CreateAPIView):
 # /api/accounts/users/me/
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthenticationFromCookie]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -115,7 +126,7 @@ class UserDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     lookup_field = 'username'
     authentication_classes = [
-        JWTAuthentication,
+        JWTAuthenticationFromCookie,
         SessionAuthentication,
         BasicAuthentication,
     ]
@@ -185,7 +196,7 @@ class UserPreferencesView(generics.RetrieveUpdateAPIView):
     PATCH /users/<username>/preferences/ => update prefs
     """
     serializer_class = UserPreferencesSerializer
-    authentication_classes = [JWTAuthentication, SessionAuthentication, BasicAuthentication]
+    authentication_classes = [JWTAuthenticationFromCookie, SessionAuthentication, BasicAuthentication]
     permission_classes = [IsOwnerOrAdmin]
 
     lookup_field = 'username'
