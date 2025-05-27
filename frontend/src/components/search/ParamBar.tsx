@@ -58,7 +58,9 @@ const ParamBar = ({ defaultShowSensitive }: ParamBarProps) => {
   return (
     <div className="flex flex-col gap-4 pt-4">
       <div className="flex flex-row items-center gap-4">
-        <TextSearchIcon size={24} strokeWidth={2} />
+        <div className="hidden xs:block">
+          <TextSearchIcon size={24} strokeWidth={2} />
+        </div>
         <SearchSelector
           initialSearchBy={searchBy}
           onSearchChange={(newSearchBy) => {
@@ -81,8 +83,10 @@ const ParamBar = ({ defaultShowSensitive }: ParamBarProps) => {
           }}
         />
       </div>
-      <div className="flex flex-row items-center gap-4">
-        <FunnelIcon size={24} strokeWidth={2} />
+      <div className="flex flex-row flex-wrap xs:flex-nowrap items-center gap-4">
+        <div className="hidden xs:block">
+          <FunnelIcon size={24} strokeWidth={2} />
+        </div>
         <ToggleSelector
           paramKey="media_type"
           values={['audio', 'image']}
