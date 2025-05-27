@@ -3,6 +3,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { User as UserIcon, Star as StarIcon, Menu as MenuIcon } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
@@ -58,14 +59,18 @@ const Header = () => {
     >
       <div className="relative flex items-center justify-between">
         {!isLandingPage && (
-          <div className="cursor-pointer border-1" onClick={() => router.push('/')}>
+          <div className="flex items-center cursor-pointer" onClick={() => router.push('/')}>
             <span className="hidden sm:inline text-2xl font-bold">
               Open<HighlightedText>Galaxy</HighlightedText>
             </span>
 
-            <div className="block sm:hidden text-3xl font-bold">
-              O<HighlightedText>G</HighlightedText>
-            </div>
+            <Image
+              className="block sm:hidden md:block text-xs"
+              src="/icon0.svg"
+              alt="Icon"
+              width={40}
+              height={40}
+            />
           </div>
         )}
 
