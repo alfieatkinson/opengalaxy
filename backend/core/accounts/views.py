@@ -3,12 +3,11 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework.exceptions import NotFound
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.conf import settings
@@ -212,7 +211,7 @@ class UserPreferencesView(generics.RetrieveUpdateAPIView):
         try:
             return self.get_queryset().get(user__username=username)
         except UserPreferences.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return NotFound(detail="User preferences not found")
 
 class FavouritesPagination(PageNumberPagination):
     page_size = 24
