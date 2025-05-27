@@ -63,14 +63,14 @@ const Header = () => {
               Open<HighlightedText>Galaxy</HighlightedText>
             </span>
 
-            <div className="block sm:hidden text-2xl font-bold">
+            <div className="block sm:hidden text-3xl font-bold">
               O<HighlightedText>G</HighlightedText>
             </div>
           </div>
         )}
 
         {!isLandingPage && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-1/3 md:w-2/3 min-w-xs max-w-xl ">
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-1/2 lg:w-2/3 max-w-xs md:max-w-sm lg:max-w-lg">
             <ClientOnly>
               <SearchBar placeholder="Search for media..." />
             </ClientOnly>
@@ -78,7 +78,7 @@ const Header = () => {
         )}
 
         <div className="flex justify-end items-center">
-          <div className="hidden sm:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             {isLoggedIn ? (
               <>
                 <Dropdown
@@ -109,7 +109,7 @@ const Header = () => {
               </>
             )}
           </div>
-          <div className="block sm:hidden">
+          <div className="block md:hidden">
             <Dropdown
               trigger={<MenuIcon size={32} className="cursor-pointer hover:opacity-80" />}
               items={dropdownItemsMobile}
