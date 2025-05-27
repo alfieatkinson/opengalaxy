@@ -55,7 +55,7 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className="card card-compact bg-base-100 shadow w-11/12 sm:w-md mx-auto p-10">
+    <div className="card card-compact bg-base-100 shadow w-11/12 sm:w-md mx-auto p-4 py-10 xs:p-10">
       <h1 className="text-3xl text-center font-bold mb-4">Register</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
         {fields.map((field) => (
