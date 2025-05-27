@@ -77,6 +77,8 @@ const Header = () => {
           </div>
         )}
 
+        {isLandingPage && <div className="flex-grow" />}
+
         <div className="flex justify-end items-center">
           <div className="hidden md:flex items-center space-x-4">
             {isLoggedIn ? (
