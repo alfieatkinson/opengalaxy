@@ -11,6 +11,7 @@ import HighlightedText from '@/components/shared/HighlightedText'
 import Dropdown from '@/components/shared/Dropdown'
 import ClientOnly from '@/components/shared/ClientOnly'
 import ThemeSwitcher from '@/components/shared/ThemeSwitcher'
+import ThemeSwitchButton from '@/components/shared/ThemeSwitchButton'
 
 const Header = () => {
   const router = useRouter()
@@ -51,64 +52,69 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed flex w-full p-4 z-50 items-center justify-between text-secondary ${
+      className={`fixed w-screen p-4 z-50 text-secondary ${
         isLandingPage ? 'bg-transparent' : 'bg-base-200'
       }`}
     >
-      {!isLandingPage && (
-        <div className="cursor-pointer" onClick={() => router.push('/')}>
-          <span className="hidden sm:inline text-2xl font-bold">
-            Open<HighlightedText>Galaxy</HighlightedText>
-          </span>
-
-          <div className="block sm:hidden text-3xl font-bold">
-            O<HighlightedText>G</HighlightedText>
-          </div>
-        </div>
-      )}
-      <div className="mx-4 flex-grow flex justify-center">
+      <div className="relative flex items-center justify-between">
         {!isLandingPage && (
-          <ClientOnly>
-            <SearchBar placeholder="Search for media..." />
-          </ClientOnly>
+          <div className="cursor-pointer" onClick={() => router.push('/')}>
+            <span className="hidden sm:inline text-2xl font-bold">
+              Open<HighlightedText>Galaxy</HighlightedText>
+            </span>
+
+            <div className="block sm:hidden text-2xl font-bold">
+              O<HighlightedText>G</HighlightedText>
+            </div>
+          </div>
         )}
-      </div>
-      <div className="flex justify-end items-center">
-        <div className="hidden sm:flex items-center space-x-4">
-          {isLoggedIn ? (
-            <>
-              <Dropdown
-                trigger={
-                  <div className="flex items-center space-x-2 hover:text-primary">
-                    <span className="text-sm font-bold">{user?.username}</span>
-                    <UserIcon size={32} />
-                  </div>
-                }
-                items={dropdownItems}
-              />
-              <button
-                onClick={() => router.push(`/profile/${user?.username}/favourites`)}
-                className="flex items-center space-x-2 hover:text-primary"
-              >
-                <StarIcon size={32} />
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login">
-                <button className="btn btn-primary">Login</button>
-              </Link>
-              <Link href="/register">
-                <button className="btn btn-secondary">Register</button>
-              </Link>
-            </>
-          )}
-        </div>
-        <div className="block sm:hidden">
-          <Dropdown
-            trigger={<MenuIcon size={32} className="cursor-pointer hover:opacity-80" />}
-            items={dropdownItemsMobile}
-          />
+
+        {!isLandingPage && (
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-1/3 md:w-2/3 min-w-xs max-w-xl ">
+            <ClientOnly>
+              <SearchBar placeholder="Search for media..." />
+            </ClientOnly>
+          </div>
+        )}
+
+        <div className="flex justify-end items-center">
+          <div className="hidden sm:flex items-center space-x-4">
+            {isLoggedIn ? (
+              <>
+                <Dropdown
+                  trigger={
+                    <div className="flex items-center space-x-2 hover:text-primary">
+                      <span className="text-sm font-bold">{user?.username}</span>
+                      <UserIcon size={32} />
+                    </div>
+                  }
+                  items={dropdownItems}
+                />
+                <button
+                  onClick={() => router.push(`/profile/${user?.username}/favourites`)}
+                  className="flex items-center space-x-2 hover:text-primary"
+                >
+                  <StarIcon size={32} />
+                </button>
+              </>
+            ) : (
+              <>
+                <ThemeSwitchButton />
+                <Link href="/login">
+                  <button className="btn btn-primary">Login</button>
+                </Link>
+                <Link href="/register">
+                  <button className="btn btn-secondary">Register</button>
+                </Link>
+              </>
+            )}
+          </div>
+          <div className="block sm:hidden">
+            <Dropdown
+              trigger={<MenuIcon size={32} className="cursor-pointer hover:opacity-80" />}
+              items={dropdownItemsMobile}
+            />
+          </div>
         </div>
       </div>
     </header>
