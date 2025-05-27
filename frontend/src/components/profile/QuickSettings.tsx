@@ -36,7 +36,7 @@ const QuickSettings = ({ username }: QuickSettingsProps) => {
         setLoading(false)
       }
     })()
-  }, [username, me])
+  }, [username, me?.username])
 
   const handleToggle =
     (field: keyof UserPreferences) => async (e: React.ChangeEvent<HTMLInputElement>) => {

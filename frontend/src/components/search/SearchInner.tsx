@@ -122,7 +122,7 @@ const SearchInner = () => {
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false))
-  }, [cacheKey, searchValue, authFetch, isLoggedIn])
+  }, [cacheKey, searchValue, authFetch, isLoggedIn, prefs])
 
   if (!searchValue) return <p className="p-8 text-center">Enter a search term.</p>
   if (error) return notFound()
