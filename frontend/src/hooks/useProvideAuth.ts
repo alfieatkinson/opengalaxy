@@ -82,7 +82,9 @@ export const useProvideAuth = () => {
     if (!res.ok) throw new Error('Login failed')
     // tokens are now in cookies—just fetch user
     const meRes = await authFetch('/api/accounts/users/me/')
-    setUser(await meRes.json())
+    const me = await meRes.json()
+    setUser(me)
+    updateLocalPrefs(me.preferences)
   }
 
   // Sign up: Register a new user and log them in
@@ -114,6 +116,11 @@ export const useProvideAuth = () => {
       credentials: 'include',
     })
     setUser(null)
+    updateLocalPrefs({
+      public_profile: true,
+      show_sensitive: false,
+      blur_sensitive: true,
+    })
   }
 
   return { user, setUser, prefs, isLoggedIn, signIn, signUp, signOut, authFetch, updateLocalPrefs }
