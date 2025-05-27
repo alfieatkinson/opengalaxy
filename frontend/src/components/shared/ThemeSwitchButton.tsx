@@ -9,7 +9,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       data-cy="theme-switcher"
-      className="btn btn-circle btn-ghost hover:btn-outline btn-secondary btn-sm aspect-square p-0"
+      className="btn btn-ghost hover:btn-outline btn-secondary btn-sm aspect-square p-0"
       onClick={(e) => {
         e.stopPropagation()
         toggleTheme()
