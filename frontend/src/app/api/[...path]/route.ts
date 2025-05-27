@@ -17,7 +17,17 @@ const proxy = async (req: NextRequest) => {
   // Prepare fetch options
   const fetchOptions: RequestInitWithDuplex = {
     method: req.method,
-    headers: req.headers,
+    headers: new Headers({
+      // Copy all incoming headers except the host
+      ...Object.fromEntries(req.headers.entries()),
+      // Explicitly forward the cookie header
+      cookie: req.headers.get('cookie') || '',
+    }),
+    // For non-GET/HEAD:
+    ...(!['GET', 'HEAD'].includes(req.method) && {
+      body: req.body,
+      duplex: 'half',
+    }),
   }
 
   if (!['GET', 'HEAD'].includes(req.method)) {
@@ -25,22 +35,23 @@ const proxy = async (req: NextRequest) => {
     fetchOptions.duplex = 'half' // required for streaming bodies in Node.js fetch
   }
 
-  const response = await fetch(url, fetchOptions)
+  // Call the backend
+  const backendResponse = await fetch(url, fetchOptions)
 
-  // Clone headers to plain object for NextResponse
-  const headers: Record<string, string> = {}
-  response.headers.forEach((value, key) => {
-    headers[key] = value
+  // Build your NextResponse
+  const response = new NextResponse(backendResponse.body, {
+    status: backendResponse.status,
+    // Copy everything except set-cookie
+    headers: Object.fromEntries(
+      [...backendResponse.headers.entries()].filter(([k]) => k.toLowerCase() !== 'set-cookie'),
+    ),
   })
 
-  return new NextResponse(response.body, {
-    status: response.status,
-    headers,
-  })
+  // Now append any set-cookie headers so the browser will see them
+  const setCookie = backendResponse.headers.get('set-cookie')
+  if (setCookie) response.headers.append('set-cookie', setCookie)
+
+  return response
 }
 
-export const GET = proxy
-export const POST = proxy
-export const PUT = proxy
-export const DELETE = proxy
-export const PATCH = proxy
+export { proxy as GET, proxy as POST, proxy as PUT, proxy as DELETE, proxy as PATCH }
