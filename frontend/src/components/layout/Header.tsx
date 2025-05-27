@@ -58,7 +58,7 @@ const Header = () => {
     >
       <div className="relative flex items-center justify-between">
         {!isLandingPage && (
-          <div className="cursor-pointer" onClick={() => router.push('/')}>
+          <div className="cursor-pointer border-1" onClick={() => router.push('/')}>
             <span className="hidden sm:inline text-2xl font-bold">
               Open<HighlightedText>Galaxy</HighlightedText>
             </span>
@@ -70,7 +70,7 @@ const Header = () => {
         )}
 
         {!isLandingPage && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-1/2 lg:w-2/3 max-w-xs md:max-w-sm lg:max-w-lg">
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-full lg:w-2/3 max-w-xs md:max-w-sm lg:max-w-lg">
             <ClientOnly>
               <SearchBar placeholder="Search for media..." />
             </ClientOnly>
