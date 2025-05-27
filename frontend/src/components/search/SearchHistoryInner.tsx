@@ -78,15 +78,8 @@ const SearchHistoryInner = () => {
           onClick={onClear}
           disabled={!items.length}
         >
-          CLEAR SEARCH HISTORY
-        </button>
-        <button
-          data-cy="clear-search-history"
-          className="flex sm:hidden float-right btn btn-outline btn-error max-w-60"
-          onClick={onClear}
-          disabled={!items.length}
-        >
-          CLEAR
+          <p className="hidden sm:flex">CLEAR SEARCH HISTORY</p>
+          <p className="flex sm:hidden">CLEAR</p>
         </button>
       </div>
       {items.length ? (

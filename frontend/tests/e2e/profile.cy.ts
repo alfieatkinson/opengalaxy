@@ -11,7 +11,7 @@ describe('Profile flows', () => {
   let tokens: { access: string; refresh: string }
 
   before(() => {
-    // 1) Register
+    // Register
     cy.request('POST', 'http://localhost:8000/api/accounts/register/', {
       username: user.username,
       email: user.email,
@@ -22,12 +22,24 @@ describe('Profile flows', () => {
       .its('status')
       .should('eq', 201)
 
-    // 2) Login and capture tokens
+    // Login and capture tokens
     cy.request('POST', 'http://localhost:8000/api/accounts/token/', {
       username: user.username,
       password: user.password,
-    }).then(({ body }) => {
-      tokens = { access: body.access, refresh: body.refresh }
+    }).then((resp) => {
+      // parse out the two cookies
+      const header = resp.headers['set-cookie'] as string[]
+      const cookieMap = Object.fromEntries(
+        header.map((str) => {
+          const [pair] = str.split(';')
+          const [name, val] = pair.split('=')
+          return [name, val]
+        }),
+      )
+      tokens = {
+        access: cookieMap.accessToken,
+        refresh: cookieMap.refreshToken,
+      }
     })
   })
 
@@ -62,17 +74,46 @@ describe('Profile flows', () => {
   })
 
   context('Own profile (logged-in)', () => {
-    beforeEach(function () {
-      // Inject tokens before load
-      cy.visit(`/profile/${user.username}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
+    beforeEach(() => {
+      // Re-set the cookies on every test so the app sees you as “me”
+      cy.clearCookies()
+      cy.setCookie('accessToken', tokens.access, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
       })
-    })
+      cy.setCookie('refreshToken', tokens.refresh, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+      })
 
-    it('shows QuickSettings for self', () => {
+      // Stub /users/me/ so useAuth() fills in `me`
+      cy.intercept('GET', '/api/accounts/users/me/', {
+        statusCode: 200,
+        body: {
+          id: '1',
+          username: user.username,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          is_active: true,
+          is_staff: false,
+          preferences: { public_profile: true, show_sensitive: false, blur_sensitive: true },
+        },
+      }).as('getMe')
+
+      // Stub your QuickSettings prefs fetch
+      cy.intercept('GET', `/api/accounts/users/${user.username}/preferences/`, {
+        statusCode: 200,
+        body: { public_profile: true, show_sensitive: false, blur_sensitive: true },
+      }).as('getPrefs')
+
+      // Stub the profile + favourites calls too
       cy.intercept('GET', `/api/accounts/users/${user.username}/`, {
         statusCode: 200,
         body: user,
@@ -81,11 +122,14 @@ describe('Profile flows', () => {
         statusCode: 200,
         body: { results: [], count: 0 },
       }).as('getFavs')
-      cy.wait(['@getProfile', '@getFavs'])
 
-      // QuickSettings button present
+      // Finally visit and wait for *all* four calls
+      cy.visit(`/profile/${user.username}`)
+      cy.wait(['@getMe', '@getPrefs', '@getProfile', '@getFavs'])
+    })
+
+    it('shows QuickSettings for self', () => {
       cy.contains('Quick Settings').should('exist')
-      // Clicking “More settings =>” lands on /settings
       cy.get('[data-cy=more-settings]').click()
       cy.url().should('include', '/settings')
     })

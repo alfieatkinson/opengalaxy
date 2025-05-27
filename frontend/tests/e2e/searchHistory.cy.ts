@@ -8,8 +8,8 @@ describe('Search History page', () => {
     last_name: 'User',
     password: 'Password123!',
   }
-  let tokens: { access: string; refresh: string }
   const pageSize = 2
+  let tokens: { access: string; refresh: string }
 
   before(() => {
     // Register + login
@@ -19,8 +19,20 @@ describe('Search History page', () => {
     cy.request('POST', '/api/accounts/token/', {
       username: user.username,
       password: user.password,
-    }).then(({ body }) => {
-      tokens = { access: body.access, refresh: body.refresh }
+    }).then((resp) => {
+      // parse out the two cookies
+      const header = resp.headers['set-cookie'] as string[]
+      const cookieMap = Object.fromEntries(
+        header.map((str) => {
+          const [pair] = str.split(';')
+          const [name, val] = pair.split('=')
+          return [name, val]
+        }),
+      )
+      tokens = {
+        access: cookieMap.accessToken,
+        refresh: cookieMap.refreshToken,
+      }
     })
   })
 
@@ -34,19 +46,32 @@ describe('Search History page', () => {
 
   context('Logged in', () => {
     beforeEach(() => {
-      // stub the user info request
+      cy.clearCookies()
+      cy.setCookie('accessToken', tokens.access, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+      })
+      cy.setCookie('refreshToken', tokens.refresh, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+      })
       cy.intercept('GET', '/api/accounts/users/me/', {
         statusCode: 200,
         body: {
-          id: '1',
-          username: user.username,
-          email: user.email,
-          first_name: user.first_name,
-          last_name: user.last_name,
+          id: 'user123',
+          username: 'testuser',
+          email: 'test@example.com',
+          first_name: 'Test',
+          last_name: 'User',
           created_at: '2024-01-01T00:00:00Z',
           updated_at: '2024-01-01T00:00:00Z',
           is_active: true,
           is_staff: false,
+          preferences: { public_profile: true, show_sensitive: false, blur_sensitive: true },
         },
       }).as('getMe')
     })
@@ -59,12 +84,7 @@ describe('Search History page', () => {
       }).as('getEmpty')
 
       // visit the page with the tokens set
-      cy.visit(`/search-history/?page=1&page_size=${pageSize}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
-      })
+      cy.visit(`/search-history/?page=1&page_size=${pageSize}`)
       cy.wait('@getMe')
 
       cy.wait('@getEmpty')
@@ -79,12 +99,7 @@ describe('Search History page', () => {
       }).as('getPage1')
 
       // Visit with page=1
-      cy.visit(`/search-history/?page=1&page_size=${pageSize}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
-      })
+      cy.visit(`/search-history/?page=1&page_size=${pageSize}`)
       cy.wait('@getMe')
 
       // Wait for that stub
@@ -118,12 +133,7 @@ describe('Search History page', () => {
       }).as('getH1')
 
       // visit the page with the tokens set
-      cy.visit(`/search-history/?page=1&page_size=${pageSize}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
-      })
+      cy.visit(`/search-history/?page=1&page_size=${pageSize}`)
       cy.wait('@getMe')
 
       cy.wait('@getH1')
@@ -150,12 +160,7 @@ describe('Search History page', () => {
       }).as('getH1')
 
       // visit the page with the tokens set
-      cy.visit(`/search-history/?page=1&page_size=${pageSize}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
-      })
+      cy.visit(`/search-history/?page=1&page_size=${pageSize}`)
       cy.wait('@getMe')
 
       cy.wait('@getH1')
@@ -178,12 +183,7 @@ describe('Search History page', () => {
       }).as('getH1')
 
       // visit the page with the tokens set
-      cy.visit(`/search-history/?page=1&page_size=${pageSize}`, {
-        onBeforeLoad(win) {
-          win.localStorage.setItem('accessToken', tokens.access)
-          win.localStorage.setItem('refreshToken', tokens.refresh)
-        },
-      })
+      cy.visit(`/search-history/?page=1&page_size=${pageSize}`)
       cy.wait('@getMe')
 
       cy.wait('@getH1')

@@ -11,7 +11,7 @@ describe('Settings page flows', () => {
   let tokens: { access: string; refresh: string }
 
   before(() => {
-    // 1) Register
+    // Register
     cy.request('POST', 'http://localhost:8000/api/accounts/register/', {
       username: user.username,
       email: user.email,
@@ -22,39 +22,68 @@ describe('Settings page flows', () => {
       .its('status')
       .should('eq', 201)
 
-    // 2) Login and capture tokens
+    // Login and capture tokens
     cy.request('POST', 'http://localhost:8000/api/accounts/token/', {
       username: user.username,
       password: user.password,
-    }).then(({ body }) => {
-      tokens = { access: body.access, refresh: body.refresh }
+    }).then((resp) => {
+      // parse out the two cookies
+      const header = resp.headers['set-cookie'] as string[]
+      const cookieMap = Object.fromEntries(
+        header.map((str) => {
+          const [pair] = str.split(';')
+          const [name, val] = pair.split('=')
+          return [name, val]
+        }),
+      )
+      tokens = {
+        access: cookieMap.accessToken,
+        refresh: cookieMap.refreshToken,
+      }
     })
   })
 
   beforeEach(() => {
-    // Inject tokens _before_ the app loads
-    cy.visit('http://localhost:3000/settings', {
-      onBeforeLoad(win) {
-        win.localStorage.setItem('accessToken', tokens.access)
-        win.localStorage.setItem('refreshToken', tokens.refresh)
-      },
+    cy.clearCookies()
+    cy.setCookie('accessToken', tokens.access, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
     })
-  })
+    cy.setCookie('refreshToken', tokens.refresh, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+    })
 
-  it('toggles preferences and persists', () => {
-    // Stub GET prefs
+    cy.intercept('GET', '/api/accounts/users/me/', {
+      statusCode: 200,
+      body: user,
+    }).as('getMe')
+
     cy.intercept('GET', '/api/accounts/users/*/preferences/', {
       statusCode: 200,
       body: { public_profile: true, show_sensitive: false, blur_sensitive: true },
     }).as('getPrefs')
 
+    cy.intercept('GET', '/api/search/history/preview/', [
+      { id: 1, search_key: 'query', search_value: 'dog', searched_at: new Date().toISOString() },
+    ]).as('getHistory')
+
+    cy.visit('http://localhost:3000/settings')
+    cy.wait('@getMe')
+    cy.wait('@getPrefs')
+    cy.wait('@getHistory')
+  })
+
+  it('toggles preferences and persists', () => {
     // Stub PATCH prefs
     cy.intercept('PATCH', '/api/accounts/users/*/preferences/', (req) => {
       // flip the field being updated
       req.reply((res) => res.send({ ...req.body }))
     }).as('patchPrefs')
-
-    cy.wait('@getPrefs')
 
     // Toggle "Show sensitive"
     cy.get('label').contains('Show sensitive').parent().find('input[type=checkbox]').as('toggle')
@@ -64,12 +93,6 @@ describe('Settings page flows', () => {
   })
 
   it('shows recent searches and navigates', () => {
-    const preview = [
-      { id: 1, search_key: 'query', search_value: 'dog', searched_at: new Date().toISOString() },
-    ]
-    cy.intercept('GET', '/api/search/history/preview/', preview).as('getHistory')
-
-    cy.wait('@getHistory')
     cy.contains('"dog"').should('exist')
     cy.get('[data-cy=view-all-search-history]').click()
     cy.url().should('include', '/search-history')
