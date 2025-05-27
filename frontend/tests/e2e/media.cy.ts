@@ -5,10 +5,20 @@ describe('Media page flows', () => {
   const audioId = 'aud67890'
 
   beforeEach(() => {
-    // Clear any stored localStorage or session state
-    cy.clearLocalStorage()
-    localStorage.setItem('accessToken', 'fake-token')
-    localStorage.setItem('refreshToken', 'fake-refresh-token')
+    // Clear all cookies, then inject our fake JWTs as HttpOnly cookies
+    cy.clearCookies()
+    cy.setCookie('accessToken', 'fake-token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+    })
+    cy.setCookie('refreshToken', 'fake-refresh-token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+    })
 
     cy.intercept('GET', '/api/accounts/users/me/', {
       statusCode: 200,
@@ -22,8 +32,9 @@ describe('Media page flows', () => {
         updated_at: '2024-01-01T00:00:00Z',
         is_active: true,
         is_staff: false,
+        preferences: { public_profile: true, show_sensitive: false, blur_sensitive: true },
       },
-    })
+    }).as('getMe')
   })
 
   context('Image media', () => {
@@ -51,6 +62,7 @@ describe('Media page flows', () => {
 
       // Visit the page
       cy.visit(`http://localhost:3000/media/${imageId}`)
+      cy.wait('@getMe')
       cy.wait(['@getImageMedia', '@getImgFavStatus'])
     })
 
@@ -117,6 +129,7 @@ describe('Media page flows', () => {
       }).as('removeAudioFav')
 
       cy.visit(`http://localhost:3000/media/${audioId}`)
+      cy.wait('@getMe')
       cy.wait(['@getAudioMedia', '@getAudioFavStatus'])
     })
 
