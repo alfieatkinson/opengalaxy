@@ -185,4 +185,4 @@ For more information, please see the [contribution guidelines](./CONTRIBUTING.md
 
 ## License
 
-This project is open-source under the [MIT License](./LICENSE).gi
+This project is open-source under the [MIT License](./LICENSE).
