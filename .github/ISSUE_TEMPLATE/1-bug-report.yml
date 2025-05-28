@@ -1,0 +1,50 @@
+# .github/ISSUE_TEMPLATE/bug_report.yml
+
+name: Bug report
+description: Report something that isn't working as expected
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: Describe the bug clearly and concisely.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: Describe what you expected to happen instead.
+    validations:
+      required: false
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      placeholder: Steps to reproduce the bug (code, commands, etc.)
+      value: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: OS, browser, device, versions of relevant tools (e.g. Node, Python, etc.)
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, errors, or screenshots
+      placeholder: Paste any error messages or screenshots here.
+    validations:
+      required: false

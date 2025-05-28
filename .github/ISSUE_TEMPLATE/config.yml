@@ -1,0 +1,10 @@
+# .github/ISSUE_TEMPLATE/config.yml
+
+blank_issues_enabled: false
+contact_links:
+  - name: OpenGalaxy Discussion Page
+    url: https://github.com/alfieatkinson/opengalaxy/discussions
+    about: Please feel free to discuss the project here.
+  - name: Alfie Atkinson
+    url: https://alfieatkinson.dev
+    about: Please find my contact details here.
