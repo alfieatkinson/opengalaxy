@@ -32,8 +32,7 @@
 **OpenGalaxy** is a full-stack web app built for discovering, searching, and curating Creative Commons licensed media. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**.
 
 <div align="center">
-    <img src="img/mockups/landing-dark.png" width="400" />
-    <img src="img/mockups/landing-light.png" width="400" />
+    <img src="img/mockups/landing-mixed.png" />
 </div>
 
 ---
