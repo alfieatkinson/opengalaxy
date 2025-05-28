@@ -42,7 +42,7 @@
 
 ## Overview
 
-**OpenGalaxy** is a full-stack web app built for discovering, searching, and curating Creative Commons licensed media. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**.
+[**OpenGalaxy**](https://opengalaxy.alfieatkinson.dev) is a sleek, full-stack platform for discovering and curating Creative Commons media — built with modern web technologies and powered by the Openverse API. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**.
 
 <img height="12" />
 <div align="center">
@@ -53,19 +53,19 @@
 
 ## Tech Stack
 
-- **Frontend:** [TypeScript](https://www.typescriptlang.org/), [React](https://reactjs.org/), [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [DaisyUI](https://daisyui.com/)
-- **Backend:** [Python](https://www.python.org/), [Django](https://www.djangoproject.com/), [Django REST Framework](https://www.django-rest-framework.org/)
-- **Database:** [PostgreSQL](https://www.postgresql.org/), [Redis](https://redis.io/)
+- **Frontend:** [TypeScript](https://www.typescriptlang.org/) + [React](https://reactjs.org/) + [Next.js](https://nextjs.org/) + [Tailwind CSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/)
+- **Backend:** [Python](https://www.python.org/) + [Django](https://www.djangoproject.com/) + [Django REST Framework](https://www.django-rest-framework.org/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/) + [Redis](https://redis.io/)
 
 ---
 
 ## Tooling
 
 - **Authentication:** [JWT](https://jwt.io/) (HttpOnly cookies)
-- **CI/CD & Deployment:** [Pre-commit](https://pre-commit.com/), [Husky](https://typicode.github.io/husky/#/), [Vercel](https://vercel.com/), [Heroku](https://www.heroku.com/)
+- **CI/CD & Deployment:** [Pre-commit](https://pre-commit.com/) + [Husky](https://typicode.github.io/husky/#/) + [Vercel](https://vercel.com/) + [Heroku](https://www.heroku.com/)
 - **Linting & Formatting:** 
-[ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [flake8](https://flake8.pycqa.org/), [Black](https://black.readthedocs.io/)
-- **Testing:** [Jest](https://jestjs.io/), [Cypress](https://www.cypress.io/)
+[ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [flake8](https://flake8.pycqa.org/) + [Black](https://black.readthedocs.io/)
+- **Testing:** [Jest](https://jestjs.io/) + [Cypress](https://www.cypress.io/)
 
 ---
 
