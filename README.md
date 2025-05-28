@@ -2,6 +2,7 @@
     <a href="https://opengalaxy.alfieatkinson.dev"><img src="img/opengalaxy-hero.png" width="480" /></a>
     <p>A full-stack web application for browsing and managing open-license media.</p>
     <strong>Built with:</strong>
+    <img height="12" />
 </div>
 
 <div align="center">
@@ -32,7 +33,7 @@
 
 **OpenGalaxy** is a full-stack web app built for discovering, searching, and curating Creative Commons licensed media. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**.
 
-<img width="12" />
+<img height="12" />
 <div align="center">
     <img src="img/mockups/landing-mixed.png" />
 </div>
