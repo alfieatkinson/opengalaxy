@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress": "cypress run"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
