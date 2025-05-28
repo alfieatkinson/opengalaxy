@@ -3,9 +3,6 @@
     <p>A full-stack web application for browsing and managing open-license media.</p>
 </div>
 
----
-
-<h3 align="center">Built with:</h3>
 <div align="center">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="40" alt="typescript logo"  />
     <img width="12" />
