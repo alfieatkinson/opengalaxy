@@ -25,6 +25,19 @@
 
 ## Table of Contents
 
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Tooling](#tooling)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Running with Docker Compose](#running-with-docker-compose)
+- [Running Tests](#running-tests)
+  - [Cypress E2E Tests](#cypress-e2e-tests)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+  - [Steps to Contribute](#steps-to-contribute)
+- [License](#license)
+
 ---
 
 ## Overview
@@ -103,8 +116,8 @@ docker compose up --build
 
 4. The following services should now be live:
 
-- Frontend: [https://localhost:3000](https://localhost:3000)
-- Backend API: [https://localhost:8000](https://localhost:8000)
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API: [http://localhost:8000](http://localhost:8000)
 
 To stop everything:
 
