@@ -10,6 +10,7 @@ body:
     attributes:
       label: What happened?
       placeholder: Describe the bug clearly and concisely.
+    validations:
       required: true
 
   - type: textarea
@@ -17,6 +18,7 @@ body:
     attributes:
       label: What did you expect to happen?
       placeholder: Describe what you expected to happen instead.
+    validations:
       required: false
 
   - type: textarea
@@ -28,6 +30,7 @@ body:
         1. Go to '...'
         2. Click on '...'
         3. See error
+    validations:
       required: true
 
   - type: textarea
@@ -35,6 +38,7 @@ body:
     attributes:
       label: Environment
       placeholder: OS, browser, device, versions of relevant tools (e.g. Node, Python, etc.)
+    validations:
       required: false
 
   - type: textarea
@@ -42,4 +46,5 @@ body:
     attributes:
       label: Logs, errors, or screenshots
       placeholder: Paste any error messages or screenshots here.
+    validations:
       required: false
