@@ -54,6 +54,8 @@
 [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [flake8](https://flake8.pycqa.org/), [Black](https://black.readthedocs.io/)
 - **Testing:** [Jest](https://jestjs.io/), [Cypress](https://www.cypress.io/)
 
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -110,6 +112,8 @@ To stop everything:
 docker compose down
 ```
 
+---
+
 ## Running Tests
 
 All tests can be run using the tests script:
@@ -132,6 +136,8 @@ To open Cypress for visual E2E testing:
 docker compose exec <frontend-container-id> npm run cypress:open
 ```
 
+---
+
 ## Project Structure
 
 ```bash
@@ -148,6 +154,8 @@ docker compose exec <frontend-container-id> npm run cypress:open
 ```
 
 See `docs/` for initial architecture diagrams, data flow models, and more.
+
+---
 
 ## Contributing
 
@@ -171,6 +179,10 @@ Please follow the existing coding style and include tests where appropriate.
 
 If you're unsure where to start, feel free to open an issue or discussion first.
 
+For more information, please see the [contribution guidelines](./CONTRIBUTING.md).
+
+---
+
 ## License
 
-This project is open-source under the [MIT License](./LICENSE).
+This project is open-source under the [MIT License](./LICENSE).gi
