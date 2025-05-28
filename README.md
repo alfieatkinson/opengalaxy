@@ -40,4 +40,9 @@
 
 ## Tech Stack
 
-
+- **Frontend:** TypeScript + React + Next.js + TailwindCSS + DaisyUI
+- **Backend:** Python + Django + Django REST Framework
+- **Database:** PostgreSQL + Redis
+- **Auth:** JWT HttpOnly Cookies
+- **CI/CD:** Pre-commit + Husky + Vercel + Heroku
+- **Testing:** Jest + Cypress
