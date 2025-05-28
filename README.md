@@ -1,10 +1,8 @@
 <div align="center">
     <a href="https://opengalaxy.alfieatkinson.dev"><img src="img/opengalaxy-hero.png" alt="OpenGalaxy" width="480" /></a>
     <p>A full-stack web application for browsing and managing open-license media.</p>
-    <strong>Built with:</strong>
 </div>
 
-<img height="6" />
 <div align="center">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="40" alt="typescript logo"  />
     <img width="12" />
