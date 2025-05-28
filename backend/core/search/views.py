@@ -12,13 +12,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.openverse_client import OpenverseClient
 from core.media.models.media import Media
 from core.media.models.tag import Tag, MediaTag
 from .models import SearchHistory
 from .serializer import SearchHistorySerializer
+from core.accounts.authentication import JWTAuthenticationFromCookie
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ class SearchView(APIView):
     """
     
     authentication_classes = [
-        JWTAuthentication,
+        JWTAuthenticationFromCookie,
         SessionAuthentication,
         BasicAuthentication,
     ]
