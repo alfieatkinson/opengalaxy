@@ -36,7 +36,6 @@ services:
       - .env
     volumes:
       - ./frontend:/app/frontend:z
-      - node_modules:/app/frontend/node_modules:z
     depends_on:
       - backend
     networks:
