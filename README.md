@@ -51,6 +51,16 @@
 
 ---
 
+## Features
+
+- 🔍 Search and filter Creative Commons media from Openverse
+- 🧾 User accounts with favourites and search history
+- ⚡ Fast, responsive UI with Next.js, Tailwind, and DaisyUI
+- 🐳 Dockerised full-stack setup
+- 🔐 Secure JWT auth with HttpOnly cookies
+
+---
+
 ## Tech Stack
 
 - **Frontend:** [TypeScript](https://www.typescriptlang.org/) + [React](https://reactjs.org/) + [Next.js](https://nextjs.org/) + [Tailwind CSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/)
