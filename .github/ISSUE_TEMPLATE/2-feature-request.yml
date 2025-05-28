@@ -1,0 +1,27 @@
+# .github/ISSUE_TEMPLATE/feature_request.yml
+
+name: Feature request
+description: Suggest an idea for this project
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What's the feature?
+      placeholder: Describe the feature you'd like to add.
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this needed?
+      placeholder: Why would this feature be useful or improve the project?
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Any alternative approaches you've thought of?
+      required: false
