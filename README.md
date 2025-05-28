@@ -136,15 +136,15 @@ docker compose exec <frontend-container-id> npm run cypress:open
 
 ```bash
 .
-├── backend/     # Django REST API
-├── docs/        # System design & SRS docs
-├── frontend/    # Next.js frontend
-├── img/         # Project images 
-├── docker-compose.yml
-├── README.md
-├── run-tests.sh
-├── toggle-dynos.sh
-└── tree.txt     # Full project tree
+├── backend/            # Django REST API
+├── docs/               # System design & SRS docs
+├── frontend/           # Next.js frontend
+├── img/                # Project images 
+├── docker-compose.yml  # Docker compose config
+├── README.md           # What you are reading right now!
+├── run-tests.sh        # Script to run all tests
+├── toggle-dynos.sh     # Script to toggle Heroku dynos
+└── tree.txt            # Full project tree
 ```
 
 See `docs/` for initial architecture diagrams, data flow models, and more.
@@ -157,11 +157,15 @@ If you'd like to fork the project and add features, fix bugs, or improve the doc
 
 ### Steps to Contribute
 
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature-name` or `git checkout -b fix/your-fix-name`
-3. Make your changes and commit them with clear messages.
-4. Push to your fork: `git push origin feature/your-feature-name`
-5. Open a pull request to the `main` branch of this repository.
+1. **Make an issue first (recommended):**
+    - If you are planning to work on a bug or new feature, please [open an issue](https://github.com/alfieatkinson/opengalaxy/issues/new/choose) first.
+    - Opening an issue helps avoid duplicate work and gives a chance to discuss your idea or approach.
+    - Use the appropriate issue template — "Feature Request" or "Bug Report" — to keep things clear.
+2. Fork the repository.
+3. Create a new branch: `git checkout -b feature/your-feature-name` or `git checkout -b fix/your-fix-name`
+4. Make your changes and commit them with clear messages.
+5. Push to your fork: `git push origin feature/your-feature-name` or `git push origin fix/your-fix-name`
+6. Open a pull request to the `main` branch of this repository.
 
 Please follow the existing coding style and include tests where appropriate.
 
