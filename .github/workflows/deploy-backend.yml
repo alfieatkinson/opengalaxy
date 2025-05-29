@@ -1,0 +1,36 @@
+# .github/workflows/deploy-backend.yml
+
+name: Deploy Backend to Heroku
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Heroku
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Deploy backend to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: opengalaxy-backend
+          heroku_email: alfie@alfieatkinson.dev
+          usedocker: false
+          buildpack: |
+            https://github.com/timanovsky/subdir-heroku-buildpack
+            heroku/python
+          procfile: backend/Procfile
+          region: eu
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

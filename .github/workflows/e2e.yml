@@ -1,0 +1,54 @@
+# .github/workflows/e2e.yml
+name: End-to-End Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: youruser
+          POSTGRES_PASSWORD: yourpassword
+          POSTGRES_DB: yourdb
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      - name: Set up Docker Compose
+        run: docker-compose up -d --build
+
+      - name: Wait for services to be ready
+        run: |
+            until curl --output /dev/null --silent --head --fail http://localhost:8000/health; do
+                echo "Waiting for backend..."
+                sleep 5
+            done
+
+      - name: Install Cypress dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run Cypress tests
+        working-directory: ./frontend
+        run: npm run cypress
