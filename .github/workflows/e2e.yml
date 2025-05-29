@@ -13,20 +13,6 @@ on:
 jobs:
   cypress-tests:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: youruser
-          POSTGRES_PASSWORD: yourpassword
-          POSTGRES_DB: yourdb
-        ports:
-          - 5432:5432
-
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
 
     steps:
       - name: Checkout repo
@@ -36,7 +22,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Set up Docker Compose
-        run: docker-compose up -d --build
+        run: docker compose up -d --build
 
       - name: Wait for services to be ready
         run: |
