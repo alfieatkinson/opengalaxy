@@ -2,5 +2,4 @@
 
 services:
   frontend:
-    volumes:
-      - /dev/null:/app/frontend  # override volume to avoid bind mount
+    volumes: []
