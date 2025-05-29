@@ -22,17 +22,30 @@ jobs:
         run: cp .env.example .env
 
       - name: Set up Docker Compose
-        run: docker compose up -d --build
-
-      - name: Wait for services to be ready
         run: |
-            until curl --output /dev/null --silent --head --fail http://localhost:8000/api/health/; do
-                echo "Waiting for backend..."
-                sleep 5
-            done
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.ci.yml \
+            up -d --build
 
-      - name: Clean node_modules
-        run: rm -rf ./frontend/node_modules
+      - name: Wait for backend to be ready
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:8000/api/health/; do
+              echo "Waiting for backend..."
+              sleep 5
+          done
+
+      - name: Wait for frontend to be ready
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:3000; do
+            echo "Waiting for frontend..."
+            sleep 5
+          done
+
+      - name: Fix and clean node_modules
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" frontend/node_modules || true
+          rm -rf frontend/node_modules
 
       - name: Install Cypress dependencies
         working-directory: ./frontend
