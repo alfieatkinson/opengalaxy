@@ -75,7 +75,7 @@ const Header = () => {
         )}
 
         {!isLandingPage && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-full lg:w-2/3 max-w-xs md:max-w-sm lg:max-w-lg">
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-full lg:w-2/3 max-w-[220px] sm:max-w-xs md:max-w-sm lg:max-w-lg">
             <ClientOnly>
               <SearchBar placeholder="Search for media..." />
             </ClientOnly>

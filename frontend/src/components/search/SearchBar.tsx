@@ -31,7 +31,7 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
   }
 
   return (
-    <div className="join w-full min-w-3xs max-w-2xl justify-center">
+    <div className="join w-full max-w-2xl justify-center">
       <input
         className="input input-bordered join-item w-4/5"
         type="text"
