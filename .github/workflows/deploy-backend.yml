@@ -7,8 +7,9 @@ on:
     branches:
       - main
     paths:
-      - 'backend/**'       # Trigger only if backend directory changes
+      - 'backend/**'
       - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
