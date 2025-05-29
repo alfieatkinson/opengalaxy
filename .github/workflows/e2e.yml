@@ -22,7 +22,10 @@ jobs:
         run: cp .env.example .env
 
       - name: Set up Docker Compose
-        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --build
+        run: docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.ci.yml \
+            up -d --build
 
       - name: Wait for services to be ready
         run: |
