@@ -67,7 +67,3 @@ networks:
   custom_network:
     name: ${PROJECT_NAME}
     driver: bridge
-
-volumes:
-  node_modules:
-    driver: local
