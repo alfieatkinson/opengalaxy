@@ -1,5 +1,7 @@
 #/docker-compose.yml
 
+version: '3.8'
+
 services:
   # Service for PostgreSQL database
   db:

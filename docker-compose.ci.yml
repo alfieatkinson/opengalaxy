@@ -1,5 +1,7 @@
 # docker-compose.ci.yml
 
+version: '3.8'
+
 services:
   frontend:
     volumes: []
