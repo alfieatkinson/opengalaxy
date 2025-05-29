@@ -35,8 +35,10 @@ jobs:
                 sleep 5
             done
 
-      - name: Clean node_modules
-        run: rm -rf ./frontend/node_modules
+      - name: Fix and clean node_modules
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" frontend/node_modules || true
+          rm -rf frontend/node_modules
 
       - name: Install Cypress dependencies
         working-directory: ./frontend
