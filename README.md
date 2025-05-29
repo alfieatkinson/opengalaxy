@@ -42,7 +42,7 @@
 
 ## Overview
 
-[**OpenGalaxy**](https://opengalaxy.alfieatkinson.dev) is a sleek, full-stack platform for discovering and curating Creative Commons media — built with modern web technologies and powered by the Openverse API. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**.
+[**OpenGalaxy**](https://opengalaxy.alfieatkinson.dev) is a sleek, full-stack platform for discovering and curating Creative Commons media — built with modern web technologies and powered by the Openverse API. It fetches media from the [Openverse API](https://api.openverse.org/v1/) and offers users personalisation through accounts, favourites, and search history. This project is submitted in partial fulfilment of the Degree of **Master of Science in Computer Science**, view the report [here](https://raw.githubusercontent.com/alfieatkinson/opengalaxy/main/docs/Report.pdf).
 
 <img height="12" />
 <div align="center">
