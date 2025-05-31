@@ -48,6 +48,12 @@
 <img height="12" />
 <div align="center">
     <img src="img/mockups/landing-mixed.png" />
+    <img height="12" />
+    <img src="img/mockups/search.png" />
+    <img height="12" />
+    <img src="img/mockups/media.png" />
+    <img height="12" />
+    <img src="img/mockups/profile.png" />
 </div>
 
 ---
