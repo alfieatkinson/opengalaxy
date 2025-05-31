@@ -36,6 +36,7 @@
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
   - [Steps to Contribute](#steps-to-contribute)
+  - [Code of Conduct](#code-of-conduct)
 - [License](#license)
 
 ---
@@ -203,6 +204,10 @@ Please follow the existing coding style and include tests where appropriate.
 If you're unsure where to start, feel free to open an issue or discussion first.
 
 For more information, please see the [contribution guidelines](./CONTRIBUTING.md).
+
+### Code of Conduct
+
+Please note that this project adheres to a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. If you witness or experience any issues, please report them appropriately.
 
 ---
 
